@@ -32,7 +32,7 @@ int  UART1_Rx_RecvIndex=0;                              //  当前该读的行位置
 
 unsigned int UART1_Tx_Flag=0;
 unsigned int UART1_Tx_Len=0;
-extern int WIFI_Inited_Flag;
+// extern int WIFI_Inited_Flag;
 
 extern bool Is_uart1_RX_INT;
 

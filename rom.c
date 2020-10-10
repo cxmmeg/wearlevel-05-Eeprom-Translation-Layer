@@ -10,7 +10,7 @@
 
 #include "rom.h"
 #include "common.h"
-#include "hydrologycommand.h"
+// #include "hydrologycommand.h"
 #include "msp430common.h"
 #include "rtc.h"
 #include <stdlib.h>
@@ -98,10 +98,6 @@ int ROM_WriteByte(unsigned long long addr,
 {			      //修改为at24c1024b的时序
 	DownInt();
 
-	if(!IsDebug && addr < HYDROLOGY_DATA_START_INDEX){		// only debug mode can change config
-		return -1;
-	}
-
 	if (addr > 524287 - 32)	 //地址空间 0x0000  -- 0x0007ffdf
 	{
 		UpInt();
@@ -160,10 +156,6 @@ static int _ROM_WriteBytes(unsigned long long addr, const char* src,
 			   int length)	//修改了addr的数据类型以满足addr长度要求
 {  //该函数 不会被外部函数调用, 内部函数已经考虑了中断问题,所以此处不必考虑中断/
    ////修改为at24c1024b的时序
-
-	if(!IsDebug && ((addr+length) < HYDROLOGY_DATA_START_INDEX)){		// only debug mode can change config
-		return -1;
-	}
 
 	if (length > 256) {
 		return -1;
@@ -225,23 +217,6 @@ int IsSame_(const char* data1, const char* data2, size_t len) {
 			return 0;
 		}
 	return 1;
-}
-int ROM_WriteBytes_Page(unsigned long long addr, const char* src, int length) {
-	for (int i = 0; i < 5; i++) {
-		if (ROM_WriteBytes_Page_(addr, src, length) == 0) {
-			char read[ 256 ] = { 0 };
-			ROM_ReadBytes_Page(addr, read, length);
-			if (!IsSame_(src, read, length)) {
-				printf("write error\r\n%s", read);
-				continue;
-				// while (1)
-				// 	;
-			}
-
-			return 0;
-		}
-	}
-	return -1;
 }
 
 int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
@@ -321,6 +296,24 @@ int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
 		}
 	}
 	return 0;
+}
+
+int ROM_WriteBytes_Page(unsigned long long addr, const char* src, int length) {
+	for (int i = 0; i < 5; i++) {
+		if (ROM_WriteBytes_Page_(addr, src, length) == 0) {
+			char read[ 256 ] = { 0 };
+			ROM_ReadBytes_Page(addr, read, length);
+			if (!IsSame_(src, read, length)) {
+				printf("write error\r\n%s", read);
+				continue;
+				// while (1)
+				// 	;
+			}
+
+			return 0;
+		}
+	}
+	return -1;
 }
 
 int ROM_ReadByte(unsigned long long addr,

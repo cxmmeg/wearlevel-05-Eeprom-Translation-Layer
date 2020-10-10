@@ -10,7 +10,7 @@
 
 #include "uart0.h"
 #include "common.h"
-#include "dtu.h"
+//#include "dtu.h"
 #include "led.h"
 #include "msp430common.h"
 #include "uart3.h"

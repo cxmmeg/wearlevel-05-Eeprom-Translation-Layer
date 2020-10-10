@@ -29,10 +29,10 @@
  */
 
 #include "rtc.h"
-#include "Sampler.h"
-#include "Store.h"
+//#include "Sampler.h"
+//#include "Store.h"
 #include "common.h"
-#include "hydrologycommand.h"
+//#include "hydrologycommand.h"
 #include "led.h"
 #include "msp430common.h"
 #include "rom.h"
@@ -99,8 +99,8 @@ char s_RTC_PulseBytes[ 4 ][ 3 ] = {
 
 int RTC_ReadStartIdx(char* dest) {
 	DownInt();
-	if (s_RTC_StartIdx <= DATA_MAX_IDX
-	    && s_RTC_StartIdx >= DATA_MIN_IDX) {  //内存值正确
+	if (s_RTC_StartIdx <= 0//0
+	    && s_RTC_StartIdx >= 0) {  //内存值正确
 		*dest = s_RTC_StartIdx;
 		//写入RTC,保证RTC里的值的正确
 		_RTC_WriteRAM(STARTIDX_ADDR, s_RTC_StartIdx);
@@ -109,8 +109,8 @@ int RTC_ReadStartIdx(char* dest) {
 	}
 	else {	//内存值错误
 		*dest = _RTC_ReadRAM(STARTIDX_ADDR);
-		if ((*dest) <= DATA_MAX_IDX
-		    && (*dest) >= DATA_MIN_IDX) {  // RTC值可能正确
+		if ((*dest) <= 0
+		    && (*dest) >= 0) {  // RTC值可能正确
 			s_RTC_StartIdx = (*dest);  //更新内存值
 			UpInt();
 			return 0;
@@ -132,8 +132,8 @@ int RTC_SetStartIdx(char src) {
 
 int RTC_ReadEndIdx(char* dest) {
 	DownInt();
-	if (s_RTC_EndIdx <= DATA_MAX_IDX
-	    && s_RTC_EndIdx >= DATA_MIN_IDX) {	//内存值正确
+	if (s_RTC_EndIdx <= 0
+	    && s_RTC_EndIdx >= 0) {	//内存值正确
 		*dest = s_RTC_EndIdx;
 		//写入RTC,保证RTC里的值的正确
 		_RTC_WriteRAM(ENDIDX_ADDR, s_RTC_EndIdx);
@@ -142,8 +142,8 @@ int RTC_ReadEndIdx(char* dest) {
 	}
 	else {	//内存值错误
 		*dest = _RTC_ReadRAM(ENDIDX_ADDR);
-		if ((*dest) <= DATA_MAX_IDX
-		    && (*dest) >= DATA_MIN_IDX) {  // RTC值可能正确
+		if ((*dest) <= 0
+		    && (*dest) >= 0) {  // RTC值可能正确
 			s_RTC_EndIdx = (*dest);	   //更新内存值
 			UpInt();
 			return 0;
@@ -485,9 +485,9 @@ int RTC_IncPulseBytes(int _index) {  // 此函数 在中断中调用,
 	char _old_byte2 = _byte2;
 	char _byte3	= s_RTC_PulseBytes[ _index - 1 ][ 2 ];
 	char _old_byte3 = _byte3;
-	char _max_byte1 = g_pulse_range[ _index - 1 ][ 0 ];
-	char _max_byte2 = g_pulse_range[ _index - 1 ][ 1 ];
-	char _max_byte3 = g_pulse_range[ _index - 1 ][ 2 ];
+	//char 0 = g_pulse_range[ _index - 1 ][ 0 ];
+	//char 0 = g_pulse_range[ _index - 1 ][ 1 ];
+	//char 0 = g_pulse_range[ _index - 1 ][ 2 ];
 
 	if (_byte3 == 255) {  //第3字节溢出的话
 		_byte3 = 0;
@@ -507,25 +507,25 @@ int RTC_IncPulseBytes(int _index) {  // 此函数 在中断中调用,
 	//
 	//  要判断是否超过MAX了
 	//
-	if (_byte1 < _max_byte1)
+	if (_byte1 < 0)
 		goto Update_And_Return;
-	if (_byte1 > _max_byte1) {  //归0
+	if (_byte1 > 0) {  //归0
 		_byte1 = 0;
 		_byte2 = 0;
 		_byte3 = 0;
 		goto Update_And_Return;
 	}
-	else {	// _byte1==_max_byte1
-		if (_byte2 < _max_byte2)
+	else {	// _byte1==0
+		if (_byte2 < 0)
 			goto Update_And_Return;
-		if (_byte2 > _max_byte2) {
+		if (_byte2 > 0) {
 			_byte1 = 0;
 			_byte2 = 0;
 			_byte3 = 0;
 			goto Update_And_Return;
 		}
-		else {	// _byte2 == _max_byte2
-			if (_byte3 > _max_byte3) {
+		else {	// _byte2 == 0
+			if (_byte3 > 0) {
 				_byte1 = 0;
 				_byte2 = 0;
 				_byte3 = 0;
@@ -1166,6 +1166,7 @@ int RTC_SetAlarm(const char hour, const char min, const char sec) {
 	_RTC_Write_OneByte(RegAddr_Control, 0x45);
 	// printf("set alarn, control:%x\r\n",
 	// _RTC_Read_OneByte(RegAddr_Control));
+	return 0;
 }
 
 int _RTC_MultiRead(char cmd, char* dest, int length) {

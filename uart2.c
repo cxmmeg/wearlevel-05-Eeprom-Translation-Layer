@@ -18,7 +18,7 @@
 #include "stdio.h"
 #include "stdbool.h"
 #include "stdint.h"
-#include "camera.h"
+//#include "camera.h"
 /************A1********/
 #define TXD2 BIT4
 #define RXD2 BIT5
@@ -37,7 +37,7 @@ unsigned int UART2_Tx_Flag=0;
 unsigned int UART2_Tx_Len=0;
 int line_len = PAC_MAXSIZE;
 
-extern int WIFI_Inited_Flag;
+// extern int WIFI_Inited_Flag;
 
 extern cameratype camera_i, camera_ii;
 extern bool last_packet;

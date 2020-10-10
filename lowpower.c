@@ -1,4 +1,5 @@
 #include "lowpower.h"
+#include "common.h"
 #include "main.h"
 #include "msp430common.h"
 #include "rtc.h"
@@ -15,28 +16,6 @@ void BoardPowerOn() {
 void BoardPowerOff() {
 	P2DIR |= BIT0;
 	P2OUT |= BIT0;
-}
-void SleepAndWakeupTest() {
-	while (1) {
-		printf("control:%x\r\n", _RTC_Read_OneByte(RegAddr_Control));
-		System_Delayms(1000);
-		char rtc_nowTime[ 6 ];
-		char date, control;
-		_RTC_ReadTime(&rtc_nowTime[ 5 ], &rtc_nowTime[ 4 ],
-			      &rtc_nowTime[ 3 ], &rtc_nowTime[ 2 ],
-			      &rtc_nowTime[ 1 ], &date, &rtc_nowTime[ 0 ],
-			      &control);
-		printf("rtc time:%d/%d/%d %d:%d:%d \r\n ", rtc_nowTime[ 0 ],
-		       rtc_nowTime[ 1 ], rtc_nowTime[ 2 ], rtc_nowTime[ 3 ],
-		       rtc_nowTime[ 4 ], rtc_nowTime[ 5 ]);
-		for (int i = 0; i < 5; ++i) {
-			printf("hello %d\r\n", i);
-			System_Delayms(2000);
-		}
-		Hydrology_TimeCheck();
-		gotoSleepLPM3();
-		// setWakeupInterval(2, INTERVAL_MIN);
-	}
 }
 
 void CalcNextWakeupTime(char* nextHour, char* nextMin) {
@@ -117,11 +96,5 @@ void SetSleepInterval(int interval, int interval_type) {
 }
 
 void gotoSleepLPM3() {
-	if (setWakeupInterval(g_sleep_interval, g_sleep_interval_type)
-	    != 0)  // setWakeupInterval(10,
-		   // INTERVAL_MIN)表示10分钟唤醒一次，setWakeupInterval(4,
-		   // INTERVAL_HOUR)表示4小时唤醒一次
-		return;
-	printf("going to sleep \r\n ");
-	// __bis_SR_register(LPM3_bits + GIE);
+
 }

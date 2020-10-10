@@ -1004,7 +1004,7 @@ DATA16_Z
                                                    UART3_Send (uart3)
                                                    WIFI_InitCmd (wifi_config)
                                                    WIFI_Open (wifi_config)
-                                                   WIFI_SendData (wifi_config)
+                                                   //WIFI_SendData (wifi_config)
                                                    WIFI_Server_Start (wifi_config)
                                                    WIFI_WaitSendResult (wifi_config)
     -------------------------------------------------------------------------
@@ -1129,7 +1129,7 @@ DATA16_Z
            Utility_Strlen          000105F0        Console_WriteString (Console)
                                                    Console_WriteStringln (Console)
                                                    WIFI_InitCmd (wifi_config)
-                                                   WIFI_SendData (wifi_config)
+                                                   //WIFI_SendData (wifi_config)
                                                    WIFI_Server_Start (wifi_config)
     -------------------------------------------------------------------------
 <CODE> 2 (was CODE)
@@ -5033,7 +5033,7 @@ DATA16_Z
     -------------------------------------------------------------------------
 DATA16_Z
   Relative segment, address: 1CF2 - 1CF3 (0x2 bytes), align: 1
-  Segment part 71.            Intra module refs:   WIFI_SendData
+  Segment part 71.            Intra module refs:   //WIFI_SendData
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
            g_wifi_index            1CF2 
@@ -5055,7 +5055,7 @@ DATA16_I
 <CODE> 2 (was CODE)
   Relative segment, address: 000104F6 - 0001050F (0x1a bytes), align: 1
   Segment part 80.            Intra module refs:   WIFI_InitCmd
-                                                   WIFI_SendData
+                                                   //WIFI_SendData
                                                    WIFI_Server_Start
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
@@ -5080,7 +5080,7 @@ DATA16_I
     -------------------------------------------------------------------------
 <CODE> 1 (was CODE)
   Relative segment, address: E1E0 - E263 (0x84 bytes), align: 1
-  Segment part 84.            Intra module refs:   WIFI_SendData
+  Segment part 84.            Intra module refs:   //WIFI_SendData
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
            WIFI_WaitSendResult     E1E0 
@@ -5099,7 +5099,7 @@ DATA16_I
   Segment part 87.
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
-           WIFI_SendData           D1EE            Console_WriteBytes (Console)
+           //WIFI_SendData           D1EE            Console_WriteBytes (Console)
                                                    Console_WriteBytesln (Console)
                                                    Console_WriteString (Console)
                                                    Console_WriteStringln (Console)
@@ -5115,7 +5115,7 @@ DATA16_I
 <CODE> 2 (was CODE)
   Relative segment, address: 000108A4 - 000108A7 (0x4 bytes), align: 1
   Segment part 85.            Intra module refs:   WIFI_Open
-                                                   WIFI_SendData
+                                                   //WIFI_SendData
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
            WIFI_ClearBuffer        000108A4 
@@ -5191,7 +5191,7 @@ DATA16_C
     -------------------------------------------------------------------------
 DATA16_C
   Relative segment, address: 64DE - 64EE (0x11 bytes), align: 0
-  Segment part 28.            Intra module refs:   WIFI_SendData
+  Segment part 28.            Intra module refs:   //WIFI_SendData
 
     *************************************************************************
 
@@ -5887,7 +5887,7 @@ RESET
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
            sprintf                 F46A            WIFI_InitCmd (wifi_config)
-                                                   WIFI_SendData (wifi_config)
+                                                   //WIFI_SendData (wifi_config)
                                                    getBCDnums (message)
                calls direct
 

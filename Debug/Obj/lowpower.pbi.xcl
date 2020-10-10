@@ -1,9 +1,9 @@
-"\\Mac\Home\work\RTUV3.3_4G-rtc_lowpower_test\lowpower.c"
--std=c99
+"\\Mac\Home\work\ETL\lowpower.c"
+-std=c++98
 -ferror-limit=0
 -fbracket-depth=512
 -I
-\\Mac\Home\work\RTUV3.3_4G-rtc_lowpower_test\Driverlib
+\\Mac\Home\work\ETL\Driverlib
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc\dlib
 -I
@@ -11,7 +11,9 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc\dlib\c
 -I
-\\Mac\Home\work\RTUV3.3_4G-rtc_lowpower_test\Driverlib
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc\dlib\ecpp
+-I
+\\Mac\Home\work\ETL\Driverlib
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0
@@ -223,10 +225,12 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc\dlib\c
 -D__HAS_LOCATED_DECLARATION__=1
 -D__IAR_COMPILERBASE__=595716
 -D__STDC__=1
--D__STDC_VERSION__=199901L
--D__STDC_HOSTED__=1
--D__STDC_NO_VLA__=1
--D__STDC_NO_ATOMICS__=1
+-D__cplusplus=199711L
+-D__iar_extended_embedded_cplusplus=1
+-D__embedded_cplusplus=1
+-D__WCHAR_T=1
+-D__BOOL=1
+-D__ARRAY_OPERATORS=1
 -D__EDG_TYPE_TRAITS_ENABLED=1
 -D__EDG__=1
 -D__EDG_VERSION__=410

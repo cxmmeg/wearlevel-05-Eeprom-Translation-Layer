@@ -2406,30 +2406,6 @@
         </file>
     </group>
     <file>
-        <name>$PROJ_DIR$\adc.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\adc.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\BC95.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\BC95.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\blueTooth.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\blueTooth.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\camera.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\camera.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\common.c</name>
     </file>
     <file>
@@ -2451,54 +2427,6 @@
         <name>$PROJ_DIR$\debug.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\ec200.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\ec200.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\flash.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\flash.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\flow.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\flow.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\GSM.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\GSM.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\GTM900C.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\GTM900C.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\hydrologycommand.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\hydrologycommand.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\hydrologytask.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\hydrologytask.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\ioDev.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\ioDev.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\led.c</name>
     </file>
     <file>
@@ -2517,25 +2445,7 @@
         <name>$PROJ_DIR$\main.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\message.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\message.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\msp430common.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\packet.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\packet.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\reportbinding .c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\reportbinding.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\rom.c</name>
@@ -2548,18 +2458,6 @@
     </file>
     <file>
         <name>$PROJ_DIR$\rtc.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\Sampler.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\Sampler.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\store.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\store.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\sys_status.c</name>
@@ -2586,12 +2484,6 @@
         <name>$PROJ_DIR$\uart1.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart2.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\uart2.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\uart3.c</name>
     </file>
     <file>
@@ -2602,11 +2494,5 @@
     </file>
     <file>
         <name>$PROJ_DIR$\uart_config.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\wifi_config.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\wifi_config.h</name>
     </file>
 </project>

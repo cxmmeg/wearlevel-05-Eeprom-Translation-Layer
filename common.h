@@ -61,7 +61,6 @@ void Set_Vcore(unsigned int level);
 void Max3222_Open();
 void Max3222_Close();
 
-void Select_Debug_Mode(int type);
    
 //  ×Ö·û´®¸¨Öúº¯Êý 
 int  Utility_Strlen(char *); 
@@ -133,9 +132,6 @@ void TraceStrFuncLine(char * _str,int _len,int _ln,char const* _funcname,int _li
 void TraceInt4FuncLine(int _val, int _ln,char const* _funcname,int _linename);
 
 
-int Utility_GetGprsServerIp(char* _str,int* len);
-int Utility_GetGprsServerPort(char* _str,int* len);
-int Utility_GetGprsServerApn(char* _str,int * len);
 
 
 void Clear_ExternWatchdog();
