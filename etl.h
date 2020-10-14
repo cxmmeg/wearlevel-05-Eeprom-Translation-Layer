@@ -6,7 +6,7 @@
  * --------------------
  * Erase Cycle          [2B]
  * Effective Erase Cyle [2B]
- * Logic Page           [1B/2B]
+ * Logic Page Num       [1B/2B]
  * Hot                  [1B]
  * check sum            [1B]
  * data                 [8B?]
@@ -36,6 +36,15 @@ struct InfoPage {
 	unsigned char logic_page_size;
 	unsigned int  total_page_count;
 	unsigned int  thresh_hold;
+};
+
+struct DataPage {
+	unsigned int   erase_cycle;
+	unsigned int   effective_erase_cycle;
+	unsigned int   logic_page_num;
+	unsigned char  hot;
+	unsigned char  check_sum;
+	unsigned char* data;
 };
 
 class ETL {
