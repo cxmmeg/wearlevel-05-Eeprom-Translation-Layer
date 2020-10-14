@@ -14,6 +14,7 @@
  *
  * info page :
  * -------------------
+ * identify		[3B]	("ETL")
  * logic page size      [1B]
  * tital page count     [2B]
  * thresh hold          [2B]
@@ -30,7 +31,29 @@
  *      MaxQue<EC,HP>.front - MaxQue<EC,HP>.back > 2*TH
  */
 
+struct InfoPage {
+	char*	      identify;
+	unsigned char logic_page_size;
+	unsigned int  total_page_count;
+	unsigned int  thresh_hold;
+};
 
+class ETL {
+    public:
+	void SetCapacity(unsigned long long capacity);
+	bool NeedFormat();
+	void Format(unsigned char logic_page_size, unsigned int thresh_hold);
+	void FetchInfoPage();
+	struct InfoPage GetInfoPage();
+	void Write(unsigned long long addr, const char* src, int length);
+	int  Read(unsigned long long addr, char* dest, int length);
 
+    private:
+	unsigned long long capacity_;
+	struct InfoPage	   info_page_;
+
+	virtual int RomWriteByte(unsigned long long addr, char data)  = 0;
+	virtual int RomeReadByte(unsigned long long addr, char* dest) = 0;
+};
 
 #endif
