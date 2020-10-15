@@ -1,6 +1,9 @@
 #ifndef ETL_H_
 #define ETL_H_
 
+#include "dualpool.h"
+#include <unordered_map>
+
 /*
  * physical data page structure :
  * --------------------
@@ -32,37 +35,46 @@
  */
 
 struct InfoPage {
-	char*	      identify;
+	char	      identify[ 3 ];
 	unsigned char logic_page_size;
 	unsigned int  total_page_count;
 	unsigned int  thresh_hold;
 };
 
 struct DataPage {
-	unsigned int   erase_cycle;
-	unsigned int   effective_erase_cycle;
-	unsigned int   logic_page_num;
-	unsigned char  hot;
-	unsigned char  check_sum;
-	unsigned char* data;
+	unsigned int  erase_cycle;
+	unsigned int  effective_erase_cycle;
+	unsigned int  logic_page_num;
+	unsigned char hot;
+	unsigned char check_sum;
+	char*	      data;
 };
 
 class ETL {
     public:
-	void SetCapacity(unsigned long long capacity);
-	bool NeedFormat();
-	void Format(unsigned char logic_page_size, unsigned int thresh_hold);
-	void FetchInfoPage();
-	struct InfoPage GetInfoPage();
-	void Write(unsigned long long addr, const char* src, int length);
-	int  Read(unsigned long long addr, char* dest, int length);
+	ETL(unsigned long long physical_capacity);
+	bool	 NeedFormat();
+	void	 Format(unsigned char logic_page_size, unsigned int thresh_hold);
+	void	 SetInfoPage(InfoPage infopage);
+	InfoPage GetInfoPage();
+	bool	 Write(unsigned long long addr, const char* src, int length);
+	bool	 Read(unsigned long long addr, char* dest, int length);
 
     private:
-	unsigned long long capacity_;
-	struct InfoPage	   info_page_;
+	unsigned long long				 physical_capacity_;
+	InfoPage					 info_page_;
+	DualPool*					 dualpool_;
+	std::unordered_map< unsigned int, unsigned int > lpn_to_ppn_;
 
 	virtual int RomWriteByte(unsigned long long addr, char data)  = 0;
 	virtual int RomeReadByte(unsigned long long addr, char* dest) = 0;
+
+	bool RomWriteBytes(unsigned long long addr, const char* src, int length);
+	bool RomReadBytes(unsigned long long addr, char* dest, int length);
+	void InitialPhysicalPages();
+	void InitialDualpool();
+	bool WriteDataPage(int physical_page_num, DataPage* datapage);
+	bool ReadDataPage(int physical_page_num, DataPage* datapage);
 };
 
 #endif

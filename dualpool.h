@@ -30,11 +30,11 @@ class DualPool {
 	void HotPoolResize();
 
     private:
-	int						  thresh_hold_;
-	set< DataPage, DataPageCmpByEraseCycle >	  hot_pool_sort_by_erase_cycle_;
-	set< DataPage, DataPageCmpByEraseCycle >	  cold_pool_sort_by_erase_cycle_;
-	set< DataPage, DataPageCmpByEffectiveEraseCycle > hot_pool_sort_by_effective_erase_cycle_;
-	set< DataPage, DataPageCmpByEffectiveEraseCycle > cold_pool_sort_by_effective_erase_cycle_;
+	int						       thresh_hold_;
+	std::set< DataPage, DataPageCmpByEraseCycle >	       hot_pool_sort_by_erase_cycle_;
+	std::set< DataPage, DataPageCmpByEraseCycle >	       cold_pool_sort_by_erase_cycle_;
+	std::set< DataPage, DataPageCmpByEffectiveEraseCycle > hot_pool_sort_by_effective_erase_cycle_;
+	std::set< DataPage, DataPageCmpByEffectiveEraseCycle > cold_pool_sort_by_effective_erase_cycle_;
 };
 
 #endif

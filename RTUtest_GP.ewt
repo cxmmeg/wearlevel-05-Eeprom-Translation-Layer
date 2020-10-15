@@ -2427,6 +2427,18 @@
         <name>$PROJ_DIR$\debug.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\dualpool.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\dualpool.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etl.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etl.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\led.c</name>
     </file>
     <file>
