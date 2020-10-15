@@ -19,6 +19,8 @@ struct DataPageCmpByEffectiveEraseCycle {
 	}
 };
 
+enum PoolIdentify { HOTPOOL, COLDPOOL };
+
 class DualPool {
     public:
 	DualPool(int thresh_hold);
@@ -28,6 +30,7 @@ class DualPool {
 	void DirtySwap();
 	void ColdPoolResize();
 	void HotPoolResize();
+	void AddPageIntoPool(DataPage* datapage, enum PoolIdentify pool_identify);
 
     private:
 	int						       thresh_hold_;

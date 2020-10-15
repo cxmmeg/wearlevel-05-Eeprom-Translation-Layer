@@ -1,5 +1,6 @@
 #include "etl.h"
 #include <stddef.h>
+#include <string.h>
 /* public methods */
 
 ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_capacity) {
@@ -87,10 +88,76 @@ void ETL::InitialPhysicalPages() {
 	}
 }
 void ETL::InitialDualpool() {
+	this->dualpool_	   = new DualPool(this->info_page_.thresh_hold);
+	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
+	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
+	     ++physical_page_num) {
+		this->ReadDataPage(physical_page_num, datapage);
+		if (datapage->hot == 1)
+			this->dualpool_->AddPageIntoPool(datapage, PoolIdentify::HOTPOOL);
+		else
+			this->dualpool_->AddPageIntoPool(datapage, PoolIdentify::COLDPOOL);
+	}
 }
 
 bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
+	unsigned int datapage_size = this->GetDataPageSize();
+	char*	     buff	   = ( char* )calloc(datapage_size, sizeof(char));
+	unsigned int offest	   = 0;
+
+	memcpy(buff + offest, ( char* )&datapage->erase_cycle, sizeof(datapage->erase_cycle));
+	offest += sizeof(datapage->erase_cycle);
+
+	memcpy(buff + offest, ( char* )&datapage->effective_erase_cycle,
+	       sizeof(datapage->effective_erase_cycle));
+	offest += sizeof(datapage->effective_erase_cyclef);
+
+	memcpy(buff + offest, ( char* )&datapage->logic_page_num, sizeof(datapage->logic_page_num));
+	offest += sizeof(datapage->logic_page_num);
+
+	memcpy(buff + offest, ( char* )&datapage->hot, sizeof(datapage->hot));
+	offest += sizeof(datapage->hot);
+
+	memcpy(buff + offest, ( char* )&datapage->check_sum, sizeof(datapage->check_sum));
+	offest += sizeof(datapage->check_sum);
+
+	memcpy(buff + offest, ( char* )&datapage->data, this->info_page_.logic_page_size);
+
+	this->RomWriteBytes(datapage_size * physical_page_num, buff, datapage_size);
+
+	return true;
 }
 bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
+	unsigned int datapage_size = this->GetDataPageSize();
+	char*	     buff	   = ( char* )calloc(datapage_size, sizeof(char));
+	unsigned int offest	   = 0;
+
+	this->RomReadBytes(datapage_size * physical_page_num, buff, datapage_size);
+
+	memcpy(( char* )&datapage->erase_cycle, buff + offest, sizeof(datapage->erase_cycle));
+	offest += sizeof(datapage->erase_cycle);
+
+	memcpy(( char* )&datapage->effective_erase_cycle, buff + offest,
+	       sizeof(datapage->effective_erase_cycle));
+	offest += sizeof(datapage->effective_erase_cyclef);
+
+	memcpy(( char* )&datapage->logic_page_num, buff + offest, sizeof(datapage->logic_page_num));
+	offest += sizeof(datapage->logic_page_num);
+
+	memcpy(( char* )&datapage->hot, buff + offest, sizeof(datapage->hot));
+	offest += sizeof(datapage->hot);
+
+	memcpy(( char* )&datapage->check_sum, buff + offest, sizeof(datapage->check_sum));
+	offest += sizeof(datapage->check_sum);
+
+	memcpy(( char* )&datapage->data, buff + offest, this->info_page_.logic_page_size);
+
+	return true;
+}
+
+unsigned int ETL::GetDataPageSize() {
+	return sizeof(DataPage::erase_cycle) + sizeof(DataPage::effective_erase_cycle)
+	       + sizeof(DataPage::logic_page_num) + sizeof(DataPage::hot) + sizeof(DataPage::check_sum)
+	       + this->info_page_.logic_page_size;
 }
 /* end of private methods */
