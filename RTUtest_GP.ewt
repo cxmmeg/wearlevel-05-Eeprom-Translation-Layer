@@ -2418,13 +2418,28 @@
         <name>$PROJ_DIR$\Console.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\cstartup.s43</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\debug.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\debug.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\dualpool.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\dualpool.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etl.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etl.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etlforat24c1024.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etlforat24c1024.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\led.c</name>
