@@ -35,7 +35,7 @@ int  UART2_Rx_RecvIndex=0;                              //  当前该读的行位置
 
 unsigned int UART2_Tx_Flag=0;
 unsigned int UART2_Tx_Len=0;
-int line_len = PAC_MAXSIZE;
+int line_len = 0;
 
 // extern int WIFI_Inited_Flag;
 

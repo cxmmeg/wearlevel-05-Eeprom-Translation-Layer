@@ -2,8 +2,9 @@
 #define DUALPOOL_H
 
 #include <set>
+#include "etl.h"
 
-struct DataPage;
+//struct DataPage;
 
 struct DataPageCmpByEraseCycle {
     public:

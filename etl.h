@@ -2,7 +2,7 @@
 #define ETL_H_
 
 #include "dualpool.h"
-#include <unordered_map>
+#include <map>
 
 /*
  * physical data page structure :
@@ -52,7 +52,7 @@ struct DataPage {
 	DataPage(int data_size) {
 		this->data = ( char* )calloc(data_size, sizeof(char));
 	}
-	DataPage() = delete;
+	//DataPage() = delete;
 	~DataPage() {
 		if (this->data)
 			free(this->data);
@@ -73,10 +73,10 @@ class ETL {
 	unsigned long long				 physical_capacity_;
 	InfoPage					 info_page_;
 	DualPool*					 dualpool_;
-	std::unordered_map< unsigned int, unsigned int > lpn_to_ppn_;
+	std::map< unsigned int, unsigned int > lpn_to_ppn_;
 
 	virtual int RomWriteByte(unsigned long long addr, char data)  = 0;
-	virtual int RomeReadByte(unsigned long long addr, char* dest) = 0;
+	virtual int RomReadByte(unsigned long long addr, char* dest) = 0;
 
 	bool	     RomWriteBytes(unsigned long long addr, const char* src, int length);
 	bool	     RomReadBytes(unsigned long long addr, char* dest, int length);

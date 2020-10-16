@@ -34,12 +34,11 @@ void ROM_Init() {
 }
 //供RTC使用的WriteByte
 int ROM_WriteByte_RTC(unsigned long long addr,
-		      char data)  //修改了addr的数据类型以满足addr长度要求
+		      char		 data)  //修改了addr的数据类型以满足addr长度要求
 {				  //修改为at24c1024b的时序
 	DownInt();
 
-	if (addr < 524287 - 31
-	    || addr > 524287)  //地址空间 0x0007ffe0 --0x0007ffff
+	if (addr < 524287 - 31 || addr > 524287)  //地址空间 0x0007ffe0 --0x0007ffff
 	{
 		UpInt();
 		return -1;
@@ -94,15 +93,10 @@ int ROM_WriteByte_RTC(unsigned long long addr,
 }
 
 int ROM_WriteByte(unsigned long long addr,
-		  char data)  //修改了addr的数据类型以满足addr长度要求
+		  char		     data)  //修改了addr的数据类型以满足addr长度要求
 {			      //修改为at24c1024b的时序
 	DownInt();
 
-	if (addr > 524287 - 32)	 //地址空间 0x0000  -- 0x0007ffdf
-	{
-		UpInt();
-		return -1;
-	}
 	ROM_WP_OFF();
 	//构造地址
 	// A2 A1 P0 高8位 低8位 共19位地址
@@ -223,23 +217,20 @@ int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
 			 int length)  //修改了addr的数据类型以满足addr长度要求
 {				      //修改了数据的长度要求
 	DownInt();		      //修改为at24c1024b的时序
-	if (addr > 524287 - 32)	 //地址空间 0x0000  -- 0x0007ffe0
+	if (addr > 524287 - 32)	      //地址空间 0x0000  -- 0x0007ffe0
 	{
 		UpInt();
-		printf("addr out of bound!!\r\naddr:%ld , len : %d\r\n", addr,
-		       length);
+		printf("addr out of bound!!\r\naddr:%ld , len : %d\r\n", addr, length);
 		return -1;
 	}
 	if (addr + length > 524287 - 32) {
 		UpInt();
-		printf("end addr out of bound!!\r\naddr:%ld , len : %d\r\n",
-		       addr, length);
+		printf("end addr out of bound!!\r\naddr:%ld , len : %d\r\n", addr, length);
 		return -1;
 	}
 	if (length < 1) {
 		UpInt();
-		printf("length must > 0!!\r\naddr:%ld , len : %d\r\n", addr,
-		       length);
+		printf("length must > 0!!\r\naddr:%ld , len : %d\r\n", addr, length);
 		return -1;
 	}
 	//
@@ -264,16 +255,13 @@ int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
 		}
 	}
 
-	int leftBytes = length - bytes;	 //判断剩余多少字节
-	unsigned long long nextAddr =
-		addr + bytes;  //补足剩余的字节数,就为下一页的起始地址.
+	int		   leftBytes = length - bytes;	//判断剩余多少字节
+	unsigned long long nextAddr = addr + bytes;  //补足剩余的字节数,就为下一页的起始地址.
 	while (leftBytes > 0) {
 
 		if (leftBytes <= 256) {
 
-			if (_ROM_WriteBytes(nextAddr, &(src[ bytes ]),
-					    leftBytes)
-			    < 0) {
+			if (_ROM_WriteBytes(nextAddr, &(src[ bytes ]), leftBytes) < 0) {
 				UpInt();
 				printf("_ROM_WriteBytes error3\r\n");
 				return -3;
@@ -282,17 +270,14 @@ int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
 			return 0;
 		}
 		else {
-			if (_ROM_WriteBytes(nextAddr, &(src[ bytes ]), 256)
-			    < 0) {
+			if (_ROM_WriteBytes(nextAddr, &(src[ bytes ]), 256) < 0) {
 				UpInt();
 				printf("_ROM_WriteBytes error4\r\n");
 				return -3;
 			}
 			bytes += 256;
 			leftBytes = leftBytes - 256;  //判断剩余多少字节
-			nextAddr =
-				nextAddr
-				+ 256;	//补足剩余的字节数,就为下一页的起始地址.
+			nextAddr = nextAddr + 256;  //补足剩余的字节数,就为下一页的起始地址.
 		}
 	}
 	return 0;
@@ -317,14 +302,10 @@ int ROM_WriteBytes_Page(unsigned long long addr, const char* src, int length) {
 }
 
 int ROM_ReadByte(unsigned long long addr,
-		 char* dest)  //修改了addr的数据类型以满足addr长度要求
+		 char*		    dest)  //修改了addr的数据类型以满足addr长度要求
 {			      //修改为at24c1024b的时序
 	DownInt();
 
-	if (addr > 524287) {
-		UpInt();
-		return -1;
-	}
 	// 读 会 多发送一个伪字节 用来传送地址.
 
 	//构造地址
@@ -615,9 +596,8 @@ char I2C_RxByte(void)  //修改函数使它和V3.0板的管脚相匹配
 }
 
 int ROM_WriteBytes(unsigned long long addr, const char* src, int length) {
-	unsigned long long	 end = addr + length;
-	const unsigned long long CHIP_SIZE =
-		( unsigned long long )128 * ( unsigned long long )1024;
+	unsigned long long	 end	   = addr + length;
+	const unsigned long long CHIP_SIZE = ( unsigned long long )128 * ( unsigned long long )1024;
 	// const unsigned long long PAGE_SIZE = ( unsigned long long )256;
 
 	if ((addr / CHIP_SIZE) == (end / CHIP_SIZE)) {
@@ -637,9 +617,8 @@ int ROM_WriteBytes(unsigned long long addr, const char* src, int length) {
 }
 
 int ROM_ReadBytes(unsigned long long addr, char* dest, int length) {
-	unsigned long long	 end = addr + length;
-	const unsigned long long CHIP_SIZE =
-		( unsigned long long )128 * ( unsigned long long )1024;
+	unsigned long long	 end	   = addr + length;
+	const unsigned long long CHIP_SIZE = ( unsigned long long )128 * ( unsigned long long )1024;
 	// const unsigned long long PAGE_SIZE = ( unsigned long long )256;
 
 	if (addr / CHIP_SIZE == end / CHIP_SIZE) {
@@ -664,8 +643,7 @@ void rom_unit_test() {
 	ROM_WP_OFF();
 	printf("start rom test\r\n");
 	unsigned long long endaddr =
-		(( unsigned long long )128 * ( unsigned long long )1024 * 4
-		 - TEST_DATA_LEN - 32);
+		(( unsigned long long )128 * ( unsigned long long )1024 * 4 - TEST_DATA_LEN - 32);
 
 	unsigned long long startadd = 5048;
 	for (; startadd < endaddr; startadd += TEST_DATA_LEN) {

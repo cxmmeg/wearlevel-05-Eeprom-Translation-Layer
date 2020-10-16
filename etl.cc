@@ -65,7 +65,7 @@ bool ETL::RomWriteBytes(unsigned long long addr, const char* src, int length) {
 }
 bool ETL::RomReadBytes(unsigned long long addr, char* dest, int length) {
 	for (unsigned int offset = 0; offset < length; ++offset)
-		if (!this->RomeReadByte(addr + offset, dest + offset))
+		if (!this->RomReadByte(addr + offset, dest + offset))
 			return false;
 	return true;
 }
