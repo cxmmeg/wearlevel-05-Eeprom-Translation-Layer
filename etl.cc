@@ -110,7 +110,7 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 
 	memcpy(buff + offest, ( char* )&datapage->effective_erase_cycle,
 	       sizeof(datapage->effective_erase_cycle));
-	offest += sizeof(datapage->effective_erase_cyclef);
+	offest += sizeof(datapage->effective_erase_cycle);
 
 	memcpy(buff + offest, ( char* )&datapage->logic_page_num, sizeof(datapage->logic_page_num));
 	offest += sizeof(datapage->logic_page_num);
@@ -139,7 +139,7 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 
 	memcpy(( char* )&datapage->effective_erase_cycle, buff + offest,
 	       sizeof(datapage->effective_erase_cycle));
-	offest += sizeof(datapage->effective_erase_cyclef);
+	offest += sizeof(datapage->effective_erase_cycle);
 
 	memcpy(( char* )&datapage->logic_page_num, buff + offest, sizeof(datapage->logic_page_num));
 	offest += sizeof(datapage->logic_page_num);

@@ -21,16 +21,23 @@ struct DataPageCmpByEffectiveEraseCycle {
 
 enum PoolIdentify { HOTPOOL, COLDPOOL };
 
+/* pool sort by (effective) erase cycle desc */
+
 class DualPool {
     public:
 	DualPool(int thresh_hold);
-	bool IsDirtySwapTriggered();
-	bool IsColdPoolResizeTriggered();
-	bool IsHotPoolResizeTriggered();
-	void DirtySwap();
-	void ColdPoolResize();
-	void HotPoolResize();
-	void AddPageIntoPool(DataPage* datapage, enum PoolIdentify pool_identify);
+	bool	 IsDirtySwapTriggered();
+	bool	 IsColdPoolResizeTriggered();
+	bool	 IsHotPoolResizeTriggered();
+	void	 AddPageIntoPool(DataPage* datapage, enum PoolIdentify pool_identify);
+	DataPage PopFrontHotPoolByEraseCycle();
+	DataPage PopBackHotPoolByEraseCycle();
+	DataPage PopFrontHotPoolByEffectiveEraseCycle();
+	DataPage PopBackHotPoolByEffectiveEraseCycle();
+	DataPage PopFrontColdPoolByEraseCycle();
+	DataPage PopBackColdPoolByEraseCycle();
+	DataPage PopFrontColdPoolByEffectiveEraseCycle();
+	DataPage PopBackColdPoolByEffectiveEraseCycle();
 
     private:
 	int						       thresh_hold_;

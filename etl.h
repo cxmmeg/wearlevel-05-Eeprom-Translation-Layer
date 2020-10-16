@@ -85,6 +85,11 @@ class ETL {
 	bool	     WriteDataPage(int physical_page_num, DataPage* datapage);
 	bool	     ReadDataPage(int physical_page_num, DataPage* datapage);
 	unsigned int GetDataPageSize();
+
+	/* dual-pool algorithm */
+	void DirtySwap();
+	void ColdPoolResize();
+	void HotPoolResize();
 };
 
 #endif
