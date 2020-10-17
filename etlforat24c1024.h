@@ -6,8 +6,8 @@
 
 class EtlForAt24c1024 : public ETL {
     private:
-	virtual int RomWriteByte(unsigned long long addr, char data) ;
-	virtual int RomReadByte(unsigned long long addr, char* dest) ;
+	virtual int RomWriteByte(unsigned long long addr, char data);
+	virtual int RomReadByte(unsigned long long addr, char* dest);
 };
 
 #endif

@@ -1,5 +1,3 @@
-
-// extern "C" {
 #include "main.h"
 #include "common.h"
 #include "console.h"
@@ -12,12 +10,12 @@
 #include "timer.h"
 #include "uart0.h"
 #include "uart1.h"
-#include "uart2.h"
 #include "uart3.h"
 #include "uart_config.h"
-// }
+#include <set>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 
 extern bool Is_uart3_RX_INT;  //增加 LSHB200508
 int	    Opened = 1;	      // Opened控制打印信息开关 LSHB200510
@@ -34,14 +32,20 @@ int main(void) {
 	Restart_Init();
 	Main_Init();
 
-	/*  500ms */
 	Led_Round();
-	// Select_Debug_Mode(0);
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
+
+	set< int > dict;
+	dict.insert(3);
+	dict.insert(2);
+	dict.insert(1);
+	printf("smallest : %d\r\n", *dict.begin());
+	dict.erase(dict.find(1));
+	printf("largest : %d \r\n", *dict.begin());
+
 	while (1) {
 		System_Delayms(1000);
-		printf("hahah\r\n");
 	}
 }
 

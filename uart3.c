@@ -15,7 +15,7 @@
 #include "stdio.h"
 #include "uart0.h"
 #include "uart1.h"
-#include "uart2.h"
+
 //#include "ioDev.h"
 //#include "blueTooth.h"
 #include "main.h"
