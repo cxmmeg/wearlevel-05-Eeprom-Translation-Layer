@@ -18,6 +18,8 @@
 #include <string.h>
 #include <vector>
 
+#define DISABLE_WATCHDOG
+
 extern bool Is_uart3_RX_INT;  //增加 LSHB200508
 int	    Opened = 1;	      // Opened控制打印信息开关 LSHB200510
 
@@ -38,7 +40,8 @@ int main(void) {
 	TraceMsg("Device Open !", 1);
 
 	// TestETLWriteByte();
-	ETLWriteDataPage();
+	// ETLWriteDataPage();
+	ETLWriteAndReadTest();
 
 	// set< int > dict;
 	// dict.insert(3);

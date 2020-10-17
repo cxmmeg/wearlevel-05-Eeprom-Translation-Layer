@@ -2562,6 +2562,9 @@
         <name>$PROJ_DIR$\Console.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\cstartup.s43</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\debug.c</name>
     </file>
     <file>

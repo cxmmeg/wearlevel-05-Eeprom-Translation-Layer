@@ -50,11 +50,58 @@ InfoPage ETL::GetInfoPage() {
 }
 
 bool ETL::Write(unsigned long long addr, const char* src, int length) {
-	return true;
+	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
+	unsigned long long end_addr		   = addr + length;
+	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
+	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
+	unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
+
+	// printf("logic page size : %u\r\n", logic_page_size);
+	DataPage datapage(logic_page_size);
+	this->ReadDataPage(start_physical_page_num, &datapage);
+	this->ClearDataPage(&datapage);
+
+	unsigned int data_offset = addr % logic_page_size;
+	if (start_logic_page_num == end_logic_page_num) {
+		// printf("write logic page : %u, physical page : %u \r\n", start_logic_page_num,
+		//        start_physical_page_num);
+		memcpy(datapage.data + data_offset, src, length);
+		// printf("datapage.data : %s \r\n", datapage.data);
+		return this->WriteDataPage(start_physical_page_num, &datapage);
+	}
+
+	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
+	unsigned int	   front_len		= next_page_start_addr - addr;
+	memcpy(datapage.data + data_offset, src, front_len);
+	this->WriteDataPage(start_logic_page_num, &datapage);
+	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
 
 bool ETL::Read(unsigned long long addr, char* dest, int length) {
-	return true;
+	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
+	unsigned long long end_addr		   = addr + length;
+	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
+	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
+	unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
+
+	// printf("start_logic_page_num : %u \r\n", start_logic_page_num);
+	// printf("addr : %u \r\n", addr);
+
+	DataPage datapage(logic_page_size);
+	this->ReadDataPage(start_physical_page_num, &datapage);
+
+	unsigned int data_offset = addr % logic_page_size;
+	if (start_logic_page_num == end_logic_page_num) {
+		// printf("read logic page : %u, physical page : %u \r\n", start_logic_page_num,
+		//        start_physical_page_num);
+		memcpy(dest, datapage.data + data_offset, length);
+		return true;
+	}
+
+	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
+	unsigned int	   front_len		= next_page_start_addr - addr;
+	memcpy(dest, datapage.data + data_offset, front_len);
+	return this->Read(next_page_start_addr, dest + front_len, length - front_len);
 }
 
 /* end of public methods */
@@ -125,7 +172,7 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	memcpy(buff + offest, ( char* )&datapage->check_sum, sizeof(datapage->check_sum));
 	offest += sizeof(datapage->check_sum);
 
-	memcpy(buff + offest, ( char* )&datapage->data, this->info_page_.logic_page_size);
+	memcpy(buff + offest, datapage->data, this->info_page_.logic_page_size);
 
 	this->RomWriteBytes(datapage_size * physical_page_num, buff, datapage_size);
 
@@ -156,7 +203,7 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	memcpy(( char* )&datapage->check_sum, buff + offest, sizeof(datapage->check_sum));
 	offest += sizeof(datapage->check_sum);
 
-	memcpy(( char* )&datapage->data, buff + offest, this->info_page_.logic_page_size);
+	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
 
 	return true;
 }
@@ -166,4 +213,9 @@ unsigned int ETL::GetDataPageSize() {
 	       + sizeof(DataPage::logic_page_num) + sizeof(DataPage::hot) + sizeof(DataPage::check_sum)
 	       + this->info_page_.logic_page_size;
 }
+
+void ETL::ClearDataPage(DataPage* datapage) {
+	memset(datapage->data, 0, this->info_page_.logic_page_size);
+}
+
 /* end of private methods */
