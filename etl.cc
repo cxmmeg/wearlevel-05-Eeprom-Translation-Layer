@@ -8,8 +8,8 @@ ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_cap
 
 bool ETL::NeedFormat() {
 	struct InfoPage infopage = this->GetInfoPage();
-	return infopage.identify[ 0 ] == 'E' && infopage.identify[ 1 ] == 'T'
-	       && infopage.identify[ 2 ] == 'L';
+	return !(infopage.identify[ 0 ] == 'E' && infopage.identify[ 1 ] == 'T'
+		 && infopage.identify[ 2 ] == 'L' && infopage.identify[ 3 ] == '\0');
 }
 
 void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
@@ -18,16 +18,20 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
 	infopage.identify[ 0 ]	  = 'E';
 	infopage.identify[ 1 ]	  = 'T';
 	infopage.identify[ 2 ]	  = 'L';
+	infopage.identify[ 3 ]	  = '\0';
 	infopage.logic_page_size  = logic_page_size;
 	infopage.thresh_hold	  = thresh_hold;
 	infopage.total_page_count = (this->physical_capacity_ - sizeof(InfoPage)) / (8 + logic_page_size);
 	this->SetInfoPage(infopage);
+	printf("set info page done\r\n");
 
 	/* map physical page num -> logic page num */
 	InitialPhysicalPages();
+	printf("initialed physical pages\r\n");
 
 	/* initial dual pool */
 	InitialDualpool();
+	printf("initialed dual pool \r\n");
 }
 
 void ETL::SetInfoPage(InfoPage infopage) {
@@ -59,13 +63,13 @@ bool ETL::Read(unsigned long long addr, char* dest, int length) {
 
 bool ETL::RomWriteBytes(unsigned long long addr, const char* src, int length) {
 	for (unsigned int offset = 0; offset < length; ++offset)
-		if (!this->RomWriteByte(addr + offset, *(src + offset)))
+		if (this->RomWriteByte(addr + offset, *(src + offset)) < 0)
 			return false;
 	return true;
 }
 bool ETL::RomReadBytes(unsigned long long addr, char* dest, int length) {
 	for (unsigned int offset = 0; offset < length; ++offset)
-		if (!this->RomReadByte(addr + offset, dest + offset))
+		if (this->RomReadByte(addr + offset, dest + offset) < 0)
 			return false;
 	return true;
 }
@@ -124,6 +128,8 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	memcpy(buff + offest, ( char* )&datapage->data, this->info_page_.logic_page_size);
 
 	this->RomWriteBytes(datapage_size * physical_page_num, buff, datapage_size);
+
+	/* if triggered, exec dual-pool algorithm */
 
 	return true;
 }

@@ -1,4 +1,4 @@
-"\\Mac\Home\work\ETL\dualpool.cc"
+"\\Mac\Home\work\ETL\etltest.cc"
 -std=c++98
 -ferror-limit=0
 -fbracket-depth=512

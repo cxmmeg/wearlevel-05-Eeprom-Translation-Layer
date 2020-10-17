@@ -2,6 +2,7 @@
 #include "common.h"
 #include "console.h"
 #include "driverlib.h"
+#include "etltest.h"
 #include "led.h"
 #include "lowpower.h"
 #include "msp430common.h"
@@ -36,13 +37,16 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
-	set< int > dict;
-	dict.insert(3);
-	dict.insert(2);
-	dict.insert(1);
-	printf("smallest : %d\r\n", *dict.begin());
-	dict.erase(dict.find(1));
-	printf("largest : %d \r\n", *dict.begin());
+	// TestETLWriteByte();
+	ETLWriteDataPage();
+
+	// set< int > dict;
+	// dict.insert(3);
+	// dict.insert(2);
+	// dict.insert(1);
+	// printf("smallest : %d\r\n", *dict.begin());
+	// dict.erase(dict.find(1));
+	// printf("largest : %d \r\n", *dict.begin());
 
 	while (1) {
 		System_Delayms(1000);
@@ -72,8 +76,7 @@ void rtcIntPinInit() {
 	// P2.0 interrupt enabled
 	GPIO_enableInterrupt(GPIO_PORT_P2, GPIO_PIN0);
 	// P2.0 Hi/Lo edge
-	GPIO_selectInterruptEdge(GPIO_PORT_P2, GPIO_PIN0,
-				 GPIO_HIGH_TO_LOW_TRANSITION);
+	GPIO_selectInterruptEdge(GPIO_PORT_P2, GPIO_PIN0, GPIO_HIGH_TO_LOW_TRANSITION);
 	// P2.0 IFG cleared
 	GPIO_clearInterrupt(GPIO_PORT_P2, GPIO_PIN0);
 }
@@ -110,11 +113,9 @@ void Restart_Init() {
 	P10DIR |= BIT1;	 // ly P101拉高，uart1
 			 // P104，,105，低的话就是485口,高的话就是蓝牙
 	P10OUT &= ~BIT1;
-	Is_RS485_1 =
-		true;  //现在把uart1暂时直接定义为485-1，以后使用蓝牙双功能时再改
-		       // LSHB 20200506
-	P11DIR |=
-		BIT2;  //工作指示灯控制P11.2，1：系统工作正常，0：系统发生错误，相关指示灯闪烁
+	Is_RS485_1 = true;  //现在把uart1暂时直接定义为485-1，以后使用蓝牙双功能时再改
+			    // LSHB 20200506
+	P11DIR |= BIT2;	 //工作指示灯控制P11.2，1：系统工作正常，0：系统发生错误，相关指示灯闪烁
 
 	P8DIR |= BIT6;	//初始化硬件看门狗   LSHB 20200510
 	P8OUT |= BIT6;

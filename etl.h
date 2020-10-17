@@ -46,7 +46,8 @@ class ETL {
 	bool	 Write(unsigned long long addr, const char* src, int length);
 	bool	 Read(unsigned long long addr, char* dest, int length);
 
-    private:
+	/* make public for debug, private for release */
+    public:
 	unsigned long long		  physical_capacity_;
 	InfoPage			  info_page_;
 	DualPool*			  dualpool_;
@@ -54,9 +55,9 @@ class ETL {
 
 	virtual int RomWriteByte(unsigned long long addr, char data) = 0;
 	virtual int RomReadByte(unsigned long long addr, char* dest) = 0;
+	bool	    RomWriteBytes(unsigned long long addr, const char* src, int length);
+	bool	    RomReadBytes(unsigned long long addr, char* dest, int length);
 
-	bool	     RomWriteBytes(unsigned long long addr, const char* src, int length);
-	bool	     RomReadBytes(unsigned long long addr, char* dest, int length);
 	void	     InitialPhysicalPages();
 	void	     InitialDualpool();
 	bool	     WriteDataPage(int physical_page_num, DataPage* datapage);

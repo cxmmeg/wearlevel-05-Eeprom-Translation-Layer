@@ -2442,6 +2442,12 @@
         <name>$PROJ_DIR$\etlforat24c1024.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\etltest.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\etltest.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\led.c</name>
     </file>
     <file>

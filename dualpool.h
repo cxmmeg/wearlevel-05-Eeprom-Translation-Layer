@@ -25,7 +25,7 @@ enum PoolIdentify { HOTPOOL, COLDPOOL };
 
 class DualPool {
     public:
-	DualPool(int thresh_hold);
+	DualPool(unsigned int thresh_hold);
 	bool	 IsDirtySwapTriggered();
 	bool	 IsColdPoolResizeTriggered();
 	bool	 IsHotPoolResizeTriggered();
