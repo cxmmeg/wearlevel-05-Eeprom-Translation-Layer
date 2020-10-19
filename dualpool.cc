@@ -7,84 +7,96 @@ DualPool::DualPool(unsigned int thresh_hold) : thresh_hold_(thresh_hold) {
 }
 
 bool DualPool::IsDirtySwapTriggered() {
-	return this->hot_pool_sort_by_erase_cycle_.begin()->erase_cycle
-		       - (--this->cold_pool_sort_by_erase_cycle_.end())->erase_cycle
+	return this->hot_pool_sort_by_erase_cycle_.begin()->cycle
+		       - (--this->cold_pool_sort_by_erase_cycle_.end())->cycle
 	       > this->thresh_hold_;
 }
 
 bool DualPool::IsColdPoolResizeTriggered() {
-	return this->cold_pool_sort_by_effective_erase_cycle_.begin()->effective_erase_cycle
-		       - (--this->hot_pool_sort_by_effective_erase_cycle_.end())->effective_erase_cycle
+	return this->cold_pool_sort_by_effective_erase_cycle_.begin()->cycle
+		       - (--this->hot_pool_sort_by_effective_erase_cycle_.end())->cycle
 	       > this->thresh_hold_;
 }
 
 bool DualPool::IsHotPoolResizeTriggered() {
-	return this->hot_pool_sort_by_erase_cycle_.begin()->erase_cycle
-		       - (--this->hot_pool_sort_by_erase_cycle_.end())->erase_cycle
+	return this->hot_pool_sort_by_erase_cycle_.begin()->cycle
+		       - (--this->hot_pool_sort_by_erase_cycle_.end())->cycle
 	       > 2 * this->thresh_hold_;
 }
 
-void DualPool::AddPageIntoPool(DataPage* datapage, enum PoolIdentify pool_identify) {
+void DualPool::AddPageIntoPool(PageCycle pagecycle, enum PoolIdentify pool_identify) {
 	if (pool_identify == HOTPOOL) {
-		this->hot_pool_sort_by_erase_cycle_.insert(*datapage);
-		this->hot_pool_sort_by_effective_erase_cycle_.insert(*datapage);
+		this->hot_pool_sort_by_erase_cycle_.insert(pagecycle);
+		this->hot_pool_sort_by_effective_erase_cycle_.insert(PageCycle(pagecycle.logic_page_num, 0));
 	}
 	else {
-		this->cold_pool_sort_by_erase_cycle_.insert(*datapage);
-		this->cold_pool_sort_by_effective_erase_cycle_.insert(*datapage);
+		this->cold_pool_sort_by_erase_cycle_.insert(pagecycle);
+		this->cold_pool_sort_by_effective_erase_cycle_.insert(
+			PageCycle(pagecycle.logic_page_num, 0));
 	}
 }
 
-DataPage DualPool::PopFrontHotPoolByEraseCycle() {
-	DataPage datapage = *this->hot_pool_sort_by_erase_cycle_.begin();
+void DualPool::PopPageFromPool(PageCycle pagecycle, enum PoolIdentify pool_identify) {
+	if (pool_identify == HOTPOOL) {
+		this->hot_pool_sort_by_erase_cycle_.erase(pagecycle);
+		this->hot_pool_sort_by_effective_erase_cycle_.erase(pagecycle);
+	}
+	else {
+		this->cold_pool_sort_by_erase_cycle_.erase(pagecycle);
+		this->cold_pool_sort_by_effective_erase_cycle_.erase(pagecycle);
+	}
+}
+
+unsigned int DualPool::PopFrontHotPoolByEraseCycle() {
+	PageCycle pagecycle = *this->hot_pool_sort_by_erase_cycle_.begin();
 	this->hot_pool_sort_by_erase_cycle_.erase(this->hot_pool_sort_by_erase_cycle_.begin());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopBackHotPoolByEraseCycle() {
-	DataPage datapage = *(--this->hot_pool_sort_by_erase_cycle_.end());
+unsigned int DualPool::PopBackHotPoolByEraseCycle() {
+	PageCycle pagecycle = *(--this->hot_pool_sort_by_erase_cycle_.end());
 	this->hot_pool_sort_by_erase_cycle_.erase(--this->hot_pool_sort_by_erase_cycle_.end());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopFrontHotPoolByEffectiveEraseCycle() {
-	DataPage datapage = *this->hot_pool_sort_by_effective_erase_cycle_.begin();
+unsigned int DualPool::PopFrontHotPoolByEffectiveEraseCycle() {
+	PageCycle pagecycle = *this->hot_pool_sort_by_effective_erase_cycle_.begin();
 	this->hot_pool_sort_by_effective_erase_cycle_.erase(
 		this->hot_pool_sort_by_effective_erase_cycle_.begin());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopBackHotPoolByEffectiveEraseCycle() {
-	DataPage datapage = *(--this->hot_pool_sort_by_effective_erase_cycle_.end());
+unsigned int DualPool::PopBackHotPoolByEffectiveEraseCycle() {
+	PageCycle pagecycle = *(--this->hot_pool_sort_by_effective_erase_cycle_.end());
 	this->hot_pool_sort_by_effective_erase_cycle_.erase(
 		--this->hot_pool_sort_by_effective_erase_cycle_.end());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopFrontColdPoolByEraseCycle() {
-	DataPage datapage = *this->cold_pool_sort_by_erase_cycle_.begin();
+unsigned int DualPool::PopFrontColdPoolByEraseCycle() {
+	PageCycle pagecycle = *this->cold_pool_sort_by_erase_cycle_.begin();
 	this->cold_pool_sort_by_erase_cycle_.erase(this->cold_pool_sort_by_erase_cycle_.begin());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopBackColdPoolByEraseCycle() {
-	DataPage datapage = *(--this->cold_pool_sort_by_erase_cycle_.end());
+unsigned int DualPool::PopBackColdPoolByEraseCycle() {
+	PageCycle pagecycle = *(--this->cold_pool_sort_by_erase_cycle_.end());
 	this->cold_pool_sort_by_erase_cycle_.erase(--this->cold_pool_sort_by_erase_cycle_.end());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopFrontColdPoolByEffectiveEraseCycle() {
-	DataPage datapage = *this->cold_pool_sort_by_effective_erase_cycle_.begin();
+unsigned int DualPool::PopFrontColdPoolByEffectiveEraseCycle() {
+	PageCycle pagecycle = *this->cold_pool_sort_by_effective_erase_cycle_.begin();
 	this->cold_pool_sort_by_effective_erase_cycle_.erase(
 		this->cold_pool_sort_by_effective_erase_cycle_.begin());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
-DataPage DualPool::PopBackColdPoolByEffectiveEraseCycle() {
-	DataPage datapage = *(--this->cold_pool_sort_by_effective_erase_cycle_.end());
+unsigned int DualPool::PopBackColdPoolByEffectiveEraseCycle() {
+	PageCycle pagecycle = *(--this->cold_pool_sort_by_effective_erase_cycle_.end());
 	this->cold_pool_sort_by_effective_erase_cycle_.erase(
 		--this->cold_pool_sort_by_effective_erase_cycle_.end());
-	return datapage;
+	return pagecycle.logic_page_num;
 }
 
 /* end of public methods */

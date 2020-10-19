@@ -1,7 +1,11 @@
 #include "etltest.h"
+#include "datapage.h"
+#include "dualpool.h"
 #include "etl.h"
+#include <set>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 ETL* etl = NULL;
 
@@ -18,11 +22,12 @@ static void PrintDataPage(DataPage* datapage) {
 
 void TestETLWriteByte() {
 	// printf("InfoPage size : %u \r\n", sizeof(InfoPage));
+	etl = new ETL(512);
 
-	// if (etl->NeedFormat()) {
-	etl->Format(8, 10);
-	printf("format done\r\n");
-	// }
+	if (etl->NeedFormat()) {
+		etl->Format(8, 10);
+		printf("format done\r\n");
+	}
 
 	InfoPage infopage = etl->GetInfoPage();
 	printf("identify : %s \r\n", infopage.identify);
@@ -102,7 +107,7 @@ void ETLFullWriteAndReadFullTest() {
 	etl				    = new ETL(512);
 	char test_data[ TEST_DATA_LEN + 1 ] = { 0 };
 	for (int i = 0; i < TEST_DATA_LEN; ++i)
-		test_data[ i ] = 'a' + rand() % i;
+		test_data[ i ] = 'a' + rand() % 26;
 	printf("start rom test\r\n");
 	unsigned long long endaddr  = 230;
 	unsigned long long startadd = 0;
@@ -115,6 +120,8 @@ void ETLFullWriteAndReadFullTest() {
 	}
 	for (startadd = 0; startadd + TEST_DATA_LEN < endaddr; startadd += TEST_DATA_LEN) {
 		char* data = ( char* )calloc(TEST_DATA_LEN + 1, sizeof(char));
+		assert(data);
+
 		if (etl->Read(startadd, data, TEST_DATA_LEN) != true) {
 			printf("READ ERROR\r\n");
 		}
@@ -127,9 +134,49 @@ void ETLFullWriteAndReadFullTest() {
 				while (1)
 					;
 			}
-		delete data;
+		if (data) {
+			free(data);
+			data = NULL;
+		}
 	}
 	printf("test done\r\n");
 	while (1)
 		;
+}
+
+void DualPoolTeste() {
+	etl = new ETL(512);
+	set< PageCycle > pool;
+	struct DataPage* datapage = new DataPage(8);
+	for (unsigned int physical_page_num = 0; physical_page_num < 28; ++physical_page_num) {
+		etl->ReadDataPage(physical_page_num, datapage);
+		pool.insert(PageCycle(datapage->logic_page_num, datapage->erase_cycle));
+	}
+	printf("pool initialed\r\n");
+
+	for (unsigned int physical_page_num = 0; physical_page_num < 28; ++physical_page_num) {
+		etl->ReadDataPage(physical_page_num, datapage);
+		etl->PrintDataPage(datapage);
+		pool.erase(PageCycle(datapage->logic_page_num, 0));
+		datapage->erase_cycle++;
+		pool.insert(PageCycle(datapage->logic_page_num, datapage->erase_cycle));
+		printf("pool size : %u \r\n", pool.size());
+	}
+
+	// pool.insert(page1);
+	// if (pool.find(page2) != pool.end()) {
+	// 	printf("found\r\n");
+	// 	pool.erase(page2);
+	// 	if (pool.find(page2) != pool.end())
+	// 		printf("found\r\n");
+	// 	else
+	// 		printf("not found\r\n");
+	// }
+	// else
+	// 	printf("not found\r\n");
+
+	// DataPage* page3		     = new DataPage(8);
+	// page3->effective_erase_cycle = 5;
+	// pool.erase(*page3);
+	// printf("erase done\r\n");
 }

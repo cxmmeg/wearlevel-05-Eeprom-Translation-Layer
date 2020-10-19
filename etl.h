@@ -65,6 +65,8 @@ class ETL {
 	unsigned int GetDataPageSize();
 	void	     ClearDataPage(DataPage* datapage);
 	void	     InitLpnToPpnTable();
+	void	     TryToExecDualPoolAlgorithm();
+	static void  PrintDataPage(DataPage* datapage);
 
 	/* dual-pool algorithm */
 	void DirtySwap();

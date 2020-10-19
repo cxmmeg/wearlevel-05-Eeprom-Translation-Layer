@@ -1,6 +1,7 @@
 #ifndef DATAPAGE_H
 #define DATAPAGE_H
 
+#include <assert.h>
 #include <stdlib.h>
 
 struct DataPage {
@@ -13,11 +14,16 @@ struct DataPage {
 
 	DataPage(int data_size) {
 		this->data = ( char* )calloc(data_size, sizeof(char));
+		assert(this->data);
 	}
 	// DataPage() = delete;
 	~DataPage() {
 		if (this->data)
 			free(this->data);
+	}
+
+	bool operator==(const DataPage& datapage) const {
+		return this->logic_page_num == datapage.logic_page_num;
 	}
 };
 

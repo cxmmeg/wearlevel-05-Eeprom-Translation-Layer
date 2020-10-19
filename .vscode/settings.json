@@ -1,5 +1,12 @@
 {
 	"files.associations": {
-		"set": "cpp"
-	}
+                "set": "cpp",
+                "functional": "cpp",
+                "map": "cpp",
+                "string": "cpp",
+                "unordered_map": "cpp",
+                "vector": "cpp",
+                "*.tcc": "cpp",
+                "hashtable": "cpp"
+        }
 }

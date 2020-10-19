@@ -1,7 +1,9 @@
 #include "main.h"
 #include "common.h"
 #include "console.h"
+#include "datapage.h"
 #include "driverlib.h"
+#include "dualpool.h"
 #include "etltest.h"
 #include "led.h"
 #include "lowpower.h"
@@ -43,6 +45,7 @@ int main(void) {
 	// ETLWriteDataPage();
 	// ETLWriteAndReadTest();
 	ETLFullWriteAndReadFullTest();
+	// DualPoolTeste();
 
 	// set< int > dict;
 	// dict.insert(3);

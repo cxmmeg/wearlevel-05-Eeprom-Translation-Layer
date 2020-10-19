@@ -5,17 +5,18 @@
 #include "infopage.h"
 #include <set>
 
-struct DataPageCmpByEraseCycle {
-    public:
-	bool operator()(const DataPage& page1, const DataPage& page2) {
-		return page1.erase_cycle < page2.erase_cycle;
+struct PageCycle {
+	unsigned int logic_page_num;
+	unsigned int cycle;
+	PageCycle(unsigned int lpn, unsigned int cycle_) : logic_page_num(lpn), cycle(cycle_) {
 	}
-};
+	bool operator<(const PageCycle& pagecycle) const {
+		if (this->logic_page_num == pagecycle.logic_page_num)
+			return false;
 
-struct DataPageCmpByEffectiveEraseCycle {
-    public:
-	bool operator()(const DataPage& page1, const DataPage& page2) {
-		return page1.effective_erase_cycle < page2.effective_erase_cycle;
+		if (this->cycle == pagecycle.cycle)
+			return this->logic_page_num < pagecycle.logic_page_num;
+		return this->cycle < pagecycle.cycle;
 	}
 };
 
@@ -26,25 +27,26 @@ enum PoolIdentify { HOTPOOL, COLDPOOL };
 class DualPool {
     public:
 	DualPool(unsigned int thresh_hold);
-	bool	 IsDirtySwapTriggered();
-	bool	 IsColdPoolResizeTriggered();
-	bool	 IsHotPoolResizeTriggered();
-	void	 AddPageIntoPool(DataPage* datapage, enum PoolIdentify pool_identify);
-	DataPage PopFrontHotPoolByEraseCycle();
-	DataPage PopBackHotPoolByEraseCycle();
-	DataPage PopFrontHotPoolByEffectiveEraseCycle();
-	DataPage PopBackHotPoolByEffectiveEraseCycle();
-	DataPage PopFrontColdPoolByEraseCycle();
-	DataPage PopBackColdPoolByEraseCycle();
-	DataPage PopFrontColdPoolByEffectiveEraseCycle();
-	DataPage PopBackColdPoolByEffectiveEraseCycle();
+	bool	     IsDirtySwapTriggered();
+	bool	     IsColdPoolResizeTriggered();
+	bool	     IsHotPoolResizeTriggered();
+	void	     AddPageIntoPool(PageCycle pagecycle, enum PoolIdentify pool_identify);
+	void	     PopPageFromPool(PageCycle pagecycle, enum PoolIdentify pool_identify);
+	unsigned int PopFrontHotPoolByEraseCycle();
+	unsigned int PopBackHotPoolByEraseCycle();
+	unsigned int PopFrontHotPoolByEffectiveEraseCycle();
+	unsigned int PopBackHotPoolByEffectiveEraseCycle();
+	unsigned int PopFrontColdPoolByEraseCycle();
+	unsigned int PopBackColdPoolByEraseCycle();
+	unsigned int PopFrontColdPoolByEffectiveEraseCycle();
+	unsigned int PopBackColdPoolByEffectiveEraseCycle();
 
-    private:
-	int						  thresh_hold_;
-	set< DataPage, DataPageCmpByEraseCycle >	  hot_pool_sort_by_erase_cycle_;
-	set< DataPage, DataPageCmpByEraseCycle >	  cold_pool_sort_by_erase_cycle_;
-	set< DataPage, DataPageCmpByEffectiveEraseCycle > hot_pool_sort_by_effective_erase_cycle_;
-	set< DataPage, DataPageCmpByEffectiveEraseCycle > cold_pool_sort_by_effective_erase_cycle_;
+    public:
+	int		 thresh_hold_;
+	set< PageCycle > hot_pool_sort_by_erase_cycle_;
+	set< PageCycle > cold_pool_sort_by_erase_cycle_;
+	set< PageCycle > hot_pool_sort_by_effective_erase_cycle_;
+	set< PageCycle > cold_pool_sort_by_effective_erase_cycle_;
 };
 
 #endif

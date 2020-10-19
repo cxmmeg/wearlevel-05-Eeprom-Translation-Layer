@@ -9,6 +9,9 @@ ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_cap
 		this->Format(8, 10);
 	this->InitLpnToPpnTable();
 	printf("initialed lpn to pnp table \r\n");
+
+	InitialDualpool();
+	printf("initialed dual pool \r\n");
 }
 
 bool ETL::NeedFormat() {
@@ -64,7 +67,12 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	// printf("logic page size : %u\r\n", logic_page_size);
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
-	// this->ClearDataPage(&datapae);
+	enum PoolIdentify pool_identify = datapage.hot == 1 ? HOTPOOL : COLDPOOL;
+	this->dualpool_->PopPageFromPool(PageCycle(datapage.logic_page_num, datapage.erase_cycle),
+					 pool_identify);
+	datapage.erase_cycle++;
+	this->dualpool_->AddPageIntoPool(PageCycle(datapage.logic_page_num, datapage.erase_cycle),
+					 pool_identify);
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -135,6 +143,7 @@ bool ETL::RomReadBytes(unsigned long long addr, char* dest, int length) {
 
 void ETL::InitialPhysicalPages() {
 	char* data = ( char* )calloc(this->info_page_.logic_page_size, sizeof(char));
+	assert(data);
 
 	DataPage datapage(this->info_page_.logic_page_size);
 	datapage.erase_cycle	       = 1;
@@ -149,6 +158,11 @@ void ETL::InitialPhysicalPages() {
 		datapage.check_sum			     = 0;
 		this->WriteDataPage(physical_page_num, &datapage);
 	}
+
+	if (data) {
+		free(data);
+		data = NULL;
+	}
 }
 void ETL::InitialDualpool() {
 	this->dualpool_	   = new DualPool(this->info_page_.thresh_hold);
@@ -156,17 +170,25 @@ void ETL::InitialDualpool() {
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
 		this->ReadDataPage(physical_page_num, datapage);
+		// this->PrintDataPage(datapage);
 		if (datapage->hot == 1)
-			this->dualpool_->AddPageIntoPool(datapage, HOTPOOL);
+			this->dualpool_->AddPageIntoPool(
+				PageCycle(datapage->logic_page_num, datapage->erase_cycle), HOTPOOL);
 		else
-			this->dualpool_->AddPageIntoPool(datapage, COLDPOOL);
+			this->dualpool_->AddPageIntoPool(
+				PageCycle(datapage->logic_page_num, datapage->erase_cycle), COLDPOOL);
 	}
+
+	printf("hotpool size : %u , coldpool size : %u \r\n",
+	       this->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       this->dualpool_->cold_pool_sort_by_erase_cycle_.size());
 }
 
 bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	unsigned int datapage_size = this->GetDataPageSize();
 	char*	     buff	   = ( char* )calloc(datapage_size, sizeof(char));
-	unsigned int offest	   = 0;
+	assert(buff);
+	unsigned int offest = 0;
 
 	memcpy(buff + offest, ( char* )&datapage->erase_cycle, sizeof(datapage->erase_cycle));
 	offest += sizeof(datapage->erase_cycle);
@@ -187,6 +209,10 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	memcpy(buff + offest, datapage->data, this->info_page_.logic_page_size);
 
 	this->RomWriteBytes(datapage_size * physical_page_num, buff, datapage_size);
+	if (buff) {
+		free(buff);
+		buff = NULL;
+	}
 
 	// printf("ppn : %u  ,write : ", physical_page_num);
 	// for (unsigned int i = 0; i < this->info_page_.logic_page_size; ++i)
@@ -194,13 +220,16 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	// printf("\r\n");
 
 	/* if triggered, exec dual-pool algorithm */
+	this->TryToExecDualPoolAlgorithm();
 
 	return true;
 }
 bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
-	unsigned int datapage_size = this->GetDataPageSize();
-	char*	     buff	   = ( char* )calloc(datapage_size, sizeof(char));
-	unsigned int offest	   = 0;
+	const unsigned int datapage_size = this->GetDataPageSize();
+	// char		   buff[ 20 ] = { 0 };
+	char* buff = ( char* )calloc(datapage_size + 1, sizeof(char));
+	assert(buff);
+	unsigned int offest = 0;
 
 	this->RomReadBytes(datapage_size * physical_page_num, buff, datapage_size);
 
@@ -223,6 +252,11 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
 	// printf("ppn : %u , read : %s \r\n", physical_page_num, datapage->data);
 
+	if (buff) {
+		free(buff);
+		buff = NULL;
+	}
+
 	return true;
 }
 
@@ -244,5 +278,19 @@ void ETL::InitLpnToPpnTable() {
 		printf("lpn %u -> ppn %u \r\n", datapage->logic_page_num, i);
 	}
 	delete datapage;
+}
+
+void ETL::TryToExecDualPoolAlgorithm() {
+}
+
+void ETL::PrintDataPage(DataPage* datapage) {
+	printf("--------------------------------------\r\n");
+	printf("erase cycle : %u\r\n", datapage->erase_cycle);
+	printf("effective erase cycle : %u\r\n", datapage->effective_erase_cycle);
+	printf("logic page num : %u\r\n", datapage->logic_page_num);
+	printf("hot : %u\r\n", datapage->hot);
+	printf("check_sum : %u\r\n", datapage->check_sum);
+	printf("data : %s\r\n", datapage->data);
+	printf("--------------------------------------\r\n");
 }
 /* end of private methods */

@@ -7,5 +7,6 @@ void TestETLWriteByte();
 void ETLWriteDataPage();
 void ETLWriteAndReadTest();
 void ETLFullWriteAndReadFullTest();
+void DualPoolTeste();
 
 #endif
