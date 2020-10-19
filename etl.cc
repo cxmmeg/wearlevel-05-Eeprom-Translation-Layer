@@ -64,7 +64,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	// printf("logic page size : %u\r\n", logic_page_size);
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
-	this->ClearDataPage(&datapage);
+	// this->ClearDataPage(&datapae);
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {

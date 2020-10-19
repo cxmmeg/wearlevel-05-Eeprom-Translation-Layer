@@ -41,7 +41,8 @@ int main(void) {
 
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
-	ETLWriteAndReadTest();
+	// ETLWriteAndReadTest();
+	ETLFullWriteAndReadFullTest();
 
 	// set< int > dict;
 	// dict.insert(3);

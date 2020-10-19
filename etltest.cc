@@ -1,6 +1,7 @@
 #include "etltest.h"
 #include "etl.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 ETL* etl = NULL;
 
@@ -71,11 +72,13 @@ static void ETLWriteAndRead(char* write_buff, unsigned int write_len, unsigned l
 }
 
 void ETLWriteAndReadTest() {
+
 	etl = new ETL(512);
 
 	char* write_buff1 = "hello world!";
 	char* write_buff2 = "hello!";
 	char* write_buff3 = "abcdefghijklmnopqrstuvwxyz";
+	char* write_buff4 = "yhlvzqmubc";
 
 	ETLWriteAndRead(write_buff3, strlen(write_buff3) + 1, 0);
 	printf("\r\n");
@@ -85,4 +88,48 @@ void ETLWriteAndReadTest() {
 
 	ETLWriteAndRead(write_buff2, strlen(write_buff2) + 1, 5);
 	printf("\r\n");
+
+	ETLWriteAndRead(write_buff4, strlen(write_buff4) + 1, 0);
+	printf("\r\n");
+
+	ETLWriteAndRead(write_buff4, strlen(write_buff4) + 1, 0);
+	printf("\r\n");
+}
+
+void ETLFullWriteAndReadFullTest() {
+
+#define TEST_DATA_LEN 15
+	etl				    = new ETL(512);
+	char test_data[ TEST_DATA_LEN + 1 ] = { 0 };
+	for (int i = 0; i < TEST_DATA_LEN; ++i)
+		test_data[ i ] = 'a' + rand() % i;
+	printf("start rom test\r\n");
+	unsigned long long endaddr  = 230;
+	unsigned long long startadd = 0;
+	for (startadd = 0; startadd + TEST_DATA_LEN < endaddr; startadd += TEST_DATA_LEN) {
+
+		if (etl->Write(startadd, test_data, TEST_DATA_LEN) != true) {
+			printf("WRITE ERROR\r\n");
+		}
+		printf("start addr :%ld\r\n", startadd);
+	}
+	for (startadd = 0; startadd + TEST_DATA_LEN < endaddr; startadd += TEST_DATA_LEN) {
+		char* data = ( char* )calloc(TEST_DATA_LEN + 1, sizeof(char));
+		if (etl->Read(startadd, data, TEST_DATA_LEN) != true) {
+			printf("READ ERROR\r\n");
+		}
+
+		for (unsigned int i = 0; i < TEST_DATA_LEN; ++i)
+			if (test_data[ i ] != data[ i ]) {
+				printf("read && write not match \r\n");
+				printf("test_data : %s , %c \r\n", test_data, test_data[ i ]);
+				printf("read_data : %s , %c \r\n", data, data[ i ]);
+				while (1)
+					;
+			}
+		delete data;
+	}
+	printf("test done\r\n");
+	while (1)
+		;
 }

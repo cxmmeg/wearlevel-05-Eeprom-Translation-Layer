@@ -6,5 +6,6 @@
 void TestETLWriteByte();
 void ETLWriteDataPage();
 void ETLWriteAndReadTest();
+void ETLFullWriteAndReadFullTest();
 
 #endif
