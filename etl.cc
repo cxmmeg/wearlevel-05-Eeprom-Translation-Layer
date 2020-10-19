@@ -1,9 +1,14 @@
 #include "etl.h"
+#include "rom.h"
 #include <stddef.h>
 #include <string.h>
 /* public methods */
 
 ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_capacity) {
+	if (this->NeedFormat())
+		this->Format(8, 10);
+	this->InitLpnToPpnTable();
+	printf("initialed lpn to pnp table \r\n");
 }
 
 bool ETL::NeedFormat() {
@@ -73,7 +78,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
 	memcpy(datapage.data + data_offset, src, front_len);
-	this->WriteDataPage(start_logic_page_num, &datapage);
+	this->WriteDataPage(start_physical_page_num, &datapage);
 	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
 
@@ -107,6 +112,13 @@ bool ETL::Read(unsigned long long addr, char* dest, int length) {
 /* end of public methods */
 
 /* private methods */
+
+int ETL::RomWriteByte(unsigned long long addr, char data) {
+	return ROM_WriteByte(addr, data);
+}
+int ETL::RomReadByte(unsigned long long addr, char* dest) {
+	return ROM_ReadByte(addr, dest);
+}
 
 bool ETL::RomWriteBytes(unsigned long long addr, const char* src, int length) {
 	for (unsigned int offset = 0; offset < length; ++offset)
@@ -176,6 +188,11 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 
 	this->RomWriteBytes(datapage_size * physical_page_num, buff, datapage_size);
 
+	// printf("ppn : %u  ,write : ", physical_page_num);
+	// for (unsigned int i = 0; i < this->info_page_.logic_page_size; ++i)
+	// 	printf("%c", *(datapage->data + i));
+	// printf("\r\n");
+
 	/* if triggered, exec dual-pool algorithm */
 
 	return true;
@@ -204,6 +221,7 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	offest += sizeof(datapage->check_sum);
 
 	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
+	// printf("ppn : %u , read : %s \r\n", physical_page_num, datapage->data);
 
 	return true;
 }
@@ -218,4 +236,13 @@ void ETL::ClearDataPage(DataPage* datapage) {
 	memset(datapage->data, 0, this->info_page_.logic_page_size);
 }
 
+void ETL::InitLpnToPpnTable() {
+	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
+	for (unsigned int i = 0; i < this->info_page_.total_page_count; ++i) {
+		this->ReadDataPage(i, datapage);
+		this->lpn_to_ppn_[ datapage->logic_page_num ] = i;
+		printf("lpn %u -> ppn %u \r\n", datapage->logic_page_num, i);
+	}
+	delete datapage;
+}
 /* end of private methods */

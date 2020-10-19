@@ -1,8 +1,8 @@
 #include "etltest.h"
-#include "etlforat24c1024.h"
+#include "etl.h"
 #include <stdio.h>
 
-EtlForAt24c1024* etl = new EtlForAt24c1024(512);
+ETL* etl = NULL;
 
 static void PrintDataPage(DataPage* datapage) {
 	printf("--------------------------------------\r\n");
@@ -71,16 +71,18 @@ static void ETLWriteAndRead(char* write_buff, unsigned int write_len, unsigned l
 }
 
 void ETLWriteAndReadTest() {
+	etl = new ETL(512);
+
 	char* write_buff1 = "hello world!";
 	char* write_buff2 = "hello!";
-	char* write_buff3 = "hello!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbc";
+	char* write_buff3 = "abcdefghijklmnopqrstuvwxyz";
 
-	ETLWriteAndRead(write_buff1, strlen(write_buff1) + 1, 0);
+	ETLWriteAndRead(write_buff3, strlen(write_buff3) + 1, 0);
+	printf("\r\n");
+
+	ETLWriteAndRead(write_buff1, strlen(write_buff1) + 1, 2);
 	printf("\r\n");
 
 	ETLWriteAndRead(write_buff2, strlen(write_buff2) + 1, 5);
-	printf("\r\n");
-
-	ETLWriteAndRead(write_buff3, strlen(write_buff3) + 1, 10);
 	printf("\r\n");
 }

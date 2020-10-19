@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>4081373576</Checksum>
+        <Checksum>2334172005</Checksum>
     </DebugChecksum>
     <EEM_State_Storage>
         <Buffer>010000000000000000000000</Buffer>
@@ -79,8 +79,9 @@
     </DataSample>
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{$PROJ_DIR$\etltest.cc}.67.8" 1 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\etl.cc}.218.2" 1 0 0 0 "" 0 ""</Bp1>
-        <Count>2</Count>
+        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\main.c}.44.2" 1 0 0 0 "" 0 ""</Bp1>
+        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\etl.cc}.9.3" 1 0 0 0 "" 0 ""</Bp2>
+        <Count>3</Count>
     </Breakpoints>
     <FET>
         <Clock_mode>46</Clock_mode>

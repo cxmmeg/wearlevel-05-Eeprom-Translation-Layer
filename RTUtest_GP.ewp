@@ -104,11 +104,11 @@
                 </option>
                 <option>
                     <name>GStackSize2</name>
-                    <state>5048</state>
+                    <state>3000</state>
                 </option>
                 <option>
                     <name>GHeapSize2</name>
-                    <state>6000</state>
+                    <state>8000</state>
                 </option>
                 <option>
                     <name>RadioDataModelType</name>
