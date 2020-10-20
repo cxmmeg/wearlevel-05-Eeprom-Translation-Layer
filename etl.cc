@@ -1,5 +1,6 @@
 #include "etl.h"
 #include "rom.h"
+#include "tool.h"
 #include <stddef.h>
 #include <string.h>
 /* public methods */
@@ -71,6 +72,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->dualpool_->PopPageFromPool(PageCycle(datapage.logic_page_num, datapage.erase_cycle),
 					 pool_identify);
 	datapage.erase_cycle++;
+	datapage.effective_erase_cycle++;
 	this->dualpool_->AddPageIntoPool(PageCycle(datapage.logic_page_num, datapage.erase_cycle),
 					 pool_identify);
 
@@ -80,13 +82,23 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		//        start_physical_page_num);
 		memcpy(datapage.data + data_offset, src, length);
 		// printf("datapage.data : %s \r\n", datapage.data);
-		return this->WriteDataPage(start_physical_page_num, &datapage);
+
+		this->WriteDataPage(start_physical_page_num, &datapage);
+
+		/* if triggered, exec dual-pool algorithm */
+		this->TryToExecDualPoolAlgorithm();
+
+		return true;
 	}
 
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
 	memcpy(datapage.data + data_offset, src, front_len);
 	this->WriteDataPage(start_physical_page_num, &datapage);
+
+	/* if triggered, exec dual-pool algorithm */
+	this->TryToExecDualPoolAlgorithm();
+
 	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
 
@@ -219,9 +231,6 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	// 	printf("%c", *(datapage->data + i));
 	// printf("\r\n");
 
-	/* if triggered, exec dual-pool algorithm */
-	this->TryToExecDualPoolAlgorithm();
-
 	return true;
 }
 bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
@@ -280,7 +289,99 @@ void ETL::InitLpnToPpnTable() {
 	delete datapage;
 }
 
+/*
+ * dual-pool algorithm :
+ * Dirty Swap:
+ *      MaxQue<EC,HP>.front - MaxQue<EC,CP>.back > TH
+ *
+ * Cold Pool Resize :
+ *      MaxQue<EEC,CP>.front - MaxQue<EEC,HP>.back > TH
+ *
+ * Hot Pool Resize :
+ *      MaxQue<EC,HP>.front - MaxQue<EC,HP>.back > 2*TH
+ */
 void ETL::TryToExecDualPoolAlgorithm() {
+	if (this->dualpool_->IsDirtySwapTriggered()) {
+		printf("dirty swap triggered \r\n");
+		unsigned int coldest_lpn      = this->dualpool_->PopBackColdPoolByEraseCycle();
+		unsigned int hotest_lpn	      = this->dualpool_->PopFrontHotPoolByEraseCycle();
+		unsigned int coldest_ppn      = this->lpn_to_ppn_[ coldest_lpn ];
+		unsigned int hotest_ppn	      = this->lpn_to_ppn_[ hotest_lpn ];
+		DataPage*    coldest_datapage = new DataPage(this->info_page_.logic_page_size);
+		DataPage*    hotest_datapage  = new DataPage(this->info_page_.logic_page_size);
+		assert(coldest_datapage);
+		assert(hotest_datapage);
+
+		this->ReadDataPage(coldest_ppn, coldest_datapage);
+		this->ReadDataPage(hotest_ppn, hotest_datapage);
+		this->dualpool_->PopPageFromPool(PageCycle(coldest_lpn, coldest_datapage->erase_cycle),
+						 COLDPOOL);
+		this->dualpool_->PopPageFromPool(PageCycle(hotest_lpn, hotest_datapage->erase_cycle),
+						 HOTPOOL);
+		this->lpn_to_ppn_[ coldest_lpn ]	= hotest_ppn;
+		this->lpn_to_ppn_[ hotest_lpn ]		= coldest_ppn;
+		coldest_datapage->logic_page_num	= hotest_lpn;
+		coldest_datapage->effective_erase_cycle = 0;
+		coldest_datapage->erase_cycle++;
+		hotest_datapage->logic_page_num	       = coldest_lpn;
+		hotest_datapage->effective_erase_cycle = 0;
+		hotest_datapage->erase_cycle++;
+		Tool::SwapMemory(coldest_datapage->data, hotest_datapage->data,
+				 this->info_page_.logic_page_size);
+		this->dualpool_->AddPageIntoPool(
+			PageCycle(coldest_datapage->logic_page_num, coldest_datapage->erase_cycle), COLDPOOL);
+		this->dualpool_->AddPageIntoPool(
+			PageCycle(hotest_datapage->logic_page_num, hotest_datapage->erase_cycle), HOTPOOL);
+		this->WriteDataPage(coldest_ppn, coldest_datapage);
+		this->WriteDataPage(hotest_ppn, hotest_datapage);
+
+		delete coldest_datapage;
+		delete hotest_datapage;
+	}
+
+	if (this->dualpool_->IsColdPoolResizeTriggered()) {
+		printf("cold pool resize triggered \r\n");
+		unsigned     cold_to_hot_lpn	  = this->dualpool_->PopFrontColdPoolByEffectiveEraseCycle();
+		unsigned int cold_to_hot_ppn	  = this->lpn_to_ppn_[ cold_to_hot_lpn ];
+		DataPage*    cold_to_hot_datapage = new DataPage(this->info_page_.logic_page_size);
+		assert(cold_to_hot_datapage);
+		this->ReadDataPage(cold_to_hot_ppn, cold_to_hot_datapage);
+
+		/* move page from cold pool to hot pool */
+		this->dualpool_->PopPageFromPool(
+			PageCycle(cold_to_hot_lpn, cold_to_hot_datapage->erase_cycle), COLDPOOL);
+		this->dualpool_->hot_pool_sort_by_erase_cycle_.insert(
+			PageCycle(cold_to_hot_lpn, cold_to_hot_datapage->erase_cycle));
+		this->dualpool_->hot_pool_sort_by_effective_erase_cycle_.insert(
+			PageCycle(cold_to_hot_lpn, cold_to_hot_datapage->effective_erase_cycle));
+
+		cold_to_hot_datapage->hot = 1;
+		this->WriteDataPage(cold_to_hot_ppn, cold_to_hot_datapage);
+
+		delete cold_to_hot_datapage;
+	}
+
+	if (this->dualpool_->IsHotPoolResizeTriggered()) {
+		printf("hot pool resize triggered \r\n");
+		unsigned int hot_to_cold_lpn = this->dualpool_->PopBackHotPoolByEraseCycle();
+		unsigned int hot_to_cold_ppn = this->lpn_to_ppn_[ hot_to_cold_lpn ];
+		// DataPage*    hot_to_cold_datapage = new DataPage(this->info_page_.logic_page_size);
+		DataPage hot_to_cold_datapage(this->info_page_.logic_page_size);
+		// assert(hot_to_cold_ppn);
+		this->ReadDataPage(hot_to_cold_ppn, &hot_to_cold_datapage);
+
+		/* move page from hot pool to cold pool */
+		this->dualpool_->PopPageFromPool(PageCycle(hot_to_cold_lpn, hot_to_cold_datapage.erase_cycle),
+						 HOTPOOL);
+		this->dualpool_->hot_pool_sort_by_erase_cycle_.insert(
+			PageCycle(hot_to_cold_lpn, hot_to_cold_datapage.erase_cycle));
+		this->dualpool_->hot_pool_sort_by_effective_erase_cycle_.insert(
+			PageCycle(hot_to_cold_lpn, hot_to_cold_datapage.effective_erase_cycle));
+		hot_to_cold_datapage.hot = 0;
+		this->WriteDataPage(hot_to_cold_ppn, &hot_to_cold_datapage);
+
+		// delete hot_to_cold_datapage;
+	}
 }
 
 void ETL::PrintDataPage(DataPage* datapage) {

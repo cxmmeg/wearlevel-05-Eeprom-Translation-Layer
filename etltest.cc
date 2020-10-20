@@ -104,11 +104,15 @@ void ETLWriteAndReadTest() {
 void ETLFullWriteAndReadFullTest() {
 
 #define TEST_DATA_LEN 15
-	etl				    = new ETL(512);
+	etl = new ETL(512);
+	// etl->Format(8,20);
 	char test_data[ TEST_DATA_LEN + 1 ] = { 0 };
 	for (int i = 0; i < TEST_DATA_LEN; ++i)
 		test_data[ i ] = 'a' + rand() % 26;
 	printf("start rom test\r\n");
+        
+
+
 	unsigned long long endaddr  = 230;
 	unsigned long long startadd = 0;
 	for (startadd = 0; startadd + TEST_DATA_LEN < endaddr; startadd += TEST_DATA_LEN) {
@@ -140,6 +144,10 @@ void ETLFullWriteAndReadFullTest() {
 		}
 	}
 	printf("test done\r\n");
+
+	printf("hotpool size : %u , coldpool size : %u \r\n",
+	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
 	while (1)
 		;
 }
@@ -162,21 +170,17 @@ void DualPoolTeste() {
 		pool.insert(PageCycle(datapage->logic_page_num, datapage->erase_cycle));
 		printf("pool size : %u \r\n", pool.size());
 	}
+}
 
-	// pool.insert(page1);
-	// if (pool.find(page2) != pool.end()) {
-	// 	printf("found\r\n");
-	// 	pool.erase(page2);
-	// 	if (pool.find(page2) != pool.end())
-	// 		printf("found\r\n");
-	// 	else
-	// 		printf("not found\r\n");
-	// }
-	// else
-	// 	printf("not found\r\n");
-
-	// DataPage* page3		     = new DataPage(8);
-	// page3->effective_erase_cycle = 5;
-	// pool.erase(*page3);
-	// printf("erase done\r\n");
+void TestUpdateEraseCycle() {
+	etl = new ETL(512);
+	DataPage datapage(etl->info_page_.logic_page_size);
+	etl->ReadDataPage(0, &datapage);
+	etl->PrintDataPage(&datapage);
+	for (int i = 0; i < 30; ++i) {
+		char* write_buff = "11112222abc";
+		etl->Write(0, write_buff, strlen(write_buff) + 1);
+	}
+	etl->ReadDataPage(0, &datapage);
+	etl->PrintDataPage(&datapage);
 }

@@ -2646,6 +2646,12 @@
         <name>$PROJ_DIR$\timer.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\tool.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\tool.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\uart0.c</name>
     </file>
     <file>

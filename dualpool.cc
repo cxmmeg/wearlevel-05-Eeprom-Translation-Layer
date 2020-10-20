@@ -31,8 +31,7 @@ void DualPool::AddPageIntoPool(PageCycle pagecycle, enum PoolIdentify pool_ident
 	}
 	else {
 		this->cold_pool_sort_by_erase_cycle_.insert(pagecycle);
-		this->cold_pool_sort_by_effective_erase_cycle_.insert(
-			PageCycle(pagecycle.logic_page_num, 0));
+		this->cold_pool_sort_by_effective_erase_cycle_.insert(PageCycle(pagecycle.logic_page_num, 0));
 	}
 }
 

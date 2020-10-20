@@ -11,6 +11,7 @@
 #include "rom.h"
 #include "rtc.h"
 #include "timer.h"
+#include "tool.h"
 #include "uart0.h"
 #include "uart1.h"
 #include "uart3.h"
@@ -46,6 +47,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
+	// TestUpdateEraseCycle();
 
 	// set< int > dict;
 	// dict.insert(3);
