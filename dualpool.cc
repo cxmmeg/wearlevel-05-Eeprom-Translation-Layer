@@ -1,5 +1,6 @@
 #include "dualpool.h"
 #include "etl.h"
+#include <stdio.h>
 
 /* public methods */
 
@@ -19,9 +20,14 @@ bool DualPool::IsColdPoolResizeTriggered() {
 }
 
 bool DualPool::IsHotPoolResizeTriggered() {
-	return this->hot_pool_sort_by_erase_cycle_.begin()->cycle
-		       - (--this->hot_pool_sort_by_erase_cycle_.end())->cycle
-	       > 2 * this->thresh_hold_;
+	if (this->hot_pool_sort_by_erase_cycle_.begin()->cycle
+		    - (this->hot_pool_sort_by_erase_cycle_.rbegin())->cycle
+	    > 2 * this->thresh_hold_) {
+		printf("%u - %u > %u \r\n", this->hot_pool_sort_by_erase_cycle_.begin()->cycle,
+		       this->hot_pool_sort_by_erase_cycle_.rbegin()->cycle, 2 * this->thresh_hold_);
+		return true;
+	}
+	return false;
 }
 
 void DualPool::AddPageIntoPool(PageCycle pagecycle, enum PoolIdentify pool_identify) {
@@ -96,6 +102,29 @@ unsigned int DualPool::PopBackColdPoolByEffectiveEraseCycle() {
 	this->cold_pool_sort_by_effective_erase_cycle_.erase(
 		--this->cold_pool_sort_by_effective_erase_cycle_.end());
 	return pagecycle.logic_page_num;
+}
+
+void DualPool::PrintEraseCyclePoolInfo() {
+	printf("hot erase cycle pool : \r\n");
+	set< PageCycle >::iterator it = this->hot_pool_sort_by_erase_cycle_.begin();
+	for (; it != this->hot_pool_sort_by_erase_cycle_.end(); it++)
+		printf("lpn : %u , cycle : %d \r\n", it->logic_page_num, it->cycle);
+
+	printf("cold erase cycle pool : \r\n");
+	for (it = this->cold_pool_sort_by_erase_cycle_.begin();
+	     it != this->cold_pool_sort_by_erase_cycle_.end(); it++)
+		printf("lpn : %u , cycle : %d \r\n", it->logic_page_num, it->cycle);
+}
+void DualPool::PrintEffectiveEraseCyclePoolInfo() {
+	printf("hot effective erase cycle pool : \r\n");
+	set< PageCycle >::iterator it = this->hot_pool_sort_by_effective_erase_cycle_.begin();
+	for (; it != this->hot_pool_sort_by_effective_erase_cycle_.end(); it++)
+		printf("lpn : %u , cycle : %d \r\n", it->logic_page_num, it->cycle);
+
+	printf("cold effective erase cycle pool : \r\n");
+	for (it = this->cold_pool_sort_by_effective_erase_cycle_.begin();
+	     it != this->cold_pool_sort_by_effective_erase_cycle_.end(); it++)
+		printf("lpn : %u , cycle : %d \r\n", it->logic_page_num, it->cycle);
 }
 
 /* end of public methods */

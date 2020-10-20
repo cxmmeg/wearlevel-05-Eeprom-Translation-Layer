@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 struct DataPage {
-	unsigned int  erase_cycle;
-	unsigned int  effective_erase_cycle;
+	int	      erase_cycle;
+	int	      effective_erase_cycle;
 	unsigned int  logic_page_num;
 	unsigned char hot;
 	unsigned char check_sum;

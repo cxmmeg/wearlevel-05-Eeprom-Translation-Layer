@@ -7,8 +7,8 @@
 
 struct PageCycle {
 	unsigned int logic_page_num;
-	unsigned int cycle;
-	PageCycle(unsigned int lpn, unsigned int cycle_) : logic_page_num(lpn), cycle(cycle_) {
+	int	     cycle;
+	PageCycle(unsigned int lpn, int cycle_) : logic_page_num(lpn), cycle(cycle_) {
 	}
 	bool operator<(const PageCycle& pagecycle) const {
 		if (this->logic_page_num == pagecycle.logic_page_num)
@@ -16,7 +16,7 @@ struct PageCycle {
 
 		if (this->cycle == pagecycle.cycle)
 			return this->logic_page_num < pagecycle.logic_page_num;
-		return this->cycle < pagecycle.cycle;
+		return this->cycle > pagecycle.cycle;
 	}
 };
 
@@ -40,6 +40,9 @@ class DualPool {
 	unsigned int PopBackColdPoolByEraseCycle();
 	unsigned int PopFrontColdPoolByEffectiveEraseCycle();
 	unsigned int PopBackColdPoolByEffectiveEraseCycle();
+
+	void PrintEraseCyclePoolInfo();
+	void PrintEffectiveEraseCyclePoolInfo();
 
     public:
 	int		 thresh_hold_;

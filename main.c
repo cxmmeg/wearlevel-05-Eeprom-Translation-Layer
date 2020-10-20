@@ -45,9 +45,9 @@ int main(void) {
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
 	// ETLWriteAndReadTest();
-	ETLFullWriteAndReadFullTest();
+	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestUpdateEraseCycle();
+	TestUpdateEraseCycle();
 
 	// set< int > dict;
 	// dict.insert(3);

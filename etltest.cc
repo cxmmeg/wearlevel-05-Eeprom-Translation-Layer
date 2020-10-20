@@ -1,4 +1,5 @@
 #include "etltest.h"
+#include "common.h"
 #include "datapage.h"
 #include "dualpool.h"
 #include "etl.h"
@@ -110,8 +111,6 @@ void ETLFullWriteAndReadFullTest() {
 	for (int i = 0; i < TEST_DATA_LEN; ++i)
 		test_data[ i ] = 'a' + rand() % 26;
 	printf("start rom test\r\n");
-        
-
 
 	unsigned long long endaddr  = 230;
 	unsigned long long startadd = 0;
@@ -174,13 +173,21 @@ void DualPoolTeste() {
 
 void TestUpdateEraseCycle() {
 	etl = new ETL(512);
+	etl->Format(8, 20);
 	DataPage datapage(etl->info_page_.logic_page_size);
-	etl->ReadDataPage(0, &datapage);
-	etl->PrintDataPage(&datapage);
-	for (int i = 0; i < 30; ++i) {
-		char* write_buff = "11112222abc";
-		etl->Write(0, write_buff, strlen(write_buff) + 1);
+	// etl->ReadDataPage(0, &datapage);
+	// etl->PrintDataPage(&datapage);
+	for (int i = 0; i < 60; ++i) {
+		char* write_buff = "111122";
+		etl->Write(0, write_buff, strlen(write_buff));
+		// System_Delayms(10000);
 	}
-	etl->ReadDataPage(0, &datapage);
-	etl->PrintDataPage(&datapage);
+	// etl->ReadDataPage(0, &datapage);
+	// etl->PrintDataPage(&datapage);
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
+	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	printf("test done \r\n");
 }
