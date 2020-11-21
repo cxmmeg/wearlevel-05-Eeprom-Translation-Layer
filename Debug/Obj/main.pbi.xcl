@@ -1,4 +1,4 @@
-"\\Mac\Home\work\ETL\main.c"
+"\\Mac\Home\work\ETL\main.cc"
 -std=c++98
 -ferror-limit=0
 -fbracket-depth=512

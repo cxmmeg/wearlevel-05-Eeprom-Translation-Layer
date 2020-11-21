@@ -58,7 +58,7 @@ int main(void) {
 	// printf("largest : %d \r\n", *dict.begin());
 
 	while (1) {
-	System_Delayms(1000);
+		System_Delayms(1000);
 	}
 }
 

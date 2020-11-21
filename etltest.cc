@@ -11,7 +11,7 @@
 ETL* etl = NULL;
 
 static void PrintDataPage(DataPage* datapage) {
-	printf("--------------------------------------\r\n");
+	printf("++++++++++++++++++++++++++++++++++++++r\n");
 	printf("erase cycle : %u\r\n", datapage->erase_cycle);
 	printf("effective erase cycle : %u\r\n", datapage->effective_erase_cycle);
 	printf("logic page num : %u\r\n", datapage->logic_page_num);
@@ -177,7 +177,7 @@ void TestUpdateEraseCycle() {
 	DataPage datapage(etl->info_page_.logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
-	for (int i = 0; i < 60; ++i) {
+	for (int i = 0; i < 1000; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 		// System_Delayms(10000);
@@ -185,9 +185,11 @@ void TestUpdateEraseCycle() {
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintEraseCyclePoolInfo();
+	etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
 
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
 	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	etl->PrintPMTT();
 	printf("test done \r\n");
 }

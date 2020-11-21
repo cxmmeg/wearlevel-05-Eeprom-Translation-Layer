@@ -105,6 +105,8 @@ unsigned int DualPool::PopBackColdPoolByEffectiveEraseCycle() {
 }
 
 void DualPool::PrintEraseCyclePoolInfo() {
+	printf("++++++++++++++++Erase Cycle Pool Info+++++++++++++\r\n\r\n");
+
 	printf("hot erase cycle pool : \r\n");
 	set< PageCycle >::iterator it = this->hot_pool_sort_by_erase_cycle_.begin();
 	for (; it != this->hot_pool_sort_by_erase_cycle_.end(); it++)
@@ -114,8 +116,13 @@ void DualPool::PrintEraseCyclePoolInfo() {
 	for (it = this->cold_pool_sort_by_erase_cycle_.begin();
 	     it != this->cold_pool_sort_by_erase_cycle_.end(); it++)
 		printf("lpn : %u , cycle : %d \r\n", it->logic_page_num, it->cycle);
+
+	printf("---------------Erase Cycle Pool Info---------------\r\n\r\n");
 }
 void DualPool::PrintEffectiveEraseCyclePoolInfo() {
+
+	printf("+++++++++Effective Erase Cycle Pool Info+++++++\r\n\r\n");
+
 	printf("hot effective erase cycle pool : \r\n");
 	set< PageCycle >::iterator it = this->hot_pool_sort_by_effective_erase_cycle_.begin();
 	for (; it != this->hot_pool_sort_by_effective_erase_cycle_.end(); it++)
@@ -125,6 +132,8 @@ void DualPool::PrintEffectiveEraseCyclePoolInfo() {
 	for (it = this->cold_pool_sort_by_effective_erase_cycle_.begin();
 	     it != this->cold_pool_sort_by_effective_erase_cycle_.end(); it++)
 		printf("lpn : %u , cycle : %d \r\n", it->logic_page_num, it->cycle);
+
+	printf("----------Effective Erase Cycle Pool Info-------r\n\r\n");
 }
 
 /* end of public methods */

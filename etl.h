@@ -67,6 +67,7 @@ class ETL {
 	void	     InitLpnToPpnTable();
 	void	     TryToExecDualPoolAlgorithm();
 	static void  PrintDataPage(DataPage* datapage);
+	void	     PrintPMTT();
 
 	/* dual-pool algorithm */
 	void DirtySwap();

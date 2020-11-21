@@ -2613,7 +2613,7 @@
         <name>$PROJ_DIR$\lowpower.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\main.c</name>
+        <name>$PROJ_DIR$\main.cc</name>
     </file>
     <file>
         <name>$PROJ_DIR$\main.h</name>
