@@ -174,10 +174,12 @@ void DualPoolTeste() {
 void TestUpdateEraseCycle() {
 	etl = new ETL(512);
 	etl->Format(8, 20);
+	etl->PrintPMTT();
 	DataPage datapage(etl->info_page_.logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
-	for (int i = 0; i < 1000; ++i) {
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+	for (int i = 0; i < 2000; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 		// System_Delayms(10000);
@@ -185,7 +187,7 @@ void TestUpdateEraseCycle() {
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintEraseCyclePoolInfo();
-	etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
+	// etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
 
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
