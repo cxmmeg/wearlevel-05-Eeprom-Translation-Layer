@@ -10,6 +10,6 @@ void ETLFullWriteAndReadFullTest();
 void DualPoolTeste();
 void TestSingleHotPage();
 void TestMultiHotPage();
-void TestHotPageToColdPage();
+void TestHotPageToColdPage(unsigned int write_cycle);
 
 #endif

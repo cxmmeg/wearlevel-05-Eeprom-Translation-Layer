@@ -237,7 +237,7 @@ void TestMultiHotPage() {
 	printf("test done \r\n");
 }
 
-void TestHotPageToColdPage() {
+void TestHotPageToColdPage(unsigned int write_cycle) {
 	etl = new ETL(512);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
@@ -246,7 +246,7 @@ void TestHotPageToColdPage() {
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintEraseCyclePoolInfo();
 	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (int i = 0; i < 100; ++i) {
+	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 		etl->Read(0, readbuf, strlen(write_buff));
@@ -261,7 +261,7 @@ void TestHotPageToColdPage() {
 
 	etl->dualpool_->PrintEraseCyclePoolInfo();
 
-	for (int i = 0; i < 100; ++i) {
+	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "333322";
 		etl->Write(10, write_buff, strlen(write_buff));
 		etl->Read(10, readbuf, strlen(write_buff));
@@ -275,7 +275,7 @@ void TestHotPageToColdPage() {
 	}
 
 	etl->dualpool_->PrintEraseCyclePoolInfo();
-
+	// etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
 	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());

@@ -49,7 +49,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage();
 	// TestMultiHotPage();
-	TestHotPageToColdPage();
+	TestHotPageToColdPage(1000);
 	// set< int > dict;
 	// dict.insert(3);
 	// dict.insert(2);

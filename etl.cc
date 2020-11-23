@@ -320,17 +320,17 @@ void ETL::PrintPMTT() {
  */
 void ETL::TryToExecDualPoolAlgorithm() {
 	if (this->dualpool_->IsDirtySwapTriggered()) {
-		printf("dirty swap triggered \r\n");
+		LOG_DEBUG("dirty swap triggered \r\n");
 		this->DirtySwap();
 	}
 
 	if (this->dualpool_->IsColdPoolResizeTriggered()) {
-		printf("cold pool resize triggered \r\n");
+		LOG_DEBUG("cold pool resize triggered \r\n");
 		this->ColdPoolResize();
 	}
 
 	if (this->dualpool_->IsHotPoolResizeTriggered()) {
-		printf("hot pool resize triggered \r\n");
+		LOG_DEBUG("hot pool resize triggered \r\n");
 		this->HotPoolResize();
 	}
 }
@@ -387,9 +387,8 @@ void ETL::DirtySwap() {
 }
 
 void ETL::ColdPoolResize() {
-	unsigned     cold_to_hot_lpn	  = this->dualpool_->PopFrontColdPoolByEffectiveEraseCycle();
-	unsigned int cold_to_hot_ppn	  = this->lpn_to_ppn_[ cold_to_hot_lpn ];
-	DataPage*    cold_to_hot_datapage = new DataPage(this->info_page_.logic_page_size);
+	unsigned  cold_to_hot_ppn      = this->dualpool_->PopFrontColdPoolByEffectiveEraseCycle();
+	DataPage* cold_to_hot_datapage = new DataPage(this->info_page_.logic_page_size);
 	assert(cold_to_hot_datapage);
 	this->ReadDataPage(cold_to_hot_ppn, cold_to_hot_datapage);
 
@@ -412,8 +411,7 @@ void ETL::ColdPoolResize() {
 
 void ETL::HotPoolResize() {
 
-	unsigned int hot_to_cold_lpn = this->dualpool_->PopBackHotPoolByEraseCycle();
-	unsigned int hot_to_cold_ppn = this->lpn_to_ppn_[ hot_to_cold_lpn ];
+	unsigned int hot_to_cold_ppn = this->dualpool_->PopBackHotPoolByEraseCycle();
 	// DataPage*    hot_to_cold_datapage = new DataPage(this->info_page_.logic_page_size);
 	DataPage hot_to_cold_datapage(this->info_page_.logic_page_size);
 	// assert(hot_to_cold_ppn);

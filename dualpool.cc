@@ -137,12 +137,12 @@ void DualPool::PrintEffectiveEraseCyclePoolInfo() {
 	printf("hot effective erase cycle pool : \r\n");
 	set< PageCycle >::iterator it = this->hot_pool_sort_by_effective_erase_cycle_.begin();
 	for (; it != this->hot_pool_sort_by_effective_erase_cycle_.end(); it++)
-		printf("lpn : %u , cycle : %d \r\n", it->physical_page_num, it->cycle);
+		printf("ppn : %u , cycle : %d \r\n", it->physical_page_num, it->cycle);
 
 	printf("cold effective erase cycle pool : \r\n");
 	for (it = this->cold_pool_sort_by_effective_erase_cycle_.begin();
 	     it != this->cold_pool_sort_by_effective_erase_cycle_.end(); it++)
-		printf("lpn : %u , cycle : %d \r\n", it->physical_page_num, it->cycle);
+		printf("ppn : %u , cycle : %d \r\n", it->physical_page_num, it->cycle);
 
 	printf("----------Effective Erase Cycle Pool Info-------r\n\r\n");
 }
