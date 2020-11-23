@@ -23,8 +23,8 @@ bool DualPool::IsHotPoolResizeTriggered() {
 	if (this->hot_pool_sort_by_erase_cycle_.begin()->cycle
 		    - (this->hot_pool_sort_by_erase_cycle_.rbegin())->cycle
 	    > 2 * this->thresh_hold_) {
-		printf("%u - %u > %u \r\n", this->hot_pool_sort_by_erase_cycle_.begin()->cycle,
-		       this->hot_pool_sort_by_erase_cycle_.rbegin()->cycle, 2 * this->thresh_hold_);
+		// printf("%u - %u > %u \r\n", this->hot_pool_sort_by_erase_cycle_.begin()->cycle,
+		//        this->hot_pool_sort_by_erase_cycle_.rbegin()->cycle, 2 * this->thresh_hold_);
 		return true;
 	}
 	return false;

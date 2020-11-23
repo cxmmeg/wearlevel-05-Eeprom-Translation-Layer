@@ -47,8 +47,9 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestUpdateEraseCycle();
-
+	// TestSingleHotPage();
+	// TestMultiHotPage();
+	TestHotPageToColdPage();
 	// set< int > dict;
 	// dict.insert(3);
 	// dict.insert(2);

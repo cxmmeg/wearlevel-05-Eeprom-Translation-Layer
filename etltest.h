@@ -8,6 +8,8 @@ void ETLWriteDataPage();
 void ETLWriteAndReadTest();
 void ETLFullWriteAndReadFullTest();
 void DualPoolTeste();
-void TestUpdateEraseCycle();
+void TestSingleHotPage();
+void TestMultiHotPage();
+void TestHotPageToColdPage();
 
 #endif

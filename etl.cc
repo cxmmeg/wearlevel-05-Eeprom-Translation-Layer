@@ -140,16 +140,25 @@ int ETL::RomReadByte(unsigned long long addr, char* dest) {
 }
 
 bool ETL::RomWriteBytes(unsigned long long addr, const char* src, int length) {
-	for (unsigned int offset = 0; offset < length; ++offset)
-		if (this->RomWriteByte(addr + offset, *(src + offset)) < 0)
-			return false;
-	return true;
+
+	if (ROM_WriteBytes(addr, src, length) == 0)
+		return true;
+	return false;
+
+	// for (unsigned int offset = 0; offset < length; ++offset)
+	// 	if (this->RomWriteByte(addr + offset, *(src + offset)) < 0)
+	// 		return false;
+	// return true;
 }
 bool ETL::RomReadBytes(unsigned long long addr, char* dest, int length) {
-	for (unsigned int offset = 0; offset < length; ++offset)
-		if (this->RomReadByte(addr + offset, dest + offset) < 0)
-			return false;
-	return true;
+	if (ROM_ReadBytes(addr, dest, length) == 0)
+		return true;
+	return false;
+
+	// for (unsigned int offset = 0; offset < length; ++offset)
+	// 	if (this->RomReadByte(addr + offset, dest + offset) < 0)
+	// 		return false;
+	// return true;
 }
 
 void ETL::InitialPhysicalPages() {

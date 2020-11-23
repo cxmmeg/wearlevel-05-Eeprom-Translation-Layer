@@ -171,7 +171,7 @@ void DualPoolTeste() {
 	}
 }
 
-void TestUpdateEraseCycle() {
+void TestSingleHotPage() {
 	etl = new ETL(512);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
@@ -188,6 +188,93 @@ void TestUpdateEraseCycle() {
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintEraseCyclePoolInfo();
 	// etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
+
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
+	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	etl->PrintPMTT();
+	printf("test done \r\n");
+}
+
+bool IsSame(const void* data1, const void* data2, size_t len) {
+	char* p1 = ( char* )data1;
+	char* p2 = ( char* )data2;
+	for (int i = 0; i < len; ++i) {
+		if (*p1++ != *p2++)
+			return false;
+	}
+	return true;
+}
+
+void TestMultiHotPage() {
+	etl = new ETL(512);
+	etl->Format(8, 20);
+	etl->PrintPMTT();
+	DataPage datapage(etl->info_page_.logic_page_size);
+	// etl->ReadDataPage(0, &datapage);
+	// etl->PrintDataPage(&datapage);
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+	char* readbuf = ( char* )calloc(100, sizeof(char));
+	for (int i = 0; i < 1000; ++i) {
+		char* write_buff = "11112222333";
+		etl->Write(0, write_buff, strlen(write_buff));
+		etl->Read(0, readbuf, strlen(write_buff));
+
+		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+			printf("oh no, writebuf != readbuf \r\n\r\n");
+			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+			while (1)
+				;
+		}
+	}
+
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
+	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	etl->PrintPMTT();
+	printf("test done \r\n");
+}
+
+void TestHotPageToColdPage() {
+	etl = new ETL(512);
+	etl->Format(8, 20);
+	etl->PrintPMTT();
+	DataPage datapage(etl->info_page_.logic_page_size);
+	// etl->ReadDataPage(0, &datapage);
+	// etl->PrintDataPage(&datapage);
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+	char* readbuf = ( char* )calloc(100, sizeof(char));
+	for (int i = 0; i < 100; ++i) {
+		char* write_buff = "111122";
+		etl->Write(0, write_buff, strlen(write_buff));
+		etl->Read(0, readbuf, strlen(write_buff));
+
+		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+			printf("oh no, writebuf != readbuf \r\n\r\n");
+			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+			while (1)
+				;
+		}
+	}
+
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+
+	for (int i = 0; i < 100; ++i) {
+		char* write_buff = "333322";
+		etl->Write(10, write_buff, strlen(write_buff));
+		etl->Read(10, readbuf, strlen(write_buff));
+
+		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+			printf("oh no, writebuf != readbuf \r\n\r\n");
+			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+			while (1)
+				;
+		}
+	}
+
+	etl->dualpool_->PrintEraseCyclePoolInfo();
 
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
