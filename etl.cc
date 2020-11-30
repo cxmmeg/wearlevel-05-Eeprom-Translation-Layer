@@ -330,7 +330,7 @@ void ETL::TryToExecDualPoolAlgorithm() {
 	}
 
 	if (this->dualpool_->IsHotPoolResizeTriggered()) {
-		LOG_DEBUG("hot pool resize triggered \r\n");
+		LOG_INFO("hot pool resize triggered \r\n");
 		this->HotPoolResize();
 	}
 }

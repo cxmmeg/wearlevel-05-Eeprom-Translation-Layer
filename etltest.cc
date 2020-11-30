@@ -246,7 +246,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintEraseCyclePoolInfo();
 	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (unsigned int i = 0; i < write_cycle; ++i) {
+	for (unsigned int i = 0; i < write_cycle/5; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 		etl->Read(0, readbuf, strlen(write_buff));
