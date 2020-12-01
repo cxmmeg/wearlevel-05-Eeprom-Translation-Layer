@@ -42,6 +42,11 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
+	Time time;
+	time.GetRtcTime();
+	LOG_INFO("start time : \r\n");
+	time.Show();
+
 	// BitOperationTest();
 
 	// TestETLWriteByte();
@@ -49,9 +54,9 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(370);
+	// TestSingleHotPage(1000);
 	// TestMultiHotPage();
-	// TestHotPageToColdPage(200);
+	TestHotPageToColdPage(1500);
 	// set< int > dict;
 	// dict.insert(3);
 	// dict.insert(2);
@@ -59,6 +64,9 @@ int main(void) {
 	// printf("smallest : %d\r\n", *dict.begin());
 	// dict.erase(dict.find(1));
 	// printf("largest : %d \r\n", *dict.begin());
+
+	LOG_INFO("end time : \r\n");
+	time.Show();
 
 	while (1) {
 		System_Delayms(1000);

@@ -2628,7 +2628,7 @@
         <name>$PROJ_DIR$\rom.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\rtc.c</name>
+        <name>$PROJ_DIR$\rtc.cc</name>
     </file>
     <file>
         <name>$PROJ_DIR$\rtc.h</name>

@@ -19,12 +19,10 @@
 //#include "hydrologycommand.h"
 //#include "message.h"
 
-char switcher, anahigh, analow, pulsehigh, pulsemedium, pulselow, vthigh, vtlow,
-	tthex;
-int		    trace_open = 0;
-static int	    s_clock    = 0;  //用来指示当前频率
-static unsigned int _int =
-	0;  //中断禁用DownInt() 的层数static unsigned int s_reset_pin =0;
+char		    switcher, anahigh, analow, pulsehigh, pulsemedium, pulselow, vthigh, vtlow, tthex;
+int		    trace_open	= 0;
+static int	    s_clock	= 0;  //用来指示当前频率
+static unsigned int _int	= 0;  //中断禁用DownInt() 的层数static unsigned int s_reset_pin =0;
 static unsigned int s_reset_pin = 0;
 
 void TraceOpen() {  //调试打开
@@ -44,8 +42,7 @@ void TraceFunctionLine(char const* _funcname, int _linename) {
 	}
 }
 
-void TraceHexMsgFuncLine(char* _str, int len, char const* _funcname,
-			 int _linename) {
+void TraceHexMsgFuncLine(char* _str, int len, char const* _funcname, int _linename) {
 	if (trace_open) {
 		TraceFunctionLine(_funcname, _linename);
 		Console_WriteHexCharln(_str, len);
@@ -133,9 +130,7 @@ int Utility_atoi(char* str, int len) {
 	return res;
 }
 
-void System_Delayms(
-	unsigned int
-		nValue) {  //函数参数是寄存器,操作速度过快,所以我们不用nValue
+void System_Delayms(unsigned int nValue) {  //函数参数是寄存器,操作速度过快,所以我们不用nValue
 	unsigned long nCount = 1150;
 	unsigned long i;
 	unsigned long j;
@@ -149,9 +144,7 @@ void System_Delayms(
 	return;
 }
 
-void System_Delayus(
-	unsigned int
-		nValue) {  //函数参数是寄存器,操作速度过快,所以我们不用nValue
+void System_Delayus(unsigned int nValue) {  //函数参数是寄存器,操作速度过快,所以我们不用nValue
 	unsigned long nCount = 1;
 	unsigned long i;
 	unsigned long j;
@@ -386,11 +379,9 @@ chapter as its low side.
 ******************************************************************************/
 
 void Set_Vcore(unsigned int level) {
-	PMMCTL0_H = PMMPW_H;  // Open PMM registers for write
-	SVSMHCTL  = SVSHE + SVSHRVL0 * level + SVMHE
-		   + SVSMHRRL0 * level;	 // Set SVS/SVM high side new level
-	SVSMLCTL = SVSLE + SVMLE
-		   + SVSMLRRL0 * level;	 // Set SVM low side to new level
+	PMMCTL0_H = PMMPW_H;						   // Open PMM registers for write
+	SVSMHCTL  = SVSHE + SVSHRVL0 * level + SVMHE + SVSMHRRL0 * level;  // Set SVS/SVM high side new level
+	SVSMLCTL  = SVSLE + SVMLE + SVSMLRRL0 * level;			   // Set SVM low side to new level
 	while ((PMMIFG & SVSMLDLYIFG) == 0)
 		;			    // Wait till SVM is settled
 	PMMIFG &= ~(SVMLVLRIFG + SVMLIFG);  // Clear already set flags
@@ -398,9 +389,8 @@ void Set_Vcore(unsigned int level) {
 	if ((PMMIFG & SVMLIFG))		    // Wait till new level reached
 		while ((PMMIFG & SVMLVLRIFG) == 0)
 			;
-	SVSMLCTL = SVSLE + SVSLRVL0 * level + SVMLE
-		   + SVSMLRRL0 * level;	 // Set SVS/SVM low side to new level
-	PMMCTL0_H = 0x00;		 // Lock PMM registers for write access
+	SVSMLCTL = SVSLE + SVSLRVL0 * level + SVMLE + SVSMLRRL0 * level;  // Set SVS/SVM low side to new level
+	PMMCTL0_H = 0x00;  // Lock PMM registers for write access
 }
 
 /* for msp430f5438
@@ -424,9 +414,8 @@ void Clock_Init() {
 
 	UCSCTL6 |= XT2BYPASS;  //选择外部激励振动
 	UCSCTL6 |= XT1BYPASS;
-	UCSCTL4 |= SELA__XT1CLK + SELS__XT2CLK
-		   + SELM__XT2CLK;  //选择MCLK、SMCLK为XT2,
-	do			    // Loop until XT1,XT2 & DCO stabilizes
+	UCSCTL4 |= SELA__XT1CLK + SELS__XT2CLK + SELM__XT2CLK;	//选择MCLK、SMCLK为XT2,
+	do							// Loop until XT1,XT2 & DCO stabilizes
 	{
 		UCSCTL7 &= ~(XT2OFFG + XT1LFOFFG + XT1HFOFFG + DCOFFG);
 		SFRIFG1 &= ~OFIFG;  // 清除振荡器失效标志
@@ -506,8 +495,7 @@ int Utility_CheckDigital(const char* _str, int _start, int _end) {
 
 int Utility_CheckAlphabet(const char* _str, int _start, int _end) {
 	for (int i = _start; i <= _end; ++i) {
-		if ((_str[ i ] >= 'A' && _str[ i ] <= 'Z')
-		    || (_str[ i ] >= 'a' && _str[ i ] <= 'z'))
+		if ((_str[ i ] >= 'A' && _str[ i ] <= 'Z') || (_str[ i ] >= 'a' && _str[ i ] <= 'z'))
 			return 0;
 	}
 	return -1;
@@ -515,8 +503,7 @@ int Utility_CheckAlphabet(const char* _str, int _start, int _end) {
 
 int Utility_CheckHexChar(const char* _str, int _start, int _end) {
 	for (int i = _start; i <= _end; ++i) {
-		if ((_str[ i ] >= '0' && _str[ i ] <= '9')
-		    || (_str[ i ] >= 'A' && _str[ i ] <= 'Z')
+		if ((_str[ i ] >= '0' && _str[ i ] <= '9') || (_str[ i ] >= 'A' && _str[ i ] <= 'Z')
 		    || (_str[ i ] >= 'a' && _str[ i ] <= 'z'))
 			return 0;
 	}
@@ -568,9 +555,8 @@ IPErrorHandle:
 	return -1;
 }
 
-int Utility_BytesCompare3(
-	const char* _bytes1,
-	const char* _bytes2) {	// 判断3字节数据的大小,脉冲中断中使用
+int Utility_BytesCompare3(const char* _bytes1,
+			  const char* _bytes2) {  // 判断3字节数据的大小,脉冲中断中使用
 	if (_bytes1[ 0 ] > _bytes2[ 0 ])
 		return 1;
 	if (_bytes1[ 0 ] < _bytes2[ 0 ])
@@ -767,17 +753,16 @@ char ConvertAscIItoHex(char* ascii, char* hex, int asciilen) {
 	//        size of hex array must be even too！",1); return -1;
 	//    }
 	for (i = 0, j = 0; i < asciilen; i += 2, j++)
-		hex[ j ] = ConvertHexChar(ascii[ i ]) * 16
-			   + ConvertHexChar(ascii[ i + 1 ]);
+		hex[ j ] = ConvertHexChar(ascii[ i ]) * 16 + ConvertHexChar(ascii[ i + 1 ]);
 	return 0;
 }
 
 // 专门针对天数的判断
-static void _addDay(char* dest)	 // 减少代码大小
-{				 //天数判断复杂
-				 // 1 是否闰年
-				 // 2 月份数
-   //闰年定义:  4年1闰;100年不闰;400年要闰.
+static void _addDay(char* dest)		 // 减少代码大小
+{					 //天数判断复杂
+					 // 1 是否闰年
+					 // 2 月份数
+					 //闰年定义:  4年1闰;100年不闰;400年要闰.
 	if (dest[ 1 ] == 2)		 //是否是2月, 28,29
 	{				 // 20开头的闰年
 					 //本系统肯定不会使用到2100年
@@ -798,16 +783,15 @@ static void _addDay(char* dest)	 // 减少代码大小
 		}
 	}
 	// 是否是30天的月
-	if (dest[ 1 ] == 4 || dest[ 1 ] == 6 || dest[ 1 ] == 9
-	    || dest[ 1 ] == 11) {
+	if (dest[ 1 ] == 4 || dest[ 1 ] == 6 || dest[ 1 ] == 9 || dest[ 1 ] == 11) {
 		if (dest[ 2 ] < 31)  //没超过30天
 			return;
 		dest[ 2 ] -= 30;  //减去溢出的30天
 		++dest[ 1 ];	  //月份+1
 	}
 	// 是否是31天的月
-	if (dest[ 1 ] == 1 || dest[ 1 ] == 3 || dest[ 1 ] == 5 || dest[ 1 ] == 7
-	    || dest[ 1 ] == 8 || dest[ 1 ] == 10 || dest[ 1 ] == 12) {
+	if (dest[ 1 ] == 1 || dest[ 1 ] == 3 || dest[ 1 ] == 5 || dest[ 1 ] == 7 || dest[ 1 ] == 8
+	    || dest[ 1 ] == 10 || dest[ 1 ] == 12) {
 		if (dest[ 2 ] < 32)  //没超过31天
 			return;
 		dest[ 2 ] -= 31;  //减去溢出的31天
@@ -973,8 +957,7 @@ void Clear_ExternWatchdog() {
 }
 
 //将字符串的ASCII码形式扩展成对应的字符串
-int ASCII_to_AsciiStr(char* input_buffer, int input_buffer_len,
-		      char* output_buffer) {
+int ASCII_to_AsciiStr(char* input_buffer, int input_buffer_len, char* output_buffer) {
 	const char ascTable[ 17 ] = { "0123456789ABCDEF" };
 	char*	   tmp_p	  = output_buffer;
 	int	   i, pos;
@@ -988,8 +971,7 @@ int ASCII_to_AsciiStr(char* input_buffer, int input_buffer_len,
 }
 
 //将字符串中每两个字符拼成一个字符的ASCII形式，最终转成新的长度为原来的一半的字符串
-int AsciiStr_to_ASCII(char* input_buffer, int input_buffer_len,
-		      char* output_buffer) {
+int AsciiStr_to_ASCII(char* input_buffer, int input_buffer_len, char* output_buffer) {
 	int   i = 0, j = 0;
 	char  temp_high_4bit, temp_low_4bit;
 	char* temp = output_buffer;

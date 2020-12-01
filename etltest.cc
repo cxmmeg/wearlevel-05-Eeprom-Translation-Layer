@@ -3,6 +3,7 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "etl.h"
+#include "timer.h"
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
@@ -253,6 +254,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 			while (1)
 				;
 		}
+		WatchDog_Clear();
 	}
 
 	etl->dualpool_->PrintPool();
@@ -268,6 +270,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 			while (1)
 				;
 		}
+		WatchDog_Clear();
 	}
 
 	etl->dualpool_->PrintPool();

@@ -346,7 +346,6 @@ void ETL::TryToExecDualPoolAlgorithm() {
 	}
 
 	if (dirty_swap_triggered || coldpool_resize_triggered || hotpool_resize_triggered) {
-		this->dualpool_->InitialPoolBorder();
 
 		LOG_DEBUG("hot ec tail, ppn:%u, cycle:%d \r\n",
 			  this->dualpool_->hot_ec_tail_.physical_page_num,

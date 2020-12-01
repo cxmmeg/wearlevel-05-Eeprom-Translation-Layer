@@ -18,9 +18,8 @@
 static unsigned int s_ClockTicks  = 0;
 static unsigned int s_reset_count = 0;
 
-unsigned int sys_errorcode_runcode =
-	100;  // 定义 sys_errorcode_runcode为全局变量，取值1-69，
-	      // 初值定为100，防止误点灯   LSHB 20200506
+unsigned int sys_errorcode_runcode = 100;  // 定义 sys_errorcode_runcode为全局变量，取值1-69，
+					   // 初值定为100，防止误点灯   LSHB 20200506
 
 void Timer_Zero() {
 	s_ClockTicks = 0;
@@ -33,12 +32,11 @@ int Timer_Passed_Mins(int _min) {
 }
 
 /* Timer0_A5*/
-void Timer0_A0_Init(
-	unsigned int ccr0)  // 系统运行状态和错误指示灯控制，ccr0=45
-			    // 系统错误闪烁频率，ccr0=15
-			    // 系统通信发送数据闪烁频率，ccr0=30
-			    // 系统通信接收数据闪烁频率。闪烁时长一般3秒
-			    // LSHB 20200506
+void Timer0_A0_Init(unsigned int ccr0)	// 系统运行状态和错误指示灯控制，ccr0=45
+					// 系统错误闪烁频率，ccr0=15
+					// 系统通信发送数据闪烁频率，ccr0=30
+					// 系统通信接收数据闪烁频率。闪烁时长一般3秒
+					// LSHB 20200506
 {
 	/*5438 TA0CTL*/
 	TA0CTL |= TACLR;      //清除计数
@@ -91,9 +89,8 @@ void TimerB_Init(unsigned int ccr0) {
 	// 4分钟 中断一次 ,(跑2趟)
 	// TBCCR0=ccr0; // (32768HZ /(8*8) ) * 240 / 2 = 61440
 
-	TBCCR0 =
-		61450;	//用TIMERB0中断指示工作状态和系统错误状态61450是个初始值，没有物理含义
-			// LSHB 20200506
+	TBCCR0 = 61450;	 //用TIMERB0中断指示工作状态和系统错误状态61450是个初始值，没有物理含义
+			 // LSHB 20200506
 
 	TBCCR1 = 61440;
 	//    TBCCR2=10240;
@@ -175,9 +172,9 @@ __interrupt void TIMERB1_ISR(void) {
 		//半分钟来一次
 		//计数如果超过1000
 		++s_reset_count;
-		if (s_reset_count > 60) {  //超过30分钟就重启
-			System_Reset();
-		}
+		// if (s_reset_count > 60) {  //超过30分钟就重启
+		// 	System_Reset();
+		// }
 		TBCCR1 += 61440;
 		break;
 	case 4:
