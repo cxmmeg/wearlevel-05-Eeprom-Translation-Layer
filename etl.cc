@@ -69,11 +69,11 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	// printf("logic page size : %u\r\n", logic_page_size);
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
-	enum PoolIdentify pool_identify = datapage.hot == 1 ? HOTPOOL : COLDPOOL;
-	this->dualpool_->PopPageFromPool(start_physical_page_num, &datapage, pool_identify);
+	// enum PoolIdentify pool_identify = datapage.hot == 1 ? HOTPOOL : COLDPOOL;
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
-	this->dualpool_->AddPageIntoPool(start_physical_page_num, &datapage, pool_identify);
+	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
+					       datapage.effective_erase_cycle);
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -185,7 +185,7 @@ void ETL::InitialPhysicalPages() {
 	}
 }
 void ETL::InitialDualpool() {
-	this->dualpool_	   = new DualPool(this->info_page_.thresh_hold);
+	this->dualpool_	   = new DualPool(this->info_page_.thresh_hold, this);
 	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
@@ -197,9 +197,11 @@ void ETL::InitialDualpool() {
 			this->dualpool_->AddPageIntoPool(physical_page_num, datapage, COLDPOOL);
 	}
 
+	/* should initial TryToUpdatePoolBorder here! */
+	this->dualpool_->InitialPoolBorder();
+
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", this->info_page_.thresh_hold,
-	       this->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
-	       this->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	       this->dualpool_->GetPoolSize(HOTPOOL), this->dualpool_->GetPoolSize(COLDPOOL));
 }
 
 bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
@@ -319,19 +321,39 @@ void ETL::PrintPMTT() {
  *      MaxQue<EC,HP>.front - MaxQue<EC,HP>.back > 2*TH
  */
 void ETL::TryToExecDualPoolAlgorithm() {
+	bool dirty_swap_triggered = false, coldpool_resize_triggered = false,
+	     hotpool_resize_triggered = false;
+
 	if (this->dualpool_->IsDirtySwapTriggered()) {
 		LOG_DEBUG("dirty swap triggered \r\n");
 		this->DirtySwap();
+		dirty_swap_triggered = true;
 	}
 
 	if (this->dualpool_->IsColdPoolResizeTriggered()) {
 		LOG_DEBUG("cold pool resize triggered \r\n");
 		this->ColdPoolResize();
+		coldpool_resize_triggered = true;
 	}
 
 	if (this->dualpool_->IsHotPoolResizeTriggered()) {
 		LOG_INFO("hot pool resize triggered \r\n");
 		this->HotPoolResize();
+		hotpool_resize_triggered = true;
+	}
+
+	if (dirty_swap_triggered || coldpool_resize_triggered || hotpool_resize_triggered) {
+		this->dualpool_->InitialPoolBorder();
+
+		LOG_DEBUG("hot ec tail, ppn:%u, cycle:%d \r\n",
+			  this->dualpool_->hot_ec_tail_.physical_page_num,
+			  this->dualpool_->hot_ec_tail_.cycle);
+		LOG_DEBUG("hot eec tail, ppn:%u, cycle:%d \r\n",
+			  this->dualpool_->hot_eec_tail_.physical_page_num,
+			  this->dualpool_->hot_eec_tail_.cycle);
+		LOG_DEBUG("cold ec tail, ppn:%u, cycle:%d \r\n\r\n",
+			  this->dualpool_->cold_ec_tail_.physical_page_num,
+			  this->dualpool_->cold_ec_tail_.cycle);
 	}
 }
 

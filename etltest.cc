@@ -119,7 +119,7 @@ void ETLFullWriteAndReadFullTest() {
 		if (etl->Write(startadd, test_data, TEST_DATA_LEN) != true) {
 			printf("WRITE ERROR\r\n");
 		}
-		printf("start addr :%ld\r\n", startadd);
+		printf("start addr :%llu\r\n", startadd);
 	}
 	for (startadd = 0; startadd + TEST_DATA_LEN < endaddr; startadd += TEST_DATA_LEN) {
 		char* data = ( char* )calloc(TEST_DATA_LEN + 1, sizeof(char));
@@ -144,9 +144,8 @@ void ETLFullWriteAndReadFullTest() {
 	}
 	printf("test done\r\n");
 
-	printf("hotpool size : %u , coldpool size : %u \r\n",
-	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
-	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	printf("hotpool size : %u , coldpool size : %u \r\n", etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	while (1)
 		;
 }
@@ -171,27 +170,25 @@ void DualPoolTeste() {
 	}
 }
 
-void TestSingleHotPage() {
+void TestSingleHotPage(unsigned int write_cycle) {
 	etl = new ETL(512);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
 	DataPage datapage(etl->info_page_.logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
-	etl->dualpool_->PrintEraseCyclePoolInfo();
-	for (int i = 0; i < 2000; ++i) {
+	etl->dualpool_->PrintPool();
+	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 		// System_Delayms(10000);
 	}
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
-	etl->dualpool_->PrintEraseCyclePoolInfo();
-	// etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
+	etl->dualpool_->PrintPool();
 
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
-	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
-	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	       etl->dualpool_->GetPoolSize(HOTPOOL), etl->dualpool_->GetPoolSize(COLDPOOL));
 	etl->PrintPMTT();
 	printf("test done \r\n");
 }
@@ -213,7 +210,7 @@ void TestMultiHotPage() {
 	DataPage datapage(etl->info_page_.logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
-	etl->dualpool_->PrintEraseCyclePoolInfo();
+	etl->dualpool_->PrintPool();
 	char* readbuf = ( char* )calloc(100, sizeof(char));
 	for (int i = 0; i < 1000; ++i) {
 		char* write_buff = "11112222333";
@@ -228,11 +225,10 @@ void TestMultiHotPage() {
 		}
 	}
 
-	etl->dualpool_->PrintEraseCyclePoolInfo();
+	etl->dualpool_->PrintPool();
 
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
-	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
-	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	       etl->dualpool_->GetPoolSize(HOTPOOL), etl->dualpool_->GetPoolSize(COLDPOOL));
 	etl->PrintPMTT();
 	printf("test done \r\n");
 }
@@ -244,9 +240,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	DataPage datapage(etl->info_page_.logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
-	etl->dualpool_->PrintEraseCyclePoolInfo();
+	etl->dualpool_->PrintPool();
 	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (unsigned int i = 0; i < write_cycle/5; ++i) {
+	for (unsigned int i = 0; i < write_cycle / 5; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 		etl->Read(0, readbuf, strlen(write_buff));
@@ -259,12 +255,12 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 		}
 	}
 
-	etl->dualpool_->PrintEraseCyclePoolInfo();
+	etl->dualpool_->PrintPool();
 
 	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "333322";
-		etl->Write(10, write_buff, strlen(write_buff));
-		etl->Read(10, readbuf, strlen(write_buff));
+		etl->Write(100, write_buff, strlen(write_buff));
+		etl->Read(100, readbuf, strlen(write_buff));
 
 		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
 			printf("oh no, writebuf != readbuf \r\n\r\n");
@@ -274,11 +270,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 		}
 	}
 
-	etl->dualpool_->PrintEraseCyclePoolInfo();
-	// etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
+	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
-	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
-	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+	       etl->dualpool_->GetPoolSize(HOTPOOL), etl->dualpool_->GetPoolSize(COLDPOOL));
 	etl->PrintPMTT();
 	printf("test done \r\n");
 }

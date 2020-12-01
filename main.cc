@@ -42,14 +42,16 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
+	// BitOperationTest();
+
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestSingleHotPage();
+	TestSingleHotPage(700);
 	// TestMultiHotPage();
-	TestHotPageToColdPage(5000);
+	// TestHotPageToColdPage(200);
 	// set< int > dict;
 	// dict.insert(3);
 	// dict.insert(2);
