@@ -328,18 +328,21 @@ void ETL::TryToExecDualPoolAlgorithm() {
 		LOG_DEBUG("dirty swap triggered \r\n");
 		this->DirtySwap();
 		dirty_swap_triggered = true;
+		this->dualpool_->InitialPoolBorder();
 	}
 
 	if (this->dualpool_->IsColdPoolResizeTriggered()) {
 		LOG_DEBUG("cold pool resize triggered \r\n");
 		this->ColdPoolResize();
 		coldpool_resize_triggered = true;
+		this->dualpool_->InitialPoolBorder();
 	}
 
 	if (this->dualpool_->IsHotPoolResizeTriggered()) {
 		LOG_INFO("hot pool resize triggered \r\n");
 		this->HotPoolResize();
 		hotpool_resize_triggered = true;
+		this->dualpool_->InitialPoolBorder();
 	}
 
 	if (dirty_swap_triggered || coldpool_resize_triggered || hotpool_resize_triggered) {
@@ -351,9 +354,15 @@ void ETL::TryToExecDualPoolAlgorithm() {
 		LOG_DEBUG("hot eec tail, ppn:%u, cycle:%d \r\n",
 			  this->dualpool_->hot_eec_tail_.physical_page_num,
 			  this->dualpool_->hot_eec_tail_.cycle);
-		LOG_DEBUG("cold ec tail, ppn:%u, cycle:%d \r\n\r\n",
+		LOG_DEBUG("cold ec tail, ppn:%u, cycle:%d \r\n",
 			  this->dualpool_->cold_ec_tail_.physical_page_num,
 			  this->dualpool_->cold_ec_tail_.cycle);
+		LOG_DEBUG("hot ec head, ppn:%u, cycle:%d \r\n",
+			  this->dualpool_->hot_ec_head_.physical_page_num,
+			  this->dualpool_->hot_ec_head_.cycle);
+		LOG_DEBUG("cold eec head, ppn:%u, cycle:%d \r\n\r\n",
+			  this->dualpool_->cold_eec_head_.physical_page_num,
+			  this->dualpool_->cold_eec_head_.cycle);
 	}
 }
 

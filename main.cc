@@ -49,7 +49,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(700);
+	TestSingleHotPage(370);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(200);
 	// set< int > dict;
