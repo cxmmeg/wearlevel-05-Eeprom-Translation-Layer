@@ -207,9 +207,8 @@ int  RTC_SetAlarm(const char hour, const char min, const char sec);
 //         -1 : 参数错误
 //    附注: >>
 ////////////////////////////////////
-int _RTC_SetTime(const char second, const char minute, const char hour,
-		 const char date, const char month, const char day,
-		 const char year, const char control);
+int _RTC_SetTime(const char second, const char minute, const char hour, const char date, const char month,
+		 const char day, const char year, const char control);
 
 ////////////////////////////////////
 //    功能: 一次性设置时间
@@ -282,8 +281,8 @@ char _RTC_ReadSecond();
 //  返回值: 无
 //    附注: >>
 ////////////////////////////////////
-void _RTC_ReadTime(char* second, char* minute, char* hour, char* date,
-		   char* month, char* day, char* year, char* control);
+void _RTC_ReadTime(char* second, char* minute, char* hour, char* date, char* month, char* day, char* year,
+		   char* control);
 
 ////////////////////////////////////
 //    功能: 一次性读取时间
@@ -394,5 +393,21 @@ u8   IIC_Read_Byte(unsigned char ack);	// IIC读取一个字节
 u8   IIC_Wait_Ack(void);		// IIC等待ACK信号
 void IIC_Ack(void);			// IIC发送ACK信号
 void IIC_NAck(void);			// IIC不发送ACK信号
+
+struct Time {
+	char year;
+	char month;
+	char date;
+	char hour;
+	char min;
+	char sec;
+	Time() : year(0), month(0), date(0), hour(0), min(0), sec(0) {
+	}
+	Time(char y, char m, char d, char h, char _min, char s)
+		: year(y), month(m), date(d), hour(h), min(_min), sec(s) {
+	}
+	void GetRtcTime();
+	void Show();
+};
 
 #endif

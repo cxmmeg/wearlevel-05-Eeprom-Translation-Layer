@@ -1520,3 +1520,15 @@ u8 IIC_Read_Byte(unsigned char ack) {
 		IIC_Ack();  //·¢ËÍACK
 	return receive;
 }
+
+void Time::GetRtcTime() {
+	char day;
+	char control;
+	_RTC_ReadTime(&this->sec, &this->min, &this->hour, &this->date, &this->month, &day, &this->year,
+		      &control);
+}
+
+void Time::Show() {
+	LOG_INFO("%d/%d/%d %d:%d:%d \r\n\r\n", this->year, this->month, this->date, this->hour, this->min,
+		 this->sec);
+}
