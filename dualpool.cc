@@ -236,4 +236,20 @@ void DualPool::PrintPool() {
 	printf("---------------Erase Cycle Pool Info---------------\r\n\r\n");
 }
 
+void DualPool::SetHotECHead(const PageCycle& p) {
+	this->hot_ec_head_ = p;
+}
+void DualPool::SetHotECTail(const PageCycle& p) {
+	this->hot_ec_tail_ = p;
+}
+void DualPool::SetColdECTail(const PageCycle& p) {
+	cold_ec_tail_ = p;
+}
+void DualPool::SetColdEECHead(const PageCycle& p) {
+	cold_eec_head_ = p;
+}
+void DualPool::SetHotEECTail(const PageCycle& p) {
+	hot_eec_tail_ = p;
+}
+
 /* end of public methods */

@@ -1,4 +1,4 @@
-"\\Mac\Home\work\ETL\rtc.c"
+"\\Mac\Home\work\ETL\rtc.cc"
 -std=c++98
 -ferror-limit=0
 -fbracket-depth=512

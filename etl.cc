@@ -328,21 +328,21 @@ void ETL::TryToExecDualPoolAlgorithm() {
 		LOG_DEBUG("dirty swap triggered \r\n");
 		this->DirtySwap();
 		dirty_swap_triggered = true;
-		this->dualpool_->InitialPoolBorder();
+		// this->dualpool_->InitialPoolBorder();
 	}
 
 	if (this->dualpool_->IsColdPoolResizeTriggered()) {
 		LOG_DEBUG("cold pool resize triggered \r\n");
 		this->ColdPoolResize();
 		coldpool_resize_triggered = true;
-		this->dualpool_->InitialPoolBorder();
+		// this->dualpool_->InitialPoolBorder();
 	}
 
 	if (this->dualpool_->IsHotPoolResizeTriggered()) {
 		LOG_INFO("hot pool resize triggered \r\n");
 		this->HotPoolResize();
 		hotpool_resize_triggered = true;
-		this->dualpool_->InitialPoolBorder();
+		// this->dualpool_->InitialPoolBorder();
 	}
 
 	if (dirty_swap_triggered || coldpool_resize_triggered || hotpool_resize_triggered) {
@@ -411,6 +411,11 @@ void ETL::DirtySwap() {
 	this->dualpool_->AddPageIntoPool(hotest_ppn, hotest_datapage, COLDPOOL);
 	this->WriteDataPage(coldest_ppn, coldest_datapage);
 	this->WriteDataPage(hotest_ppn, hotest_datapage);
+
+	if (this->dualpool_->GetPoolSize(HOTPOOL) == 1)
+		this->dualpool_->SetHotECHead(PageCycle(coldest_ppn, coldest_datapage->erase_cycle));
+	if (this->dualpool_->GetPoolSize(COLDPOOL) == 1)
+		this->dualpool_->SetColdECTail(PageCycle(hotest_ppn, hotest_datapage->erase_cycle));
 
 	delete coldest_datapage;
 	delete hotest_datapage;

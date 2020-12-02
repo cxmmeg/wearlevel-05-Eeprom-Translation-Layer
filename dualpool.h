@@ -44,6 +44,11 @@ class DualPool {
 	unsigned int PopBackHotPoolByEraseCycle();
 	unsigned int PopBackColdPoolByEraseCycle();
 	unsigned int PopFrontColdPoolByEffectiveEraseCycle();
+	void	     SetHotECHead(const PageCycle& p);
+	void	     SetHotECTail(const PageCycle& p);
+	void	     SetColdECTail(const PageCycle& p);
+	void	     SetColdEECHead(const PageCycle& p);
+	void	     SetHotEECTail(const PageCycle& p);
 
 	void InitialPoolBorder();
 	void TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effective_erase_cnt);
