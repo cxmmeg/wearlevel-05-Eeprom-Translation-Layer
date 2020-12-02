@@ -65,6 +65,7 @@ int main(void) {
 	// dict.erase(dict.find(1));
 	// printf("largest : %d \r\n", *dict.begin());
 
+	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
 	time.Show();
 
