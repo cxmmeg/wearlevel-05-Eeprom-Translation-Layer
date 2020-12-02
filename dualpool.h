@@ -4,6 +4,7 @@
 #include "datapage.h"
 #include "infopage.h"
 #include <set>
+#include <vector>
 
 class ETL;
 
@@ -68,8 +69,11 @@ class DualPool {
 	/* 按at24c512(512Kbit)，每个物理页16B来算， 需要(512 * 1024) / (8 * 16 * 8) = 512B大小的bitmap
 	 * 每个pool用512B的bitmap表示，可以容纳4k个页
 	 */
-	char hot_pool_[ 4 * 1024 / 8 ];
-	char cold_pool_[ 4 * 1024 / 8 ];
+	static const int max_page_cnt_ = 4 * 1024;
+	vector< char >	 hot_pool_;
+	vector< char >	 cold_pool_;
+	// char hot_pool_[ 4 * 1024 / 8 ];
+	// char cold_pool_[ 4 * 1024 / 8 ];
 
 	PageCycle hot_ec_head_;
 	PageCycle hot_ec_tail_;

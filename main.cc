@@ -34,7 +34,6 @@ bool Is_RS485_1 = false, Is_bluetooth = false,
 	     false;  //工作指示灯控制，三种情况(1)当前UART1是否是485，（2）当前UART1是否是蓝牙，（3）是否发生了uart1中断
 		     // LSHB 20200506
 
-
 int main(void) {
 	BoardPowerOn();
 	Restart_Init();
@@ -49,9 +48,6 @@ int main(void) {
 	LOG_INFO("start time : \r\n");
 	time.Show();
 
-	char bitmap[] = { 0x0, 0x0 };
-	LOG_INFO("%d\r\n", CountSelBitCnt(vector< char >(bitmap, bitmap + 2)));
-
 	// BitOperationTest();
 
 	// TestETLWriteByte();
@@ -61,7 +57,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(1000);
 	// TestMultiHotPage();
-	// TestHotPageToColdPage(1500);
+	TestHotPageToColdPage(1500);
 	// set< int > dict;
 	// dict.insert(3);
 	// dict.insert(2);

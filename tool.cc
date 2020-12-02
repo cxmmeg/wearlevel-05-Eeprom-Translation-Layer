@@ -35,6 +35,24 @@ bool Tool::IsBitUnSet(char* data, int pos) {
 	return true;
 }
 
+void Tool::SetBit(vector< char >& data, int pos) {
+	data[ pos / 8 ] |= 1 << (pos % 8);
+}
+void Tool::UnSetBit(vector< char >& data, int pos) {
+	data[ pos / 8 ] &= ~(1 << (pos % 8));
+}
+
+bool Tool::IsBitSet(const vector< char >& data, int pos) {
+	if (data[ pos / 8 ] & (1 << (pos % 8)))
+		return true;
+	else
+		return false;
+}
+bool Tool::IsBitUnSet(const vector< char >& data, int pos) {
+	if (Tool::IsBitSet(data, pos))
+		return false;
+	return true;
+}
 static int CalcCharSelBitCnt(char data) {
 	int cnt = 0;
 	while (data > 0) {

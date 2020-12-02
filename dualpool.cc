@@ -3,6 +3,7 @@
 #include "tool.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <vector>
 
 /* public methods */
 
@@ -10,8 +11,8 @@ DualPool::DualPool(unsigned int thresh_hold) : thresh_hold_(thresh_hold) {
 }
 
 DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hold), etl_(etl) {
-	memset(this->hot_pool_, 0, 4 * 1024 / 8);
-	memset(this->cold_pool_, 0, 4 * 1024 / 8);
+	this->hot_pool_.resize(this->max_page_cnt_ / 8, 0);
+	this->cold_pool_.resize(this->max_page_cnt_ / 8, 0);
 }
 
 bool DualPool::IsDirtySwapTriggered() {
@@ -54,11 +55,11 @@ PageCycle DualPool::GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_ident
 	if (!inc)
 		son.cycle = 32767;
 
-	char* pool = pool_identify == HOTPOOL ? this->hot_pool_ : this->cold_pool_;
+	vector< char >* pool = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
 
 	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		if (Tool::IsBitUnSet(pool, ppn) || ppn == old_page->physical_page_num)
+		if (Tool::IsBitUnSet(*pool, ppn) || ppn == old_page->physical_page_num)
 			continue;
 		this->etl_->ReadDataPage(ppn, &datapage_temp);
 
@@ -115,11 +116,11 @@ unsigned int DualPool::PopFrontColdPoolByEffectiveEraseCycle() {
 }
 
 void DualPool::PrintPoolInfo(PoolIdentify pool_identify) {
-	char*	 pool = pool_identify == HOTPOOL ? this->hot_pool_ : this->cold_pool_;
-	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
+	vector< char >* pool = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
+	DataPage	datapage_temp(this->etl_->GetInfoPage().logic_page_size);
 
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		if (Tool::IsBitUnSet(pool, ppn))
+		if (Tool::IsBitUnSet(*pool, ppn))
 			continue;
 		this->etl_->ReadDataPage(ppn, &datapage_temp);
 
@@ -218,14 +219,9 @@ void DualPool::TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effect
 }
 
 int DualPool::GetPoolSize(enum PoolIdentify pool_identify) {
-	char* pool = pool_identify == HOTPOOL ? this->hot_pool_ : this->cold_pool_;
+	vector< char >* pool = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
 
-	int pool_size = 0;
-	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		if (Tool::IsBitSet(pool, ppn))
-			pool_size++;
-	}
-	return pool_size;
+	return Tool::CountSelBitCnt(*pool);
 }
 
 void DualPool::PrintPool() {
