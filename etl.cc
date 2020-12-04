@@ -9,7 +9,8 @@
 ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_capacity) {
 	if (this->NeedFormat())
 		this->Format(8, 10);
-	this->InitLpnToPpnTable();
+	this->pagetable_ = new PageTable(this);
+	// this->InitLpnToPpnTable();
 	printf("initialed lpn to pnp table \r\n");
 
 	InitialDualpool();
@@ -60,11 +61,12 @@ InfoPage ETL::GetInfoPage() {
 }
 
 bool ETL::Write(unsigned long long addr, const char* src, int length) {
-	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
-	unsigned long long end_addr		   = addr + length;
-	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
-	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
-	unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
+	unsigned int	   logic_page_size	= this->info_page_.logic_page_size;
+	unsigned long long end_addr		= addr + length;
+	unsigned int	   start_logic_page_num = addr / logic_page_size;
+	unsigned int	   end_logic_page_num	= end_addr / logic_page_size;
+	// unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
+	unsigned int start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
 	// printf("logic page size : %u\r\n", logic_page_size);
 	DataPage datapage(logic_page_size);
@@ -102,11 +104,12 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 }
 
 bool ETL::Read(unsigned long long addr, char* dest, int length) {
-	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
-	unsigned long long end_addr		   = addr + length;
-	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
-	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
-	unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
+	unsigned int	   logic_page_size	= this->info_page_.logic_page_size;
+	unsigned long long end_addr		= addr + length;
+	unsigned int	   start_logic_page_num = addr / logic_page_size;
+	unsigned int	   end_logic_page_num	= end_addr / logic_page_size;
+	// unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
+	unsigned int start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
 	// printf("start_logic_page_num : %u \r\n", start_logic_page_num);
 	// printf("addr : %u \r\n", addr);
@@ -172,10 +175,11 @@ void ETL::InitialPhysicalPages() {
 
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
-		datapage.logic_page_num			     = physical_page_num;
-		this->lpn_to_ppn_[ datapage.logic_page_num ] = physical_page_num;
-		datapage.hot				     = physical_page_num % 2 == 0 ? 1 : 0;
-		datapage.check_sum			     = 0;
+		datapage.logic_page_num = physical_page_num;
+		// this->lpn_to_ppn_[ datapage.logic_page_num ]   = physical_page_num;
+		this->pagetable_->Set(datapage.logic_page_num, physical_page_num);
+		datapage.hot	   = physical_page_num % 2 == 0 ? 1 : 0;
+		datapage.check_sum = 0;
 		this->WriteDataPage(physical_page_num, &datapage);
 	}
 
@@ -293,20 +297,21 @@ void ETL::InitLpnToPpnTable() {
 	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
 	for (unsigned int i = 0; i < this->info_page_.total_page_count; ++i) {
 		this->ReadDataPage(i, datapage);
-		this->lpn_to_ppn_[ datapage->logic_page_num ] = i;
+		// this->lpn_to_ppn_[ datapage->logic_page_num ] = i;
+		this->pagetable_->Set(datapage->logic_page_num, i);
 		// printf("lpn %u\t->\tppn %u \r\n", datapage->logic_page_num, i);
 	}
 	delete datapage;
 }
 
 void ETL::PrintPMTT() {
-	printf("++++++++++++++++PMTT++++++++++++++++\r\n\r\n");
 
-	map< unsigned int, unsigned int >::iterator it = this->lpn_to_ppn_.begin();
-	for (; it != this->lpn_to_ppn_.end(); it++)
-		printf("lpn %u\t->\tppn %u \r\n", it->first, it->second);
+	printf("++++++++++++++Page Table++++++++++++++++\r\n\r\n");
+	printf("lpn\tppn\r\n");
+	for (int lpn = 0; lpn < this->GetInfoPage().total_page_count; lpn++)
+		printf("%d\t%d\r\n", lpn, this->pagetable_->GetPPN(lpn));
 
-	printf("----------------PMTT----------------\r\n\r\n");
+	printf("--------------Page Table----------------\r\n\r\n");
 }
 
 /*
@@ -396,8 +401,10 @@ void ETL::DirtySwap() {
 
 	this->dualpool_->PopPageFromPool(coldest_ppn, coldest_datapage, COLDPOOL);
 	this->dualpool_->PopPageFromPool(hotest_ppn, hotest_datapage, HOTPOOL);
-	this->lpn_to_ppn_[ coldest_lpn ]	= hotest_ppn;
-	this->lpn_to_ppn_[ hotest_lpn ]		= coldest_ppn;
+	// this->lpn_to_ppn_[ coldest_lpn ] = hotest_ppn;
+	// this->lpn_to_ppn_[ hotest_lpn ]	 = coldest_ppn;
+	this->pagetable_->Set(coldest_lpn, hotest_ppn);
+	this->pagetable_->Set(hotest_lpn, coldest_ppn);
 	coldest_datapage->logic_page_num	= hotest_lpn;
 	coldest_datapage->effective_erase_cycle = 0;
 	coldest_datapage->erase_cycle++;

@@ -69,7 +69,7 @@ int main(void) {
 	// BitOperationTest();
 	// TestLRU();
 	// TestDualLRU();
-	TestPageTable();
+	// TestPageTable();
 
 	/* ETL Test */
 	// TestETLWriteByte();
@@ -79,7 +79,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(1000);
 	// TestMultiHotPage();
-	// TestHotPageToColdPage(1500);
+	TestHotPageToColdPage(1500);
 
 	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");

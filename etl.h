@@ -4,6 +4,7 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "infopage.h"
+#include "pagetable.h"
 #include <map>
 
 /*
@@ -48,10 +49,11 @@ class ETL {
 
 	/* make public for debug, private for release */
     public:
-	unsigned long long		  physical_capacity_;
-	InfoPage			  info_page_;
-	DualPool*			  dualpool_;
-	map< unsigned int, unsigned int > lpn_to_ppn_;
+	unsigned long long physical_capacity_;
+	InfoPage	   info_page_;
+	DualPool*	   dualpool_;
+	PageTable*	   pagetable_;
+	// map< unsigned int, unsigned int > lpn_to_ppnlpn_to_ppn__;
 
 	int  RomWriteByte(unsigned long long addr, char data);
 	int  RomReadByte(unsigned long long addr, char* dest);

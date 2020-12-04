@@ -175,17 +175,12 @@ void TestSingleHotPage(unsigned int write_cycle) {
 	etl = new ETL(512);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
-	DataPage datapage(etl->info_page_.logic_page_size);
-	// etl->ReadDataPage(0, &datapage);
-	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
+
 	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
-		// System_Delayms(10000);
 	}
-	// etl->ReadDataPage(0, &datapage);
-	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
 
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
