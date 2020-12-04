@@ -11,6 +11,7 @@
 #include "lru.h"
 #include "mathtool.h"
 #include "msp430common.h"
+#include "pagetable.h"
 #include "rom.h"
 #include "rtc.h"
 #include "timer.h"
@@ -37,6 +38,17 @@ bool Is_RS485_1 = false, Is_bluetooth = false,
      Is_uart1_RX_INT =
 	     false;  //工作指示灯控制，三种情况(1)当前UART1是否是485，（2）当前UART1是否是蓝牙，（3）是否发生了uart1中断
 		     // LSHB 20200506
+void UpdateDebugState() {
+	GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P2, GPIO_PIN4);
+	if (GPIO_getInputPinValue(GPIO_PORT_P2, GPIO_PIN4) == 0) {
+		printf("IsDebug : 1\r\n");
+		IsDebug = 1;
+	}
+	else {
+		printf("IsDebug : 0\r\n");
+		IsDebug = 0;
+	}
+}
 
 int main(void) {
 	BoardPowerOn();
@@ -46,6 +58,7 @@ int main(void) {
 	Led_Round();
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
+	UpdateDebugState();  // p2.4为低电平时，IsDebug=1;
 
 	Time time;
 	time.GetRtcTime();
@@ -55,7 +68,8 @@ int main(void) {
 	/* Tool Test */
 	// BitOperationTest();
 	// TestLRU();
-	TestDualLRU();
+	// TestDualLRU();
+	TestPageTable();
 
 	/* ETL Test */
 	// TestETLWriteByte();
