@@ -8,6 +8,7 @@
 #include "led.h"
 #include "lowpower.h"
 #include "lru.h"
+#include "mathtool.h"
 #include "msp430common.h"
 #include "rom.h"
 #include "rtc.h"
@@ -17,6 +18,7 @@
 #include "uart1.h"
 #include "uart3.h"
 #include "uart_config.h"
+#include <list>
 #include <set>
 #include <stdint.h>
 #include <stdlib.h>
@@ -51,7 +53,7 @@ int main(void) {
 
 	/* Tool Test */
 	// BitOperationTest();
-	TestLRU();
+	// TestLRU();
 
 	/* ETL Test */
 	// TestETLWriteByte();

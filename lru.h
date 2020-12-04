@@ -1,3 +1,6 @@
+#ifndef LRU_H
+#define LRU_H
+
 #include <list>
 #include <map>
 #include <utility>
@@ -9,6 +12,8 @@
  * obj->put(key,value);
  */
 
+typedef list< pair< int, int > > Cache;
+
 class LRUCache {
     public:
 	LRUCache(int capacity) : max_size(capacity) {
@@ -18,11 +23,12 @@ class LRUCache {
 	void put(int key, int value);
 	void Print();
 
-    private:
-	typedef list< pair< int, int > > Cache;
-	Cache				 cache;
-	map< int, Cache::iterator >	 dict;
-	int				 max_size;
+    protected:
+	Cache			    cache;
+	map< int, Cache::iterator > dict;
+	int			    max_size;
 };
 
 void TestLRU();
+
+#endif

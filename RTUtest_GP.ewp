@@ -2577,6 +2577,12 @@
         <name>$PROJ_DIR$\debug.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\duallru.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\duallru.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\dualpool.cc</name>
     </file>
     <file>
@@ -2623,6 +2629,12 @@
     </file>
     <file>
         <name>$PROJ_DIR$\main.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\mathtool.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\mathtool.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\msp430common.h</name>
