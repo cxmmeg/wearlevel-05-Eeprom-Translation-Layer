@@ -2613,6 +2613,12 @@
         <name>$PROJ_DIR$\lowpower.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\lru.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\lru.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\main.cc</name>
     </file>
     <file>

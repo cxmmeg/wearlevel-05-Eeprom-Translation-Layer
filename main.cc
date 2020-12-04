@@ -7,6 +7,7 @@
 #include "etltest.h"
 #include "led.h"
 #include "lowpower.h"
+#include "lru.h"
 #include "msp430common.h"
 #include "rom.h"
 #include "rtc.h"
@@ -48,8 +49,11 @@ int main(void) {
 	LOG_INFO("start time : \r\n");
 	time.Show();
 
+	/* Tool Test */
 	// BitOperationTest();
+	TestLRU();
 
+	/* ETL Test */
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
 	// ETLWriteAndReadTest();
@@ -57,14 +61,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(1000);
 	// TestMultiHotPage();
-	TestHotPageToColdPage(1500);
-	// set< int > dict;
-	// dict.insert(3);
-	// dict.insert(2);
-	// dict.insert(1);
-	// printf("smallest : %d\r\n", *dict.begin());
-	// dict.erase(dict.find(1));
-	// printf("largest : %d \r\n", *dict.begin());
+	// TestHotPageToColdPage(1500);
 
 	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
