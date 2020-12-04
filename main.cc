@@ -3,6 +3,7 @@
 #include "console.h"
 #include "datapage.h"
 #include "driverlib.h"
+#include "duallru.h"
 #include "dualpool.h"
 #include "etltest.h"
 #include "led.h"
@@ -54,6 +55,7 @@ int main(void) {
 	/* Tool Test */
 	// BitOperationTest();
 	// TestLRU();
+	TestDualLRU();
 
 	/* ETL Test */
 	// TestETLWriteByte();

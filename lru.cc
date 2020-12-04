@@ -11,7 +11,7 @@ void LRUCache::Print() {
 
 	printf("--------------Cache----------------\r\n\r\n");
 }
-int LRUCache::get(int key) {
+int LRUCache::Get(int key) {
 	if (dict.count(key) == 0)
 		return -1;
 	int value = dict[ key ]->second;
@@ -21,10 +21,10 @@ int LRUCache::get(int key) {
 	return value;
 }
 
-void LRUCache::put(int key, int value) {
+void LRUCache::Put(int key, int value) {
 	if (dict.count(key) > 0) {
 		dict[ key ]->second = value;
-		get(key);
+		Get(key);
 	}
 	else {
 		if (cache.size() == max_size) {
@@ -40,12 +40,12 @@ void LRUCache::put(int key, int value) {
 
 void TestLRU() {
 	LRUCache* cache = new LRUCache(3);
-	cache->put(1, 1);
-	cache->put(2, 2);
-	cache->put(3, 3);
+	cache->Put(1, 1);
+	cache->Put(2, 2);
+	cache->Put(3, 3);
 	cache->Print();
 
-	cache->put(4, 4);
+	cache->Put(4, 4);
 	cache->Print();
 }
 

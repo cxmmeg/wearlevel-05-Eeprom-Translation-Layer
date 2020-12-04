@@ -19,8 +19,8 @@ class LRUCache {
 	LRUCache(int capacity) : max_size(capacity) {
 	}
 
-	int  get(int key);
-	void put(int key, int value);
+	int  Get(int key);
+	void Put(int key, int value);
 	void Print();
 
     protected:
