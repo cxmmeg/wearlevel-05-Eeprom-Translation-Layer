@@ -1,86 +1,101 @@
 #include "prioritypagecyclecache.h"
+#include <algorithm>
 
-PriorityCache::PriorityCache(size_t capacity) : max_size_(capacity) {
+bool OrderByInc(const PageCycle& pc1, const PageCycle& pc2) {
+	if (pc1.cycle == pc2.cycle)
+		return pc1.physical_page_num < pc2.physical_page_num;
+	return pc1.cycle < pc2.cycle;
 }
 
-BigPageCycleCache::BigPageCycleCache(size_t capacity) : PriorityCache(capacity) {
+bool OrderByDesc(const PageCycle& pc1, const PageCycle& pc2) {
+	if (pc1.cycle == pc2.cycle)
+		return pc1.physical_page_num < pc2.physical_page_num;
+	return pc1.cycle > pc2.cycle;
 }
 
-bool BigPageCycleCache::TryToPushItem(const PageCycle& pc) {
-	this->PopItem(pc);
-	if (this->cache_.size() < this->max_size_) {
-		this->cache.insert(pc);
-		return true;
+/* +++++++++++++++++PriorityCache ++++++++++++++++++++++++++++ */
+list< PageCycle >::iterator PriorityCache::FindItem(unsigned int ppn) {
+	if (this->data.empty())
+		return this->data.end();
+
+	list< PageCycle >::iterator it = this->data.begin();
+	for (; it != this->data.end(); it++) {
+		if (it->physical_page_num == ppn)
+			return it;
 	}
 
-	if (pc.cycle <= this->cache.rbegin()->cycle)
-		return false;
-
-	this->cache.erase(this->cache.end() - 1);
-	this->cache.insert(pc);
-	return true;
+	return this->data.end();
 }
 
-PageCycle BigPageCycleCache::PopTop() {
-	PageCycle top_item = *(this->cache.begin());
-	this->cache.erase(this->cache.begin());
-	return top_item;
+void PriorityCache::Sort(enum PriorityCacheType type) {
+	if (type == SMALL)
+		this->data.sort(OrderByInc);
+	else
+		this->data.sort(OrderByDesc);
 }
 
-PageCycle BigPageCycleCache::GetTop() {
-	return *(this->cache.begin());
+list< PageCycle > PriorityCache::GetData(enum PriorityCacheType type) {
+	this->Sort(type);
+	return this->data;
 }
 
-void BigPageCycleCache::PopItem(const PageCycle& pc) {
-	this->cache.erase(pc);
-}
+/* ------------------PriorityCache --------------------------------- */
 
-SmallPageCycleCache::SmallPageCycleCache(size_t capacity) : PriorityCache(capacity) {
-}
-
-bool SmallPageCycleCache::TryToPushItem(const PageCycle& pc) {
-	this->PopItem(pc);
-	if (this->cache_.size() < this->max_size_) {
-		this->cache.insert(pc);
-		return true;
-	}
-
-	if (pc.cycle >= this->cache.rbegin()->cycle)
-		return false;
-
-	this->cache.erase(this->cache.end() - 1);
-	this->cache.insert(pc);
-	return true;
-}
-
-PageCycle SmallPageCycleCache::PopTop() {
-	PageCycle top_item = *(this->cache.begin());
-	this->cache.erase(this->cache.begin());
-	return top_item;
-}
-
-PageCycle SmallPageCycleCache::GetTop() {
-	return *(this->cache.begin());
-}
-void SmallPageCycleCache::PopItem(const PageCycle& pc) {
-	this->cache.erase(pc);
-}
-
-PriorityPageCycleCache::PriorityPageCycleCache(enum PriorityCacheType type, size_t capacity) {
-	this->cache_ = type == BIG ? new BigPageCycleCache(capacity);
+/* ++++++++++++++++++PriorityPageCycleCache++++++++++++++++++++++++ */
+PriorityPageCycleCache::PriorityPageCycleCache(enum PriorityCacheType type, size_t capacity)
+	: type_(type), cache_(capacity) {
 }
 
 bool PriorityPageCycleCache::TryToPushItem(const PageCycle& pc) {
-	return this->cache_->TryToPushItem(pc);
+	this->PopItem(pc);
+
+	if (this->cache_.data.size() < this->cache_.max_size_) {
+		this->cache_.data.push_back(pc);
+		this->cache_.Sort(this->type_);
+		return true;
+	}
+
+	if (this->type_ == BIG && pc.cycle <= this->cache_.data.rbegin()->cycle
+	    || this->type_ == SMALL && pc.cycle >= this->cache_.data.rbegin()->cycle)
+		return false;
+
+	this->cache_.data.pop_back();
+	this->cache_.data.push_back(pc);
+	this->cache_.Sort(this->type_);
+
+	return true;
 }
 
 PageCycle PriorityPageCycleCache::PopTop() {
-	return this->cache_->PopTop();
+	PageCycle top_item = *(this->cache_.data.begin());
+	this->cache_.data.pop_front();
+	return top_item;
 }
 
 PageCycle PriorityPageCycleCache::GetTop() {
-	return this->cache_->GetTop();
+	return *(this->cache_.data.begin());
+}
+
+PageCycle PriorityPageCycleCache::GetSecondTop() {
+	list< PageCycle >::iterator it = this->cache_.data.begin();
+	it++;
+	return *it;
 }
 void PriorityPageCycleCache::PopItem(const PageCycle& pc) {
-	this->cache_->PopItem();
+
+	if (this->cache_.FindItem(pc.physical_page_num) != this->cache_.data.end())
+		this->cache_.data.erase(this->cache_.FindItem(pc.physical_page_num));
 }
+
+bool PriorityPageCycleCache::IsEmpty() {
+	return this->cache_.data.empty();
+}
+bool PriorityPageCycleCache::IsFull() {
+	return this->cache_.data.size() >= this->cache_.max_size_;
+}
+
+size_t PriorityPageCycleCache::GetSize() {
+	return this->cache_.data.size();
+}
+
+/* -----------------------PriorityPageCycleCache------------------------- */

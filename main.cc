@@ -66,12 +66,6 @@ int main(void) {
 	LOG_INFO("start time : \r\n");
 	time.Show();
 
-	priority_queue< int > min_heap;
-	min_heap.push(3);
-	min_heap.push(2);
-	min_heap.push(1);
-	LOG_INFO("%d \r\n\r\n", min_heap.top());
-
 	/* Tool Test */
 	// BitOperationTest();
 	// TestLRU();
@@ -86,7 +80,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(1000);
 	// TestMultiHotPage();
-	// TestHotPageToColdPage(1500);
+	TestHotPageToColdPage(1500);
 
 	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");

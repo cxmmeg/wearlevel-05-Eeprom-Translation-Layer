@@ -2646,6 +2646,12 @@
         <name>$PROJ_DIR$\pagetable.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\prioritypagecyclecache.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\prioritypagecyclecache.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\rom.c</name>
     </file>
     <file>

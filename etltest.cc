@@ -151,25 +151,6 @@ void ETLFullWriteAndReadFullTest() {
 		;
 }
 
-void DualPoolTeste() {
-	etl = new ETL(512);
-	set< PageCycle > pool;
-	struct DataPage* datapage = new DataPage(8);
-	for (unsigned int physical_page_num = 0; physical_page_num < 28; ++physical_page_num) {
-		etl->ReadDataPage(physical_page_num, datapage);
-		pool.insert(PageCycle(datapage->logic_page_num, datapage->erase_cycle));
-	}
-	printf("pool initialed\r\n");
-
-	for (unsigned int physical_page_num = 0; physical_page_num < 28; ++physical_page_num) {
-		etl->ReadDataPage(physical_page_num, datapage);
-		etl->PrintDataPage(datapage);
-		pool.erase(PageCycle(datapage->logic_page_num, 0));
-		datapage->erase_cycle++;
-		pool.insert(PageCycle(datapage->logic_page_num, datapage->erase_cycle));
-		printf("pool size : %u \r\n", pool.size());
-	}
-}
 
 void TestSingleHotPage(unsigned int write_cycle) {
 	etl = new ETL(512);

@@ -7,7 +7,6 @@ void TestETLWriteByte();
 void ETLWriteDataPage();
 void ETLWriteAndReadTest();
 void ETLFullWriteAndReadFullTest();
-void DualPoolTeste();
 void TestSingleHotPage(unsigned int write_cycle);
 void TestMultiHotPage();
 void TestHotPageToColdPage(unsigned int write_cycle);

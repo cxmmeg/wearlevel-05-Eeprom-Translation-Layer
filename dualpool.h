@@ -4,7 +4,6 @@
 #include "datapage.h"
 #include "infopage.h"
 #include "prioritypagecyclecache.h"
-#include <set>
 #include <vector>
 
 class ETL;
@@ -46,11 +45,13 @@ class DualPool {
 	void	  PrintPoolInfo(PoolIdentify pool_identify);
 
 	/* 每次调用etl::Write的时候都要调用以下5个接口，即时更新 */
-	bool TryToUpdateHotECTail(PageCycle* page_to_update);
-	bool TryToUpdateColdECTail(PageCycle* page_to_update);
-	bool TryToUpdateHotEECTail(PageCycle* page_to_update);
-	bool TryToUpdateHotECHead(PageCycle* page_to_update);
-	bool TryToUpdateColdEECHead(PageCycle* page_to_update);
+	bool			TryToUpdateHotECTail(PageCycle* page_to_update);
+	bool			TryToUpdateColdECTail(PageCycle* page_to_update);
+	bool			TryToUpdateHotEECTail(PageCycle* page_to_update);
+	bool			TryToUpdateHotECHead(PageCycle* page_to_update);
+	bool			TryToUpdateColdEECHead(PageCycle* page_to_update);
+	PriorityPageCycleCache* SelectPriorityCache(PoolIdentify pool_identify, bool inc,
+						    bool sort_by_erasecycle);
 
     public:
 	int thresh_hold_;
@@ -62,7 +63,7 @@ class DualPool {
 	vector< char >	 hot_pool_;
 	vector< char >	 cold_pool_;
 
-	size_t		       cache_size_;
+	size_t			cache_size_;
 	PriorityPageCycleCache* hot_ec_head_cache_;
 	PriorityPageCycleCache* hot_ec_tail_cache_;
 	PriorityPageCycleCache* cold_ec_tail_cache_;
