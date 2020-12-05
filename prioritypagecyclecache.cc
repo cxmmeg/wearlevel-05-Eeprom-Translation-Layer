@@ -1,5 +1,11 @@
 #include "prioritypagecyclecache.h"
 
+PriorityCache::PriorityCache(size_t capacity) : max_size_(capacity) {
+}
+
+BigPageCycleCache::BigPageCycleCache(size_t capacity) : PriorityCache(capacity) {
+}
+
 bool BigPageCycleCache::TryToPushItem(const PageCycle& pc) {
 	this->PopItem(pc);
 	if (this->cache_.size() < this->max_size_) {
@@ -27,6 +33,9 @@ PageCycle BigPageCycleCache::GetTop() {
 
 void BigPageCycleCache::PopItem(const PageCycle& pc) {
 	this->cache.erase(pc);
+}
+
+SmallPageCycleCache::SmallPageCycleCache(size_t capacity) : PriorityCache(capacity) {
 }
 
 bool SmallPageCycleCache::TryToPushItem(const PageCycle& pc) {
@@ -57,8 +66,8 @@ void SmallPageCycleCache::PopItem(const PageCycle& pc) {
 	this->cache.erase(pc);
 }
 
-PriorityPageCycleCache::PriorityPageCycleCache(enum PriorityCacheType type) {
-	this->cache_ = type == BIG ? new BigPageCycleCache();
+PriorityPageCycleCache::PriorityPageCycleCache(enum PriorityCacheType type, size_t capacity) {
+	this->cache_ = type == BIG ? new BigPageCycleCache(capacity);
 }
 
 bool PriorityPageCycleCache::TryToPushItem(const PageCycle& pc) {

@@ -10,11 +10,16 @@
 DualPool::DualPool(unsigned int thresh_hold) : thresh_hold_(thresh_hold) {
 }
 
-DualPool::DualPool(unsigned int thresh_hold, ETL* etl)
-	: thresh_hold_(thresh_hold), etl_(etl), hot_ec_head_cache_(BIG), hot_ec_tail_cache_(SMALL),
-	  cold_ec_tail_cache_(SMALL), cold_eec_head_cache_(BIG), hot_eec_tail_cache_(SMALL) {
+DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hold) {
 	this->hot_pool_.resize(this->max_page_cnt_ / 8, 0);
 	this->cold_pool_.resize(this->max_page_cnt_ / 8, 0);
+
+	this->cache_size_	   = this->etl_->GetInfoPage().total_page_count * 0.1;
+	this->hot_ec_head_cache_   = new PriorityPageCycleCache(BIG, this->cache_size_);
+	this->hot_ec_tail_cache_   = new PriorityPageCycleCache(SMALL, this->cache_size_);
+	this->cold_ec_tail_cache_  = new PriorityPageCycleCache(SMALL, this->cache_size_);
+	this->cold_eec_head_cache_ = new PriorityPageCycleCache(BIG, this->cache_size_);
+	this->hot_eec_tail_cache_  = new PriorityPageCycleCache(SMALL, this->cache_size_);
 }
 
 bool DualPool::IsDirtySwapTriggered() {
@@ -138,22 +143,25 @@ bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 
 	this->hot_ec_tail_		 = *page_to_update;
 	PageCycle son_of_old_hot_ec_tail = GetSonOfOldPage(&this->hot_ec_tail_, HOTPOOL, false, true);
-	if (son_of_old_hot_ec_tail.cycle < this->hot_ec_tail_.cycle)
+	if (son_of_old_hot_ec_tail.cycle >= this->hot_ec_tail_.cycle)
 		return false;
 
 	this->hot_ec_tail_ = son_of_old_hot_ec_tail;
 	return true;
 }
 bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
+        /* 孤独求败，只有自己能超越自己 */
 	if (Tool::IsBitUnSet(this->cold_pool_, page_to_update->physical_page_num)
 	    || page_to_update->physical_page_num != this->cold_ec_tail_.physical_page_num)
 		return false;
 
+        /* 自己落后了，更新下自己在cache中的状态,然后看看有没有后来居上者 */
 	this->cold_ec_tail_		  = *page_to_update;
 	PageCycle son_of_old_cold_ec_tail = GetSonOfOldPage(&this->cold_ec_tail_, COLDPOOL, false, true);
-	if (son_of_old_cold_ec_tail.cycle < this->cold_ec_tail_.cycle)
+	if (son_of_old_cold_ec_tail.cycle >= this->cold_ec_tail_.cycle)
 		return false;
 
+        /* 有后来居上者，重新插入后来居上者 */
 	this->cold_ec_tail_ = son_of_old_cold_ec_tail;
 	return true;
 }
@@ -164,7 +172,7 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 
 	this->hot_eec_tail_		  = *page_to_update;
 	PageCycle son_of_old_hot_eec_tail = GetSonOfOldPage(&this->hot_eec_tail_, HOTPOOL, false, false);
-	if (son_of_old_hot_eec_tail.cycle < this->hot_eec_tail_.cycle)
+	if (son_of_old_hot_eec_tail.cycle >= this->hot_eec_tail_.cycle)
 		return false;
 
 	this->hot_eec_tail_ = son_of_old_hot_eec_tail;

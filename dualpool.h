@@ -62,11 +62,12 @@ class DualPool {
 	vector< char >	 hot_pool_;
 	vector< char >	 cold_pool_;
 
-	PriorityPageCycleCache hot_ec_head_cache_;
-	PriorityPageCycleCache hot_ec_tail_cache_;
-	PriorityPageCycleCache cold_ec_tail_cache_;
-	PriorityPageCycleCache cold_eec_head_cache_;
-	PriorityPageCycleCache hot_eec_tail_cache_;
+	size_t		       cache_size_;
+	PriorityPageCycleCache* hot_ec_head_cache_;
+	PriorityPageCycleCache* hot_ec_tail_cache_;
+	PriorityPageCycleCache* cold_ec_tail_cache_;
+	PriorityPageCycleCache* cold_eec_head_cache_;
+	PriorityPageCycleCache* hot_eec_tail_cache_;
 
 	PageCycle hot_ec_head_;
 	PageCycle hot_ec_tail_;

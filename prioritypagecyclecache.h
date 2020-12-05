@@ -36,6 +36,7 @@ struct OrderByDesc {
 
 class PriorityCache {
     public:
+	PriorityCache(size_t capacity);
 	virtual bool TryToPushItem(const PageCycle& pc) {
 	}
 	virtual PageCycle PopTop() {
@@ -52,6 +53,7 @@ class PriorityCache {
 };
 
 class BigPageCycleCache : public PriorityCache {
+	BigPageCycleCache(size_t capacity);
 	virtual bool	  TryToPushItem(const PageCycle& pc);
 	virtual PageCycle PopTop();
 	virtual PageCycle GetTop();
@@ -62,6 +64,7 @@ class BigPageCycleCache : public PriorityCache {
 };
 
 class SmallPageCycleCache : public PriorityCache {
+	SmallPageCycleCache(size_t capacity);
 	virtual bool	  TryToPushItem(const PageCycle& pc);
 	virtual PageCycle PopTop();
 	virtual PageCycle GetTop();
@@ -75,7 +78,7 @@ enum PriorityCacheType { BIG, SMALL };
 
 class PriorityPageCycleCache {
     public:
-	PriorityPageCycleCache(enum PriorityCacheType type);
+	PriorityPageCycleCache(enum PriorityCacheType type, size_t capacity);
 
 	bool	  TryToPushItem(const PageCycle& pc);
 	PageCycle PopTop();
