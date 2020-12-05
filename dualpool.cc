@@ -136,7 +136,7 @@ bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 
 	this->hot_ec_tail_		 = *page_to_update;
 	PageCycle son_of_old_hot_ec_tail = GetSonOfOldPage(&this->hot_ec_tail_, HOTPOOL, false, true);
-	if (son_of_old_hot_ec_tail.cycle < this->hot_ec_tail_.cycle)
+	if (son_of_old_hot_ec_tail.cycle > this->hot_ec_tail_.cycle)
 		return false;
 
 	this->hot_ec_tail_ = son_of_old_hot_ec_tail;
@@ -149,7 +149,7 @@ bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
 
 	this->cold_ec_tail_		  = *page_to_update;
 	PageCycle son_of_old_cold_ec_tail = GetSonOfOldPage(&this->cold_ec_tail_, COLDPOOL, false, true);
-	if (son_of_old_cold_ec_tail.cycle < this->cold_ec_tail_.cycle)
+	if (son_of_old_cold_ec_tail.cycle > this->cold_ec_tail_.cycle)
 		return false;
 
 	this->cold_ec_tail_ = son_of_old_cold_ec_tail;
@@ -162,7 +162,7 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 
 	this->hot_eec_tail_		  = *page_to_update;
 	PageCycle son_of_old_hot_eec_tail = GetSonOfOldPage(&this->hot_eec_tail_, HOTPOOL, false, false);
-	if (son_of_old_hot_eec_tail.cycle < this->hot_eec_tail_.cycle)
+	if (son_of_old_hot_eec_tail.cycle > this->hot_eec_tail_.cycle)
 		return false;
 
 	this->hot_eec_tail_ = son_of_old_hot_eec_tail;

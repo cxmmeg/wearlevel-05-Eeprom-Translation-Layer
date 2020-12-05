@@ -87,6 +87,7 @@ int main(void) {
 
 	while (1) {
 		System_Delayms(1000);
+		WatchDog_Clear();
 	}
 }
 
