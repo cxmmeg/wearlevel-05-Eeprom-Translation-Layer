@@ -3,27 +3,11 @@
 
 #include "datapage.h"
 #include "infopage.h"
+#include "prioritypagecyclecache.h"
 #include <set>
 #include <vector>
 
 class ETL;
-
-struct PageCycle {
-	unsigned int physical_page_num;
-	int	     cycle;
-	PageCycle() : physical_page_num(0), cycle(0) {
-	}
-	PageCycle(unsigned int lpn, int cycle_) : physical_page_num(lpn), cycle(cycle_) {
-	}
-	bool operator<(const PageCycle& pagecycle) const {
-		if (this->physical_page_num == pagecycle.physical_page_num)
-			return false;
-
-		if (this->cycle == pagecycle.cycle)
-			return this->physical_page_num < pagecycle.physical_page_num;
-		return this->cycle > pagecycle.cycle;
-	}
-};
 
 enum PoolIdentify { HOTPOOL, COLDPOOL };
 
@@ -77,8 +61,12 @@ class DualPool {
 	static const int max_page_cnt_ = 4 * 1024;
 	vector< char >	 hot_pool_;
 	vector< char >	 cold_pool_;
-	// char hot_pool_[ 4 * 1024 / 8 ];
-	// char cold_pool_[ 4 * 1024 / 8 ];
+
+	PriorityPageCycleCache hot_ec_head_cache_;
+	PriorityPageCycleCache hot_ec_tail_cache_;
+	PriorityPageCycleCache cold_ec_tail_cache_;
+	PriorityPageCycleCache cold_eec_head_cache_;
+	PriorityPageCycleCache hot_eec_tail_cache_;
 
 	PageCycle hot_ec_head_;
 	PageCycle hot_ec_tail_;

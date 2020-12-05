@@ -21,6 +21,7 @@
 #include "uart3.h"
 #include "uart_config.h"
 #include <list>
+#include <queue>
 #include <set>
 #include <stdint.h>
 #include <stdlib.h>
@@ -65,6 +66,12 @@ int main(void) {
 	LOG_INFO("start time : \r\n");
 	time.Show();
 
+	priority_queue< int > min_heap;
+	min_heap.push(3);
+	min_heap.push(2);
+	min_heap.push(1);
+	LOG_INFO("%d \r\n\r\n", min_heap.top());
+
 	/* Tool Test */
 	// BitOperationTest();
 	// TestLRU();
@@ -79,7 +86,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(1000);
 	// TestMultiHotPage();
-	TestHotPageToColdPage(1500);
+	// TestHotPageToColdPage(1500);
 
 	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
@@ -87,6 +94,7 @@ int main(void) {
 
 	while (1) {
 		System_Delayms(1000);
+		WatchDog_Clear();
 	}
 }
 

@@ -10,7 +10,9 @@
 DualPool::DualPool(unsigned int thresh_hold) : thresh_hold_(thresh_hold) {
 }
 
-DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hold), etl_(etl) {
+DualPool::DualPool(unsigned int thresh_hold, ETL* etl)
+	: thresh_hold_(thresh_hold), etl_(etl), hot_ec_head_cache_(BIG), hot_ec_tail_cache_(SMALL),
+	  cold_ec_tail_cache_(SMALL), cold_eec_head_cache_(BIG), hot_eec_tail_cache_(SMALL) {
 	this->hot_pool_.resize(this->max_page_cnt_ / 8, 0);
 	this->cold_pool_.resize(this->max_page_cnt_ / 8, 0);
 }

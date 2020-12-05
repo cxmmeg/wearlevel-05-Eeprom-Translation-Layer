@@ -176,7 +176,6 @@ void ETL::InitialPhysicalPages() {
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
 		datapage.logic_page_num = physical_page_num;
-		// this->lpn_to_ppn_[ datapage.logic_page_num ]   = physical_page_num;
 		this->pagetable_->Set(datapage.logic_page_num, physical_page_num);
 		datapage.hot	   = physical_page_num % 2 == 0 ? 1 : 0;
 		datapage.check_sum = 0;

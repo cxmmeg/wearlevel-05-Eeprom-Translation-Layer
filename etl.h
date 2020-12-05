@@ -53,7 +53,6 @@ class ETL {
 	InfoPage	   info_page_;
 	DualPool*	   dualpool_;
 	PageTable*	   pagetable_;
-	// map< unsigned int, unsigned int > lpn_to_ppnlpn_to_ppn__;
 
 	int  RomWriteByte(unsigned long long addr, char data);
 	int  RomReadByte(unsigned long long addr, char* dest);
