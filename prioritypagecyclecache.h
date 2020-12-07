@@ -12,7 +12,6 @@ struct PageCycle {
 	}
 };
 
-
 enum PriorityCacheType { BIG, SMALL };
 
 struct PriorityCache {

@@ -15,8 +15,6 @@ bool OrderByDesc(const PageCycle& pc1, const PageCycle& pc2) {
 
 /* +++++++++++++++++PriorityCache ++++++++++++++++++++++++++++ */
 list< PageCycle >::iterator PriorityCache::FindItem(unsigned int ppn) {
-	if (this->data.empty())
-		return this->data.end();
 
 	list< PageCycle >::iterator it = this->data.begin();
 	for (; it != this->data.end(); it++) {
@@ -85,6 +83,13 @@ void PriorityPageCycleCache::PopItem(const PageCycle& pc) {
 
 	if (this->cache_.FindItem(pc.physical_page_num) != this->cache_.data.end())
 		this->cache_.data.erase(this->cache_.FindItem(pc.physical_page_num));
+
+	list< PageCycle >::iterator it = this->cache_.data.begin();
+	for (; it != this->cache_.data.end(); it++) {
+		if (it->physical_page_num != pc.physical_page_num)
+			continue;
+		this->cache_.data.erase(it);
+	}
 }
 
 bool PriorityPageCycleCache::IsEmpty() {

@@ -65,7 +65,6 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned long long end_addr		= addr + length;
 	unsigned int	   start_logic_page_num = addr / logic_page_size;
 	unsigned int	   end_logic_page_num	= end_addr / logic_page_size;
-	// unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
 	unsigned int start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
 	// printf("logic page size : %u\r\n", logic_page_size);
