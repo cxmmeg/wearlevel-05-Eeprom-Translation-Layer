@@ -72,6 +72,7 @@ int main(void) {
 
 	while (1) {
 		System_Delayms(1000);
+		WatchDog_Clear();
 	}
 }
 
@@ -191,6 +192,6 @@ void Main_GotoSleep() {
 	TimerB_Clear();
 	WatchDog_Clear();
 	// TraceMsg("Device sleep !",1); //此处串口已经关闭
-	LPM2;
+	// LPM2();
 	//    LPM3;
 }
