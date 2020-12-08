@@ -18,3 +18,13 @@ start time :
 end time : 
 20/12/4 15:53:6 
 
+# bit map with pagetable's cache , dualpool border cache , TestHotPageToColdPage(1500) takes time: 6 mins
+
+start time : 
+20/12/8 15:42:28 
+
+end time : 
+20/12/8 15:48:42 
+
+
+
