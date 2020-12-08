@@ -79,9 +79,9 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(1500);
+	// TestSingleHotPage(1500);
 	// TestMultiHotPage();
-	// TestHotPageToColdPage(1500);
+	TestHotPageToColdPage(1500);
 
 	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
