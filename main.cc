@@ -79,7 +79,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(350);
+	TestSingleHotPage(1500);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1500);
 
