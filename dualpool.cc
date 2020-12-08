@@ -67,7 +67,7 @@ PageCycle DualPool::GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_ident
 			sort_by_erasecycle ? datapage_temp.erase_cycle : datapage_temp.effective_erase_cycle;
 
 		if ((!inc && curr_cycle < son.cycle) || (inc && curr_cycle > son.cycle)) {
-			son.cycle	      = datapage_temp.erase_cycle;
+			son.cycle	      = curr_cycle;
 			son.physical_page_num = ppn;
 		}
 	}
