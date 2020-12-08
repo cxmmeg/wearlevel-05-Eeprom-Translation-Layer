@@ -61,11 +61,11 @@ InfoPage ETL::GetInfoPage() {
 }
 
 bool ETL::Write(unsigned long long addr, const char* src, int length) {
-	unsigned int	   logic_page_size	= this->info_page_.logic_page_size;
-	unsigned long long end_addr		= addr + length;
-	unsigned int	   start_logic_page_num = addr / logic_page_size;
-	unsigned int	   end_logic_page_num	= end_addr / logic_page_size;
-	unsigned int start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
+	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
+	unsigned long long end_addr		   = addr + length;
+	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
+	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
+	unsigned int	   start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
 	// printf("logic page size : %u\r\n", logic_page_size);
 	DataPage datapage(logic_page_size);
@@ -397,8 +397,8 @@ void ETL::DirtySwap() {
 	// printf("hotest datapage:\r\n");
 	// this->PrintDataPage(hotest_datapage);
 
-	this->dualpool_->PopPageFromPool(coldest_ppn, coldest_datapage, COLDPOOL);
-	this->dualpool_->PopPageFromPool(hotest_ppn, hotest_datapage, HOTPOOL);
+	// this->dualpool_->PopPageFromPool(coldest_ppn, coldest_datapage, COLDPOOL);
+	// this->dualpool_->PopPageFromPool(hotest_ppn, hotest_datapage, HOTPOOL);
 	this->pagetable_->Set(coldest_lpn, hotest_ppn);
 	this->pagetable_->Set(hotest_lpn, coldest_ppn);
 	coldest_datapage->logic_page_num	= hotest_lpn;
@@ -434,7 +434,7 @@ void ETL::ColdPoolResize() {
 	// this->PrintDataPage(cold_to_hot_datapage);
 
 	/* move page from cold pool to hot pool */
-	this->dualpool_->PopPageFromPool(cold_to_hot_ppn, cold_to_hot_datapage, COLDPOOL);
+	// this->dualpool_->PopPageFromPool(cold_to_hot_ppn, cold_to_hot_datapage, COLDPOOL);
 	this->dualpool_->AddPageIntoPool(cold_to_hot_ppn, cold_to_hot_datapage, HOTPOOL);
 
 	cold_to_hot_datapage->hot = 1;
@@ -455,7 +455,7 @@ void ETL::HotPoolResize() {
 	// this->PrintDataPage(&hot_to_cold_datapage);
 
 	/* move page from hot pool to cold pool */
-	this->dualpool_->PopPageFromPool(hot_to_cold_ppn, &hot_to_cold_datapage, HOTPOOL);
+	// this->dualpool_->PopPageFromPool(hot_to_cold_ppn, &hot_to_cold_datapage, HOTPOOL);
 	this->dualpool_->AddPageIntoPool(hot_to_cold_ppn, &hot_to_cold_datapage, COLDPOOL);
 
 	hot_to_cold_datapage.hot = 0;

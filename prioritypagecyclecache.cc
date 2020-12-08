@@ -1,4 +1,5 @@
 #include "prioritypagecyclecache.h"
+#include "common.h"
 #include <algorithm>
 
 bool OrderByInc(const PageCycle& pc1, const PageCycle& pc2) {
@@ -16,8 +17,7 @@ bool OrderByDesc(const PageCycle& pc1, const PageCycle& pc2) {
 /* +++++++++++++++++PriorityCache ++++++++++++++++++++++++++++ */
 list< PageCycle >::iterator PriorityCache::FindItem(unsigned int ppn) {
 
-	list< PageCycle >::iterator it = this->data.begin();
-	for (; it != this->data.end(); it++) {
+	for (list< PageCycle >::iterator it = this->data.begin(); it != this->data.end(); it++) {
 		if (it->physical_page_num == ppn)
 			return it;
 	}
@@ -44,7 +44,7 @@ PriorityPageCycleCache::PriorityPageCycleCache(enum PriorityCacheType type, size
 	: type_(type), cache_(capacity) {
 }
 
-bool PriorityPageCycleCache::TryToPushItem(const PageCycle& pc) {
+bool PriorityPageCycleCache::TryToPushItem(PageCycle pc) {
 	this->PopItem(pc);
 
 	if (this->cache_.data.size() < this->cache_.max_size_) {
@@ -79,16 +79,17 @@ PageCycle PriorityPageCycleCache::GetSecondTop() {
 	it++;
 	return *it;
 }
-void PriorityPageCycleCache::PopItem(const PageCycle& pc) {
+void PriorityPageCycleCache::PopItem(PageCycle pc) {
 
-	if (this->cache_.FindItem(pc.physical_page_num) != this->cache_.data.end())
-		this->cache_.data.erase(this->cache_.FindItem(pc.physical_page_num));
+	// if (this->cache_.FindItem(pc.physical_page_num) != this->cache_.data.end())
+	// 	this->cache_.data.erase(this->cache_.FindItem(pc.physical_page_num));
 
-	list< PageCycle >::iterator it = this->cache_.data.begin();
-	for (; it != this->cache_.data.end(); it++) {
-		if (it->physical_page_num != pc.physical_page_num)
-			continue;
-		this->cache_.data.erase(it);
+	for (list< PageCycle >::iterator it = this->cache_.data.begin(); it != this->cache_.data.end();
+	     it++) {
+		if (it->physical_page_num == pc.physical_page_num) {
+			this->cache_.data.erase(it);
+			return;
+		}
 	}
 }
 
@@ -103,4 +104,31 @@ size_t PriorityPageCycleCache::GetSize() {
 	return this->cache_.data.size();
 }
 
+void PriorityPageCycleCache::Print() {
+	printf("++++++++++++priority cache++++++++++++++++\r\n\r\n");
+
+	list< PageCycle >::iterator it = this->cache_.data.begin();
+	printf("ppn\tcycle\r\n");
+	for (; it != this->cache_.data.end(); it++)
+		printf("%d\t%d\r\n", it->physical_page_num, it->cycle);
+
+	printf("------------priority cache-----------------r\n\r\n");
+}
+
 /* -----------------------PriorityPageCycleCache------------------------- */
+
+/*++++++++++++++++++++++++Test+++++++++++++++++*/
+void TestPriorityPagecycleCache() {
+	PriorityPageCycleCache* small_cache = new PriorityPageCycleCache(SMALL, 3);
+	small_cache->TryToPushItem(PageCycle(5, 5));
+	small_cache->TryToPushItem(PageCycle(4, 4));
+	small_cache->TryToPushItem(PageCycle(3, 3));
+	small_cache->TryToPushItem(PageCycle(1, 1));
+	small_cache->Print();
+	small_cache->TryToPushItem(PageCycle(1, 10));
+	small_cache->Print();
+	small_cache->TryToPushItem(PageCycle(1, 15));
+	small_cache->TryToPushItem(PageCycle(3, 8));
+	small_cache->Print();
+}
+/*------------------------Test-----------------*/

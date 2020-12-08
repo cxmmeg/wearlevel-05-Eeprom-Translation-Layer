@@ -40,7 +40,7 @@ class DualPool {
 	void PrintPool();
 
     private:
-	PageCycle GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_identify, bool inc,
+	PageCycle GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_identify, bool big,
 				  bool sort_by_erasecycle);
 	void	  PrintPoolInfo(PoolIdentify pool_identify);
 
@@ -50,7 +50,7 @@ class DualPool {
 	bool			TryToUpdateHotEECTail(PageCycle* page_to_update);
 	bool			TryToUpdateHotECHead(PageCycle* page_to_update);
 	bool			TryToUpdateColdEECHead(PageCycle* page_to_update);
-	PriorityPageCycleCache* SelectPriorityCache(PoolIdentify pool_identify, bool inc,
+	PriorityPageCycleCache* SelectPriorityCache(PoolIdentify pool_identify, bool big,
 						    bool sort_by_erasecycle);
 
     public:
@@ -63,11 +63,11 @@ class DualPool {
 	vector< char >	 hot_pool_;
 	vector< char >	 cold_pool_;
 
-	size_t cache_size_;
-	// PriorityPageCycleCache* hot_ec_head_cache_;
+	size_t			cache_size_;
+	PriorityPageCycleCache* hot_ec_head_cache_;
 	PriorityPageCycleCache* hot_ec_tail_cache_;
 	PriorityPageCycleCache* cold_ec_tail_cache_;
-	// PriorityPageCycleCache* cold_eec_head_cache_;
+	PriorityPageCycleCache* cold_eec_head_cache_;
 	PriorityPageCycleCache* hot_eec_tail_cache_;
 
 	PageCycle hot_ec_head_;

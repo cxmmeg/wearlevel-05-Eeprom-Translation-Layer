@@ -71,6 +71,7 @@ int main(void) {
 	// TestLRU();
 	// TestDualLRU();
 	// TestPageTable();
+	// TestPriorityPagecycleCache();
 
 	/* ETL Test */
 	// TestETLWriteByte();
@@ -78,7 +79,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(500);
+	TestSingleHotPage(350);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1500);
 

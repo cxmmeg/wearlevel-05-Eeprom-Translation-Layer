@@ -29,18 +29,23 @@ class PriorityPageCycleCache {
     public:
 	PriorityPageCycleCache(enum PriorityCacheType type, size_t capacity);
 
-	bool	  TryToPushItem(const PageCycle& pc);
+	bool	  TryToPushItem(PageCycle pc);
 	PageCycle PopTop();
 	PageCycle GetTop();
 	PageCycle GetSecondTop();
-	void	  PopItem(const PageCycle& pc);
+	void	  PopItem(PageCycle pc);
 	bool	  IsEmpty();
 	bool	  IsFull();
 	size_t	  GetSize();
+	void	  Print();
 
     private:
 	PriorityCache	       cache_;
 	enum PriorityCacheType type_;
 };
+
+/*++++++++++++++++++++++++Test+++++++++++++++++*/
+void TestPriorityPagecycleCache();
+/*------------------------Test-----------------*/
 
 #endif
