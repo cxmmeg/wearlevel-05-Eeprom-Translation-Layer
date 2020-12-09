@@ -394,8 +394,8 @@ void ETL::DirtySwap() {
 	// printf("hotest datapage:\r\n");
 	// this->PrintDataPage(hotest_datapage);
 
-	this->dualpool_->PopPageFromPool(coldest_ppn, coldest_datapage, COLDPOOL);
-	this->dualpool_->PopPageFromPool(hotest_ppn, hotest_datapage, HOTPOOL);
+	// this->dualpool_->PopPageFromPool(coldest_ppn, coldest_datapage, COLDPOOL);
+	// this->dualpool_->PopPageFromPool(hotest_ppn, hotest_datapage, HOTPOOL);
 	this->lpn_to_ppn_[ coldest_lpn ]	= hotest_ppn;
 	this->lpn_to_ppn_[ hotest_lpn ]		= coldest_ppn;
 	coldest_datapage->logic_page_num	= hotest_lpn;
@@ -409,13 +409,21 @@ void ETL::DirtySwap() {
 	Tool::SwapMemory(coldest_datapage->data, hotest_datapage->data, this->info_page_.logic_page_size);
 	this->dualpool_->AddPageIntoPool(coldest_ppn, coldest_datapage, HOTPOOL);
 	this->dualpool_->AddPageIntoPool(hotest_ppn, hotest_datapage, COLDPOOL);
+
 	this->WriteDataPage(coldest_ppn, coldest_datapage);
 	this->WriteDataPage(hotest_ppn, hotest_datapage);
 
-	if (this->dualpool_->GetPoolSize(HOTPOOL) == 1)
+	if (this->dualpool_->GetPoolSize(HOTPOOL) == 1) {
 		this->dualpool_->SetHotECHead(PageCycle(coldest_ppn, coldest_datapage->erase_cycle));
-	if (this->dualpool_->GetPoolSize(COLDPOOL) == 1)
+		this->dualpool_->SetHotECTail(PageCycle(coldest_ppn, coldest_datapage->erase_cycle));
+		this->dualpool_->SetHotEECTail(
+			PageCycle(coldest_ppn, coldest_datapage->effective_erase_cycle));
+	}
+	if (this->dualpool_->GetPoolSize(COLDPOOL) == 1) {
 		this->dualpool_->SetColdECTail(PageCycle(hotest_ppn, hotest_datapage->erase_cycle));
+		this->dualpool_->SetColdEECHead(
+			PageCycle(hotest_ppn, hotest_datapage->effective_erase_cycle));
+	}
 
 	delete coldest_datapage;
 	delete hotest_datapage;
@@ -431,7 +439,7 @@ void ETL::ColdPoolResize() {
 	// this->PrintDataPage(cold_to_hot_datapage);
 
 	/* move page from cold pool to hot pool */
-	this->dualpool_->PopPageFromPool(cold_to_hot_ppn, cold_to_hot_datapage, COLDPOOL);
+	// this->dualpool_->PopPageFromPool(cold_to_hot_ppn, cold_to_hot_datapage, COLDPOOL);
 	this->dualpool_->AddPageIntoPool(cold_to_hot_ppn, cold_to_hot_datapage, HOTPOOL);
 	// this->dualpool_->hot_pool_sort_by_erase_cycle_.insert(
 	// 	PageCycle(cold_to_hot_lpn, cold_to_hot_datapage->erase_cycle));
@@ -456,7 +464,7 @@ void ETL::HotPoolResize() {
 	// this->PrintDataPage(&hot_to_cold_datapage);
 
 	/* move page from hot pool to cold pool */
-	this->dualpool_->PopPageFromPool(hot_to_cold_ppn, &hot_to_cold_datapage, HOTPOOL);
+	// this->dualpool_->PopPageFromPool(hot_to_cold_ppn, &hot_to_cold_datapage, HOTPOOL);
 	this->dualpool_->AddPageIntoPool(hot_to_cold_ppn, &hot_to_cold_datapage, COLDPOOL);
 
 	// this->dualpool_->cold_pool_sort_by_erase_cycle_.insert(
