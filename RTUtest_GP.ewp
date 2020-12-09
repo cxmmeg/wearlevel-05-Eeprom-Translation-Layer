@@ -406,6 +406,7 @@
                 <option>
                     <name>newCCIncludePaths</name>
                     <state>$PROJ_DIR$\Driverlib</state>
+                    <state>$PROJ_DIR$\driver</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2550,16 +2551,16 @@
         </file>
     </group>
     <file>
-        <name>$PROJ_DIR$\common.c</name>
+        <name>$PROJ_DIR$\driver\common.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\common.h</name>
+        <name>$PROJ_DIR$\driver\common.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\Console.c</name>
+        <name>$PROJ_DIR$\driver\Console.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\Console.h</name>
+        <name>$PROJ_DIR$\driver\Console.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\cstartup.s43</name>
@@ -2571,10 +2572,10 @@
         <name>$PROJ_DIR$\datapage.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\debug.c</name>
+        <name>$PROJ_DIR$\driver\debug.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\debug.h</name>
+        <name>$PROJ_DIR$\driver\debug.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\duallru.cc</name>
@@ -2607,16 +2608,16 @@
         <name>$PROJ_DIR$\infopage.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\led.c</name>
+        <name>$PROJ_DIR$\driver\led.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\led.h</name>
+        <name>$PROJ_DIR$\driver\led.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\lowpower.c</name>
+        <name>$PROJ_DIR$\driver\lowpower.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\lowpower.h</name>
+        <name>$PROJ_DIR$\driver\lowpower.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\lru.cc</name>
@@ -2628,7 +2629,7 @@
         <name>$PROJ_DIR$\main.cc</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\main.h</name>
+        <name>$PROJ_DIR$\driver\main.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\mathtool.cc</name>
@@ -2637,7 +2638,7 @@
         <name>$PROJ_DIR$\mathtool.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\msp430common.h</name>
+        <name>$PROJ_DIR$\driver\msp430common.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\pagetable.cc</name>
@@ -2652,57 +2653,57 @@
         <name>$PROJ_DIR$\prioritypagecyclecache.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\rom.c</name>
+        <name>$PROJ_DIR$\driver\rom.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\rom.h</name>
+        <name>$PROJ_DIR$\driver\rom.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\rtc.cc</name>
+        <name>$PROJ_DIR$\driver\rtc.cc</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\rtc.h</name>
+        <name>$PROJ_DIR$\driver\rtc.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\sys_status.c</name>
+        <name>$PROJ_DIR$\driver\sys_status.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\sys_status.h</name>
+        <name>$PROJ_DIR$\driver\sys_status.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\timer.c</name>
+        <name>$PROJ_DIR$\driver\timer.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\timer.h</name>
+        <name>$PROJ_DIR$\driver\timer.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\tool.cc</name>
+        <name>$PROJ_DIR$\driver\tool.cc</name>
     </file>
     <file>
         <name>$PROJ_DIR$\tool.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart0.c</name>
+        <name>$PROJ_DIR$\driver\uart0.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart0.h</name>
+        <name>$PROJ_DIR$\driver\uart0.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart1.c</name>
+        <name>$PROJ_DIR$\driver\uart1.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart1.h</name>
+        <name>$PROJ_DIR$\driver\uart1.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart3.c</name>
+        <name>$PROJ_DIR$\driver\uart3.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart3.h</name>
+        <name>$PROJ_DIR$\driver\uart3.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart_config.c</name>
+        <name>$PROJ_DIR$\driver\uart_config.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart_config.h</name>
+        <name>$PROJ_DIR$\driver\uart_config.h</name>
     </file>
 </project>
