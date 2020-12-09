@@ -1,37 +1,35 @@
 {
-        "configurations": [
-                {
-                        "name": "Mac",
-                        "includePath": [
-                                "${workspaceFolder}/**",
-                                "/usr/include/c++/4.2.1/**",
-                                "/Users/zhuhouwang/work/msp430inc/**"
-                        ],
-                        "defines": [],
-                        "macFrameworkPath": [
-                                "/System/Library/Frameworks",
-                                "/Library/Frameworks"
-                        ],
-                        "compilerPath": "/usr/bin/gcc",
-                        "configurationProvider": "pluyckx.iar-vsc"
-                },
-                {
-                        "name": "IAR",
-                        "defines": [],
-                        "includePath": [
-                                "/Users/zhuhouwang/work/ETL/Driverlib",
-                                "/Users/zhuhouwang/work/ETL/driver",
-                                "/Users/zhuhouwang/work/ETL/**",
-                                "/Users/zhuhouwang/work/msp430inc/**",
-                                "/Volumes/[C]\\ 我的\\ Boot\\ Camp/Program\\ Files\\ \\(x86\\)/IAR\\ Systems/**"
-                        ],
-                        "forcedInclude": [],
-                        "cStandard": "c11",
-                        "cppStandard": "c++98",
-                        "compilerPath": "",
-                        "intelliSenseMode": "msvc-x64",
-                        "configurationProvider": "pluyckx.iar-vsc"
-                }
-        ],
-        "version": 4
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/c++/4.2.1/**",
+                "/Users/zhuhouwang/work/msp430inc/**"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "configurationProvider": "pluyckx.iar-vsc"
+        },
+        {
+            "name": "IAR",
+            "defines": [],
+            "includePath": [
+                "/Users/zhuhouwang/work/ETL\\Driverlib",
+                "/Users/zhuhouwang/work/ETL\\driver",
+                "/Users/zhuhouwang/work/ETL"
+            ],
+            "forcedInclude": [],
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "compilerPath": "",
+            "intelliSenseMode": "msvc-x64",
+            "configurationProvider": "pluyckx.iar-vsc"
+        }
+    ],
+    "version": 4
 }
