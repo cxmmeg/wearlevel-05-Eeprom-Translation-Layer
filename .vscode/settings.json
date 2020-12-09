@@ -17,6 +17,7 @@
                 "initializer_list": "cpp",
                 "iterator": "cpp",
                 "utility": "cpp",
-                "list": "cpp"
+                "list": "cpp",
+                "__locale": "cpp"
         }
 }

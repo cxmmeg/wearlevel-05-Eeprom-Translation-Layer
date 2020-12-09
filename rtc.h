@@ -408,6 +408,11 @@ struct Time {
 	}
 	void GetRtcTime();
 	void Show();
+	int  operator-(const Time& t) const {
+		 int sec_head = this->min + this->hour * 60;
+		 int sec_tail = t.min + t.hour * 60;
+		 return sec_head - sec_tail;
+	}
 };
 
 #endif

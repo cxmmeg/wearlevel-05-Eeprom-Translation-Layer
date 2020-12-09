@@ -35,5 +35,11 @@ start time :
 end time : 
 20/12/9 11:6:15 
 
-**+++++++++++++UpdateBorder() when AddPageIntoPool; TestHotPageToColdPage(1500) single page+++++++++++++**
+**-------------UpdateBorder() when AddPageIntoPool; TestHotPageToColdPage(1500) single page---------------**
+takes 22mins
 
+start time : 
+20/12/9 11:18:8 
+
+end time : 
+20/12/9 11:40:19 
