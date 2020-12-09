@@ -314,20 +314,20 @@ void ETL::TryToExecDualPoolAlgorithm() {
 	if (dirty_swap_triggered || coldpool_resize_triggered || hotpool_resize_triggered) {
 
 		LOG_DEBUG("hot ec tail, ppn:%u, cycle:%d \r\n",
-			  this->dualpool_->hot_ec_tail_.physical_page_num,
-			  this->dualpool_->hot_ec_tail_.cycle);
+			  this->dualpool_->hot_ec_tail_cache_->GetTop().physical_page_num,
+			  this->dualpool_->hot_ec_tail_cache_->GetTop().cycle);
 		LOG_DEBUG("hot eec tail, ppn:%u, cycle:%d \r\n",
-			  this->dualpool_->hot_eec_tail_.physical_page_num,
-			  this->dualpool_->hot_eec_tail_.cycle);
+			  this->dualpool_->hot_eec_tail_cache_->GetTop().physical_page_num,
+			  this->dualpool_->hot_eec_tail_cache_->GetTop().cycle);
 		LOG_DEBUG("cold ec tail, ppn:%u, cycle:%d \r\n",
-			  this->dualpool_->cold_ec_tail_.physical_page_num,
-			  this->dualpool_->cold_ec_tail_.cycle);
+			  this->dualpool_->cold_ec_tail_cache_->GetTop().physical_page_num,
+			  this->dualpool_->cold_ec_tail_cache_->GetTop().cycle);
 		LOG_DEBUG("hot ec head, ppn:%u, cycle:%d \r\n",
-			  this->dualpool_->hot_ec_head_.physical_page_num,
-			  this->dualpool_->hot_ec_head_.cycle);
+			  this->dualpool_->hot_ec_head_cache_->GetTop().physical_page_num,
+			  this->dualpool_->hot_ec_head_cache_->GetTop().cycle);
 		LOG_DEBUG("cold eec head, ppn:%u, cycle:%d \r\n\r\n",
-			  this->dualpool_->cold_eec_head_.physical_page_num,
-			  this->dualpool_->cold_eec_head_.cycle);
+			  this->dualpool_->cold_eec_head_cache_->GetTop().physical_page_num,
+			  this->dualpool_->cold_eec_head_cache_->GetTop().cycle);
 	}
 }
 

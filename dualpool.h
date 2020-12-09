@@ -70,12 +70,6 @@ class DualPool {
 	PriorityPageCycleCache* cold_eec_head_cache_;
 	PriorityPageCycleCache* hot_eec_tail_cache_;
 
-	PageCycle hot_ec_head_;
-	PageCycle hot_ec_tail_;
-	PageCycle cold_ec_tail_;
-	PageCycle cold_eec_head_;
-	PageCycle hot_eec_tail_;
-
 	ETL* etl_;
 };
 

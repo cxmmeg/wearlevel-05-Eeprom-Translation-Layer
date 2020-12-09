@@ -24,15 +24,18 @@ DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hol
 }
 
 bool DualPool::IsDirtySwapTriggered() {
-	return this->hot_ec_head_.cycle - this->cold_ec_tail_.cycle > this->thresh_hold_;
+	return this->hot_ec_head_cache_->GetTop().cycle - this->cold_ec_tail_cache_->GetTop().cycle
+	       > this->thresh_hold_;
 }
 
 bool DualPool::IsColdPoolResizeTriggered() {
-	return this->cold_eec_head_.cycle - this->hot_eec_tail_.cycle > this->thresh_hold_;
+	return this->cold_eec_head_cache_->GetTop().cycle - this->hot_eec_tail_cache_->GetTop().cycle
+	       > this->thresh_hold_;
 }
 
 bool DualPool::IsHotPoolResizeTriggered() {
-	return this->hot_ec_head_.cycle - this->hot_ec_tail_.cycle > 2 * this->thresh_hold_;
+	return this->hot_ec_head_cache_->GetTop().cycle - this->hot_ec_tail_cache_->GetTop().cycle
+	       > 2 * this->thresh_hold_;
 }
 
 void DualPool::AddPageIntoPool(unsigned int physical_page_num, DataPage* datapage,
@@ -50,36 +53,11 @@ void DualPool::AddPageIntoPool(unsigned int physical_page_num, DataPage* datapag
 
 void DualPool::PopPageFromPool(unsigned int physical_page_num, DataPage* datapage,
 			       enum PoolIdentify pool_identify) {
-	PageCycle ec_page_cycle(physical_page_num, datapage->erase_cycle);
-	PageCycle eec_page_cycle(physical_page_num, datapage->effective_erase_cycle);
 
-	if (pool_identify == HOTPOOL) {
+	if (pool_identify == HOTPOOL)
 		Tool::UnSetBit(this->hot_pool_, physical_page_num);
-
-		this->hot_ec_tail_cache_->PopItem(ec_page_cycle);
-		this->hot_ec_tail_ = GetSonOfOldPage(&ec_page_cycle, HOTPOOL, false, true);
-
-		this->hot_eec_tail_cache_->PopItem(eec_page_cycle);
-		this->hot_eec_tail_ = GetSonOfOldPage(&eec_page_cycle, HOTPOOL, false, false);
-
-		this->hot_ec_head_cache_->PopItem(ec_page_cycle);
-		this->hot_ec_head_ = GetSonOfOldPage(&ec_page_cycle, HOTPOOL, true, true);
-	}
-	else {
-		LOG_DEBUG("before pop cold ec tail : %d : %d\r\n", this->cold_ec_tail_.physical_page_num,
-			  this->cold_ec_tail_.cycle);
-
+	else
 		Tool::UnSetBit(this->cold_pool_, physical_page_num);
-
-		this->cold_ec_tail_cache_->PopItem(ec_page_cycle);
-		this->cold_ec_tail_ = GetSonOfOldPage(&ec_page_cycle, COLDPOOL, false, true);
-
-		this->cold_eec_head_cache_->PopItem(eec_page_cycle);
-		this->cold_eec_head_ = GetSonOfOldPage(&eec_page_cycle, COLDPOOL, true, false);
-
-		LOG_DEBUG("after pop cold ec tail : %d : %d \r\n", this->cold_ec_tail_.physical_page_num,
-			  this->cold_ec_tail_.cycle);
-	}
 }
 
 PriorityPageCycleCache* DualPool::SelectPriorityCache(PoolIdentify pool_identify, bool big,
@@ -146,47 +124,53 @@ PageCycle DualPool::GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_ident
 }
 
 unsigned int DualPool::PopFrontHotPoolByEraseCycle() {
-	/* 从hot_pool里找到hot_ec_head_的接班人 */
-	PageCycle old_hot_ec_head = this->hot_ec_head_;
-	this->hot_ec_head_cache_->PopItem(old_hot_ec_head);
-	PageCycle son_of_old_hot_ec_head = GetSonOfOldPage(&old_hot_ec_head, HOTPOOL, true, true);
-	this->hot_ec_head_		 = son_of_old_hot_ec_head;
+	PageCycle old_hot_ec_head = this->hot_ec_head_cache_->GetTop();
 
 	/* 在hot_pool里unset老的hot_ec_head_.physical_page_num */
 	Tool::UnSetBit(this->hot_pool_, old_hot_ec_head.physical_page_num);
+	this->hot_ec_head_cache_->PopItem(old_hot_ec_head);
+
+	/* 看看cache里的储备量还够不够，不够的话补充 */
+	GetSonOfOldPage(&old_hot_ec_head, HOTPOOL, true, true);
 
 	return old_hot_ec_head.physical_page_num;
 }
 
 unsigned int DualPool::PopBackHotPoolByEraseCycle() {
 
-	PageCycle old_hot_ec_tail = this->hot_ec_tail_;
-	this->hot_ec_tail_cache_->PopItem(old_hot_ec_tail);
-	PageCycle son_of_old_hot_ec_tail = GetSonOfOldPage(&old_hot_ec_tail, HOTPOOL, false, true);
-	this->hot_ec_tail_		 = son_of_old_hot_ec_tail;
+	PageCycle old_hot_ec_tail = this->hot_ec_tail_cache_->GetTop();
 
 	Tool::UnSetBit(this->hot_pool_, old_hot_ec_tail.physical_page_num);
+	this->hot_ec_tail_cache_->PopItem(old_hot_ec_tail);
+
+	/* 看看cache里的储备量还够不够，不够的话补充 */
+	GetSonOfOldPage(&old_hot_ec_tail, HOTPOOL, false, true);
+
 	return old_hot_ec_tail.physical_page_num;
 }
 
 unsigned int DualPool::PopBackColdPoolByEraseCycle() {
 
-	PageCycle old_cold_ec_tail = this->cold_ec_tail_;
-	this->cold_ec_tail_cache_->PopItem(old_cold_ec_tail);
-	PageCycle son_of_old_hot_ec_tail = GetSonOfOldPage(&old_cold_ec_tail, COLDPOOL, false, true);
-	this->cold_ec_tail_		 = son_of_old_hot_ec_tail;
+	PageCycle old_cold_ec_tail = this->cold_ec_tail_cache_->GetTop();
 
 	Tool::UnSetBit(this->cold_pool_, old_cold_ec_tail.physical_page_num);
+	this->cold_ec_tail_cache_->PopItem(old_cold_ec_tail);
+
+	/* 看看cache里的储备量还够不够，不够的话补充 */
+	GetSonOfOldPage(&old_cold_ec_tail, COLDPOOL, false, true);
+
 	return old_cold_ec_tail.physical_page_num;
 }
 
 unsigned int DualPool::PopFrontColdPoolByEffectiveEraseCycle() {
-	PageCycle old_cold_eec_head = this->cold_eec_head_;
-	this->cold_eec_head_cache_->PopItem(old_cold_eec_head);
-	PageCycle son_of_old_cold_eec_head = GetSonOfOldPage(&old_cold_eec_head, COLDPOOL, true, false);
-	this->cold_eec_head_		   = son_of_old_cold_eec_head;
+	PageCycle old_cold_eec_head = this->cold_eec_head_cache_->GetTop();
 
 	Tool::UnSetBit(this->cold_pool_, old_cold_eec_head.physical_page_num);
+	this->cold_eec_head_cache_->PopItem(old_cold_eec_head);
+
+	/* 看看cache里的储备量还够不够，不够的话补充 */
+	GetSonOfOldPage(&old_cold_eec_head, COLDPOOL, true, false);
+
 	return old_cold_eec_head.physical_page_num;
 }
 
@@ -209,16 +193,9 @@ bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num))
 		return false;
 
-	if (page_to_update->physical_page_num == this->hot_ec_tail_.physical_page_num)
-		LOG_DEBUG("update old hot ec tail \r\n");
-	if (page_to_update->cycle < this->hot_ec_tail_.cycle)
-		LOG_DEBUG("update young hot ec tail \r\n");
-
-	if (page_to_update->physical_page_num == this->hot_ec_tail_.physical_page_num
-	    || page_to_update->cycle < this->hot_ec_tail_.cycle) {
+	if (page_to_update->physical_page_num == this->hot_ec_tail_cache_->GetTop().physical_page_num
+	    || page_to_update->cycle < this->hot_ec_tail_cache_->GetTop().cycle) {
 		this->hot_ec_tail_cache_->TryToPushItem(*page_to_update);
-		this->hot_ec_tail_ = this->hot_ec_tail_cache_->GetTop();
-		this->GetSonOfOldPage(page_to_update, HOTPOOL, false, true);
 		return true;
 	}
 
@@ -229,11 +206,9 @@ bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->cold_pool_, page_to_update->physical_page_num))
 		return false;
 
-	if (page_to_update->physical_page_num == this->cold_ec_tail_.physical_page_num
-	    || page_to_update->cycle < this->cold_ec_tail_.cycle) {
+	if (page_to_update->physical_page_num == this->cold_ec_tail_cache_->GetTop().physical_page_num
+	    || page_to_update->cycle < this->cold_ec_tail_cache_->GetTop().cycle) {
 		this->cold_ec_tail_cache_->TryToPushItem(*page_to_update);
-		this->cold_ec_tail_ = this->cold_ec_tail_cache_->GetTop();
-		this->GetSonOfOldPage(page_to_update, COLDPOOL, false, true);
 		return true;
 	}
 
@@ -244,11 +219,9 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num))
 		return false;
 
-	if (page_to_update->physical_page_num == this->hot_eec_tail_.physical_page_num
-	    || page_to_update->cycle < this->hot_eec_tail_.cycle) {
+	if (page_to_update->physical_page_num == this->hot_eec_tail_cache_->GetTop().physical_page_num
+	    || page_to_update->cycle < this->hot_eec_tail_cache_->GetTop().cycle) {
 		this->hot_eec_tail_cache_->TryToPushItem(*page_to_update);
-		this->hot_eec_tail_ = this->hot_eec_tail_cache_->GetTop();
-		this->GetSonOfOldPage(page_to_update, HOTPOOL, false, false);
 		return true;
 	}
 
@@ -257,21 +230,19 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 
 bool DualPool::TryToUpdateHotECHead(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num)
-	    || page_to_update->cycle <= this->hot_ec_head_.cycle)
+	    || page_to_update->cycle <= this->hot_ec_head_cache_->GetTop().cycle)
 		return false;
 
 	this->hot_ec_head_cache_->TryToPushItem(*page_to_update);
-	this->hot_ec_head_ = this->hot_ec_head_cache_->GetTop();
 	return true;
 }
 
 bool DualPool::TryToUpdateColdEECHead(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->cold_pool_, page_to_update->physical_page_num)
-	    || page_to_update->cycle <= this->cold_eec_head_.cycle)
+	    || page_to_update->cycle <= this->cold_eec_head_cache_->GetTop().cycle)
 		return false;
 
 	this->cold_eec_head_cache_->TryToPushItem(*page_to_update);
-	this->cold_eec_head_ = this->cold_eec_head_cache_->GetTop();
 	return true;
 }
 
@@ -281,30 +252,18 @@ void DualPool::InitialPoolBorder() {
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
 		this->etl_->ReadDataPage(ppn, &datapage_temp);
 		if (Tool::IsBitSet(this->hot_pool_, ppn)) {
-			if (datapage_temp.erase_cycle > this->hot_ec_head_.cycle)
-				this->hot_ec_head_ = PageCycle(ppn, datapage_temp.erase_cycle);
-			if (datapage_temp.erase_cycle < this->hot_ec_tail_.cycle)
-				this->hot_ec_tail_cache_->TryToPushItem(
-					PageCycle(ppn, datapage_temp.erase_cycle));
-			if (datapage_temp.effective_erase_cycle < this->hot_eec_tail_.cycle)
-				this->hot_eec_tail_cache_->TryToPushItem(
-					PageCycle(ppn, datapage_temp.effective_erase_cycle));
+			this->hot_ec_head_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
+			this->hot_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
+			this->hot_eec_tail_cache_->TryToPushItem(
+				PageCycle(ppn, datapage_temp.effective_erase_cycle));
 		}
 
 		if (Tool::IsBitSet(this->cold_pool_, ppn)) {
-			if (datapage_temp.erase_cycle < this->cold_ec_tail_.cycle)
-				this->cold_ec_tail_cache_->TryToPushItem(
-					PageCycle(ppn, datapage_temp.erase_cycle));
-			if (datapage_temp.effective_erase_cycle > this->cold_eec_head_.cycle)
-				this->cold_eec_head_ = PageCycle(ppn, datapage_temp.effective_erase_cycle);
+			this->cold_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
+			this->cold_eec_head_cache_->TryToPushItem(
+				PageCycle(ppn, datapage_temp.effective_erase_cycle));
 		}
 	}
-
-	this->cold_ec_tail_  = this->cold_ec_tail_cache_->GetTop();
-	this->hot_ec_tail_   = this->hot_ec_tail_cache_->GetTop();
-	this->hot_eec_tail_  = this->hot_eec_tail_cache_->GetTop();
-	this->hot_ec_head_   = this->hot_ec_head_cache_->GetTop();
-	this->cold_eec_head_ = this->cold_eec_head_cache_->GetTop();
 }
 
 void DualPool::TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effective_erase_cnt) {
@@ -319,10 +278,10 @@ void DualPool::TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effect
 	this->TryToUpdateHotECHead(&ec);
 
 	if (this->TryToUpdateHotECTail(&ec))
-		LOG_DEBUG("update hot ec tail : %d \r\n", this->hot_ec_tail_.cycle);
+		LOG_DEBUG("update hot ec tail : %d \r\n", this->hot_ec_tail_cache_->GetTop().cycle);
 
 	if (this->TryToUpdateHotEECTail(&eec))
-		LOG_DEBUG("update hot eec tail : %d \r\n", this->hot_eec_tail_.cycle);
+		LOG_DEBUG("update hot eec tail : %d \r\n", this->hot_eec_tail_cache_->GetTop().cycle);
 }
 
 int DualPool::GetPoolSize(enum PoolIdentify pool_identify) {
@@ -344,21 +303,18 @@ void DualPool::PrintPool() {
 }
 
 void DualPool::SetHotECHead(const PageCycle& p) {
-	this->hot_ec_head_ = p;
+	this->hot_ec_head_cache_->TryToPushItem(p);
 }
 void DualPool::SetHotECTail(const PageCycle& p) {
-	this->hot_ec_tail_ = p;
 	this->hot_ec_tail_cache_->TryToPushItem(p);
 }
 void DualPool::SetColdECTail(const PageCycle& p) {
-	cold_ec_tail_ = p;
 	this->cold_ec_tail_cache_->TryToPushItem(p);
 }
 void DualPool::SetColdEECHead(const PageCycle& p) {
-	cold_eec_head_ = p;
+	this->cold_eec_head_cache_->TryToPushItem(p);
 }
 void DualPool::SetHotEECTail(const PageCycle& p) {
-	hot_eec_tail_ = p;
 	this->hot_eec_tail_cache_->TryToPushItem(p);
 }
 
