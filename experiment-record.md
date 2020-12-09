@@ -26,5 +26,14 @@ start time :
 end time : 
 20/12/8 15:48:42 
 
+**TestHotPageToColdPage(1500) -> single page**
+
+takes 3mins
+
+[INFO main.cc:66] start start_time : 
+[INFO rtc.cc:1501] 20/12/9 15:45:27 
+
+[INFO main.cc:88] end time : 
+[INFO rtc.cc:1501] 20/12/9 15:48:27 
 
 

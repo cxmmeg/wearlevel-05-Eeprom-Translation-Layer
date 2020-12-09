@@ -61,10 +61,10 @@ int main(void) {
 	TraceMsg("Device Open !", 1);
 	UpdateDebugState();  // p2.4为低电平时，IsDebug=1;
 
-	Time time;
-	time.GetRtcTime();
-	LOG_INFO("start time : \r\n");
-	time.Show();
+	Time start_time;
+	start_time.GetRtcTime();
+	LOG_INFO("start start_time : \r\n");
+	start_time.Show();
 
 	/* Tool Test */
 	// BitOperationTest();
@@ -83,9 +83,12 @@ int main(void) {
 	// TestMultiHotPage();
 	TestHotPageToColdPage(1500);
 
-	time.GetRtcTime();
+	Time end_time;
+	end_time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
-	time.Show();
+	end_time.Show();
+
+	LOG_INFO("takes %d mins \r\n", end_time - start_time);
 
 	while (1) {
 		System_Delayms(1000);

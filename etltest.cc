@@ -217,35 +217,37 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
-	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (unsigned int i = 0; i < write_cycle / 5; ++i) {
-		char* write_buff = "111122";
-		etl->Write(0, write_buff, strlen(write_buff));
-		etl->Read(0, readbuf, strlen(write_buff));
+	char* readbuf	 = ( char* )calloc(100, sizeof(char));
+	char* write_buff = "111122";
 
-		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
-			printf("oh no, writebuf != readbuf \r\n\r\n");
-			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
-			while (1)
-				;
-		}
+	for (unsigned int i = 0; i < write_cycle / 4; ++i) {
+		etl->Write(0, write_buff, strlen(write_buff));
 		WatchDog_Clear();
+	}
+
+	etl->Read(0, readbuf, strlen(write_buff));
+	if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+		printf("oh no, writebuf != readbuf \r\n\r\n");
+		printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+		while (1)
+			;
 	}
 
 	etl->dualpool_->PrintPool();
 
+	write_buff = "333322";
 	for (unsigned int i = 0; i < write_cycle; ++i) {
-		char* write_buff = "333322";
-		etl->Write(100, write_buff, strlen(write_buff));
-		etl->Read(100, readbuf, strlen(write_buff));
-
-		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
-			printf("oh no, writebuf != readbuf \r\n\r\n");
-			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
-			while (1)
-				;
-		}
+		etl->Write(32, write_buff, strlen(write_buff));
 		WatchDog_Clear();
+	}
+
+	etl->Read(32, readbuf, strlen(write_buff));
+
+	if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+		printf("oh no, writebuf != readbuf \r\n\r\n");
+		printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+		while (1)
+			;
 	}
 
 	etl->dualpool_->PrintPool();
