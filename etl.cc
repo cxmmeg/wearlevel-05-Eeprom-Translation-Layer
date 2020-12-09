@@ -10,7 +10,6 @@ ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_cap
 	if (this->NeedFormat())
 		this->Format(8, 10);
 	this->pagetable_ = new PageTable(this);
-	// this->InitLpnToPpnTable();
 	printf("initialed lpn to pnp table \r\n");
 
 	InitialDualpool();
@@ -67,10 +66,8 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
 	unsigned int	   start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
-	// printf("logic page size : %u\r\n", logic_page_size);
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
-	// enum PoolIdentify pool_identify = datapage.hot == 1 ? HOTPOOL : COLDPOOL;
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
@@ -78,10 +75,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
-		// printf("write logic page : %u, physical page : %u \r\n", start_logic_page_num,
-		//        start_physical_page_num);
 		memcpy(datapage.data + data_offset, src, length);
-		// printf("datapage.data : %s \r\n", datapage.data);
 
 		this->WriteDataPage(start_physical_page_num, &datapage);
 
@@ -90,7 +84,6 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 
 		return true;
 	}
-	// printf("write page cross logic pages\r\n");
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
 	memcpy(datapage.data + data_offset, src, front_len);
@@ -103,23 +96,17 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 }
 
 bool ETL::Read(unsigned long long addr, char* dest, int length) {
-	unsigned int	   logic_page_size	= this->info_page_.logic_page_size;
-	unsigned long long end_addr		= addr + length;
-	unsigned int	   start_logic_page_num = addr / logic_page_size;
-	unsigned int	   end_logic_page_num	= end_addr / logic_page_size;
-	// unsigned int	   start_physical_page_num = this->lpn_to_ppn_[ start_logic_page_num ];
-	unsigned int start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
-
-	// printf("start_logic_page_num : %u \r\n", start_logic_page_num);
-	// printf("addr : %u \r\n", addr);
+	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
+	unsigned long long end_addr		   = addr + length;
+	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
+	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
+	unsigned int	   start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
-		// printf("read logic page : %u, physical page : %u \r\n", start_logic_page_num,
-		//        start_physical_page_num);
 		memcpy(dest, datapage.data + data_offset, length);
 		return true;
 	}
@@ -146,21 +133,11 @@ bool ETL::RomWriteBytes(unsigned long long addr, const char* src, int length) {
 	if (ROM_WriteBytes(addr, src, length) == 0)
 		return true;
 	return false;
-
-	// for (unsigned int offset = 0; offset < length; ++offset)
-	// 	if (this->RomWriteByte(addr + offset, *(src + offset)) < 0)
-	// 		return false;
-	// return true;
 }
 bool ETL::RomReadBytes(unsigned long long addr, char* dest, int length) {
 	if (ROM_ReadBytes(addr, dest, length) == 0)
 		return true;
 	return false;
-
-	// for (unsigned int offset = 0; offset < length; ++offset)
-	// 	if (this->RomReadByte(addr + offset, dest + offset) < 0)
-	// 		return false;
-	// return true;
 }
 
 void ETL::InitialPhysicalPages() {
@@ -192,7 +169,6 @@ void ETL::InitialDualpool() {
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
 		this->ReadDataPage(physical_page_num, datapage);
-		// this->PrintDataPage(datapage);
 		if (datapage->hot == 1)
 			this->dualpool_->AddPageIntoPool(physical_page_num, datapage, HOTPOOL);
 		else
@@ -236,17 +212,12 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 		buff = NULL;
 	}
 
-	// printf("ppn : %u  ,write : ", physical_page_num);
-	// for (unsigned int i = 0; i < this->info_page_.logic_page_size; ++i)
-	// 	printf("%c", *(datapage->data + i));
-	// printf("\r\n");
-
 	return true;
 }
+
 bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	const unsigned int datapage_size = this->GetDataPageSize();
-	// char		   buff[ 20 ] = { 0 };
-	char* buff = ( char* )calloc(datapage_size + 1, sizeof(char));
+	char*		   buff		 = ( char* )calloc(datapage_size + 1, sizeof(char));
 	assert(buff);
 	unsigned int offest = 0;
 
@@ -270,9 +241,6 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 
 	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
 
-	// printf("dubug in ReadDataPage\r\n");
-	// this->PrintDataPage(datapage);
-
 	if (buff) {
 		free(buff);
 		buff = NULL;
@@ -295,9 +263,7 @@ void ETL::InitLpnToPpnTable() {
 	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
 	for (unsigned int i = 0; i < this->info_page_.total_page_count; ++i) {
 		this->ReadDataPage(i, datapage);
-		// this->lpn_to_ppn_[ datapage->logic_page_num ] = i;
 		this->pagetable_->Set(datapage->logic_page_num, i);
-		// printf("lpn %u\t->\tppn %u \r\n", datapage->logic_page_num, i);
 	}
 	delete datapage;
 }
@@ -331,21 +297,18 @@ void ETL::TryToExecDualPoolAlgorithm() {
 		LOG_DEBUG("dirty swap triggered \r\n");
 		this->DirtySwap();
 		dirty_swap_triggered = true;
-		// this->dualpool_->InitialPoolBorder();
 	}
 
 	if (this->dualpool_->IsColdPoolResizeTriggered()) {
 		LOG_DEBUG("cold pool resize triggered \r\n");
 		this->ColdPoolResize();
 		coldpool_resize_triggered = true;
-		// this->dualpool_->InitialPoolBorder();
 	}
 
 	if (this->dualpool_->IsHotPoolResizeTriggered()) {
 		LOG_INFO("hot pool resize triggered \r\n");
 		this->HotPoolResize();
 		hotpool_resize_triggered = true;
-		// this->dualpool_->InitialPoolBorder();
 	}
 
 	if (dirty_swap_triggered || coldpool_resize_triggered || hotpool_resize_triggered) {
@@ -392,13 +355,6 @@ void ETL::DirtySwap() {
 	unsigned int coldest_lpn = coldest_datapage->logic_page_num;
 	unsigned int hotest_lpn	 = hotest_datapage->logic_page_num;
 
-	// printf("coldest datapage:\r\n");
-	// this->PrintDataPage(coldest_datapage);
-	// printf("hotest datapage:\r\n");
-	// this->PrintDataPage(hotest_datapage);
-
-	// this->dualpool_->PopPageFromPool(coldest_ppn, coldest_datapage, COLDPOOL);
-	// this->dualpool_->PopPageFromPool(hotest_ppn, hotest_datapage, HOTPOOL);
 	this->pagetable_->Set(coldest_lpn, hotest_ppn);
 	this->pagetable_->Set(hotest_lpn, coldest_ppn);
 	coldest_datapage->logic_page_num	= hotest_lpn;
@@ -430,11 +386,7 @@ void ETL::ColdPoolResize() {
 	assert(cold_to_hot_datapage);
 	this->ReadDataPage(cold_to_hot_ppn, cold_to_hot_datapage);
 
-	// printf("cold to hot datapage : \r\n");
-	// this->PrintDataPage(cold_to_hot_datapage);
-
 	/* move page from cold pool to hot pool */
-	// this->dualpool_->PopPageFromPool(cold_to_hot_ppn, cold_to_hot_datapage, COLDPOOL);
 	this->dualpool_->AddPageIntoPool(cold_to_hot_ppn, cold_to_hot_datapage, HOTPOOL);
 
 	cold_to_hot_datapage->hot = 1;
@@ -446,16 +398,10 @@ void ETL::ColdPoolResize() {
 void ETL::HotPoolResize() {
 
 	unsigned int hot_to_cold_ppn = this->dualpool_->PopBackHotPoolByEraseCycle();
-	// DataPage*    hot_to_cold_datapage = new DataPage(this->info_page_.logic_page_size);
-	DataPage hot_to_cold_datapage(this->info_page_.logic_page_size);
-	// assert(hot_to_cold_ppn);
+	DataPage     hot_to_cold_datapage(this->info_page_.logic_page_size);
 	this->ReadDataPage(hot_to_cold_ppn, &hot_to_cold_datapage);
 
-	// printf("hot to cold datapage : \r\n");
-	// this->PrintDataPage(&hot_to_cold_datapage);
-
 	/* move page from hot pool to cold pool */
-	// this->dualpool_->PopPageFromPool(hot_to_cold_ppn, &hot_to_cold_datapage, HOTPOOL);
 	this->dualpool_->AddPageIntoPool(hot_to_cold_ppn, &hot_to_cold_datapage, COLDPOOL);
 
 	hot_to_cold_datapage.hot = 0;
