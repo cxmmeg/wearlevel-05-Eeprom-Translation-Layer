@@ -37,3 +37,12 @@ takes 3mins
 [INFO rtc.cc:1501] 20/12/9 15:48:27 
 
 
+**rm 5 borders**
+
+takes 3mins
+
+[INFO main.cc:66] start start_time : 
+[INFO rtc.cc:1501] 20/12/9 20:49:37 
+
+[INFO main.cc:88] end time : 
+[INFO rtc.cc:1501] 20/12/9 20:52:33 

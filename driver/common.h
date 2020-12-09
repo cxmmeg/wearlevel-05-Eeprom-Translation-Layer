@@ -21,7 +21,7 @@ extern int IsDebug;
 
 #define filename(x) strrchr(x, '\\') ? strrchr(x, '\\') + 1 : x
 
-// #define __DEBUG__
+#define __DEBUG__
 #ifdef __DEBUG__
 #define LOG_DEBUG(format, ...) printf("[DEBUG %s:%d] " format, filename(__FILE__), __LINE__, ##__VA_ARGS__)
 #else

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>2</fileVersion>
-    <fileChecksum>3747145164</fileChecksum>
+    <fileChecksum>2402521834</fileChecksum>
     <configuration>
         <name>Debug</name>
         <outputs>
@@ -652,6 +652,10 @@
                 </tool>
             </outputs>
             <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 167 272 226 212 5 282 139 33 185 57 125 213 384 221 211 173 77</file>
+                </tool>
                 <tool>
                     <name>ICC430</name>
                     <file> 221 282 139 167 272 213 226 212 57 33 173 77 185 211 384 5 125</file>
@@ -1717,11 +1721,11 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 262 285 212 224 57 60 201 247 36 226 417 109 375 134 90 250 223 72 279 206 82 277 389 95 338 185 88 209 79 205 50 65 114 126 160 168 244 291 71 349 395 355 391 393 125 33 211 173 77 268 380 233 260 283 366 47 186 52 288 94 121 197 217 208 263 58 410 343 137</file>
+                    <file> 57 126 224 185 247 212 209 244 160 168 291 71 349 226 338 88 79 205 50 65 114 285 277 389 95 417 201 60 109 36 375 134 90 250 223 72 262 279 206 82 410 395 432 391 393 125 33 211 173 77 268 380 233 260 283 366 47 186 52 288 94 121 197 217 208 263 58 343 137</file>
                 </tool>
                 <tool>
                     <name>ICC430</name>
-                    <file> 349 338 125 212 57 33 173 77 185 211 201 247 393 417 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 95 58 355 389 410 343 395 277 137 391 226</file>
+                    <file> 349 338 125 212 57 33 173 77 185 211 201 247 393 417 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 95 58 432 389 410 343 395 277 137 391 226</file>
                 </tool>
             </inputs>
         </file>
@@ -2074,8 +2078,12 @@
             </outputs>
             <inputs>
                 <tool>
+                    <name>BICOMP</name>
+                    <file> 247 77 212 82 211 33 173 57 432 366 283 185 411</file>
+                </tool>
+                <tool>
                     <name>ICC430</name>
-                    <file> 411 355 82 212 57 33 173 77 185 211 247 283 366</file>
+                    <file> 411 432 82 212 57 33 173 77 185 211 247 283 366</file>
                 </tool>
             </inputs>
         </file>
@@ -2152,11 +2160,11 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 212 338 393 109 375 57 263 247 36 260 366 277 33 173 60 285 201 224 291 283 50 121 90 58 395 209 402 125 211 77 95 88 380 233 82 47 186 52 288 94 197 217 208 268 355 391 349 410 185 417 134 79 250 205 65 114 223 126 72 160 262 279 168 206 244 71 343 137 389</file>
+                    <file> 212 77 82 125 57 201 209 217 88 380 47 186 52 288 208 375 393 211 95 233 94 197 263 36 268 224 60 438 338 277 33 173 247 285 109 291 260 283 366 50 121 90 58 395 432 391 349 410 185 417 134 79 250 205 65 114 223 126 72 160 262 279 168 206 244 71 343 137 389</file>
                 </tool>
                 <tool>
                     <name>ICC430</name>
-                    <file> 389 338 125 212 57 33 173 77 185 211 201 247 349 393 417 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 95 58 410 343 395 277 137 355 402 391</file>
+                    <file> 389 338 125 212 57 33 173 77 185 211 201 247 349 393 417 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 95 58 410 343 395 277 137 432 438 391</file>
                 </tool>
             </inputs>
         </file>
@@ -2179,11 +2187,11 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 268 209 79 212 247 244 126 201 410 57 160 168 291 71 389 338 134 205 50 65 114 285 88 366 137 276 349 185 417 224 90 250 223 36 72 262 279 206 343 355 419 82 95 393 277 125 33 211 173 77 60 109 375 380 233 260 283 47 186 52 288 94 121 197 217 208 263 58 395 401</file>
+                    <file> 268 209 79 212 247 244 126 201 410 57 160 168 291 71 389 338 134 205 50 65 114 285 88 366 276 349 185 417 224 90 250 223 36 72 262 279 206 343 137 432 421 82 95 393 277 125 33 211 173 77 60 109 375 380 233 260 283 47 186 52 288 94 121 197 217 208 263 58 395 401</file>
                 </tool>
                 <tool>
                     <name>ICC430</name>
-                    <file> 401 389 338 125 212 57 33 173 77 185 211 201 247 349 393 417 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 95 58 410 343 395 277 137 355 419 276</file>
+                    <file> 401 389 338 125 212 57 33 173 77 185 211 201 247 349 393 417 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 95 58 410 343 395 277 137 432 421 276</file>
                 </tool>
             </inputs>
         </file>
@@ -2260,11 +2268,11 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 321 221 375 419 307 384 197 57 263 410 413 276 366 185 212 30 301 329 36 224 338 21 412 362 95 201 24 311 306 353 345 109 50 209 87 268 333 349 395 402 371 88 283 247 303 10 20 327 297 313 3 0 319 352 295 213 79 60 285 82 217 208 355 343 401 408 411 404 391 372 374 80 226 33 211 173 77 125 5 320 351 315 312 318 7 350 331 323 1 2 19 16 337 4 13 15 27 298 282 139 167 134 233 291 260 65 114 186 52 288 71 417 389 409 272 277 380 90 250 205 47 223 126 72 160 94 121 262 279 168 206 244 137 393 58 66</file>
+                    <file> 0 221 375 421 327 213 197 57 263 410 428 276 366 10 313 352 36 224 338 21 442 448 95 283 247 303 20 297 3 319 295 109 50 212 209 87 268 436 349 395 438 423 88 201 185 24 30 311 307 306 301 353 321 345 329 384 79 60 285 82 217 208 432 343 401 433 411 429 391 425 430 80 226 33 211 173 77 125 5 320 351 315 312 318 7 350 331 323 1 2 19 16 337 4 13 15 27 298 282 139 167 134 233 291 260 65 114 186 52 288 71 417 389 445 272 277 380 90 250 205 47 223 126 72 160 94 121 262 279 168 206 244 137 393 58 66</file>
                 </tool>
                 <tool>
                     <name>ICC430</name>
-                    <file> 409 355 82 212 57 33 173 77 185 211 247 283 366 333 338 125 201 21 221 282 139 167 272 213 226 384 303 5 24 320 10 351 30 315 20 312 311 318 327 7 307 350 297 331 306 323 313 1 301 2 3 19 353 16 0 337 321 4 319 13 345 15 352 27 329 298 295 343 395 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 260 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 277 137 349 393 417 95 58 401 389 410 413 408 411 412 402 404 419 391 371 372 362 374 80 66 87 276</file>
+                    <file> 445 432 82 212 57 33 173 77 185 211 247 283 366 436 338 125 201 21 221 282 139 167 272 213 226 384 303 5 24 320 10 351 30 315 20 312 311 318 327 7 307 350 297 331 306 323 313 1 301 2 3 19 353 16 0 337 321 4 319 13 345 15 352 27 329 298 295 343 395 88 60 285 109 375 36 224 268 380 90 233 205 79 291 50 260 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 277 137 349 393 417 95 58 401 389 410 428 433 411 442 438 429 421 391 423 425 448 430 80 66 87 276</file>
                 </tool>
             </inputs>
         </file>
@@ -2286,8 +2294,12 @@
             </outputs>
             <inputs>
                 <tool>
+                    <name>BICOMP</name>
+                    <file> 57 82 36 224 277 247 212 262 109 33 173 380 263 268 185 233 285 223 72 279 206 432 88 79 60 209 211 77 201 205 50 65 114 126 160 168 244 291 71 137 395 375 134 90 250 260 283 366 47 186 52 288 94 121 197 217 208</file>
+                </tool>
+                <tool>
                     <name>ICC430</name>
-                    <file> 395 88 60 285 212 57 33 173 77 185 211 109 375 247 36 201 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 277 137 355</file>
+                    <file> 395 88 60 285 212 57 33 173 77 185 211 109 375 247 36 201 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 277 137 432</file>
                 </tool>
             </inputs>
         </file>
@@ -2308,6 +2320,10 @@
                 </tool>
             </outputs>
             <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 173 109 57 224 209 33 262 343 79 60 36 247 283 95 88 285 212 185 134 205 50 366 223 72 279 206 349 58 389 395 277 268 211 77 201 90 250 65 114 126 160 168 244 291 71 410 393 375 380 233 260 82 47 186 52 288 94 121 197 217 208 263 137 338 125 417</file>
+                </tool>
                 <tool>
                     <name>ICC430</name>
                     <file> 410 343 395 88 60 285 212 57 33 173 77 185 211 109 375 247 36 201 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 277 137 389 338 125 349 393 417 95 58</file>
@@ -2332,8 +2348,12 @@
             </outputs>
             <inputs>
                 <tool>
+                    <name>BICOMP</name>
+                    <file> 247 212 209 126 224 244 57 375 79 160 168 291 71 66 268 185 134 205 50 65 114 285 366 432 88 60 90 250 223 36 72 262 279 206 263 417 109 33 211 173 77 201 380 233 260 82 283 47 186 52 288 94 121 197 217 208</file>
+                </tool>
+                <tool>
                     <name>ICC430</name>
-                    <file> 417 88 60 285 212 57 33 173 77 185 211 109 375 247 36 201 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 355 66</file>
+                    <file> 417 88 60 285 212 57 33 173 77 185 211 109 375 247 36 201 224 268 380 90 233 205 79 291 50 82 283 260 366 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 432 66</file>
                 </tool>
             </inputs>
         </file>
@@ -2348,7 +2368,21 @@
                     <name>ICC430</name>
                     <file> 190</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 172</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 33 57 185 212 173 82 272 428 247 211 77 432 442 366 283 139 201 167 421</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 421 432 82 212 57 33 173 77 185 211 247 283 366 428 442 139 167 272 201</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\uart0.c</name>
@@ -2361,7 +2395,21 @@
                     <name>ICC430</name>
                     <file> 214</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 119</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 247 77 212 448 82 211 428 33 173 57 432 442 366 283 185 139 201 167 423 272</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 423 432 82 212 57 33 173 77 185 211 247 283 366 428 442 139 167 272 201 448</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\uart1.c</name>
@@ -2374,7 +2422,21 @@
                     <name>ICC430</name>
                     <file> 136</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 156</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 212 139 185 247 77 448 167 272 57 425 82 201 211 432 423 428 445 33 173 442 283 366</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 442 139 167 272 82 212 57 33 173 77 185 211 247 283 201 432 366 425 423 448 428 445</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\rtc.cc</name>
@@ -2387,7 +2449,21 @@
                     <name>ICC430</name>
                     <file> 273</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 162</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 201 212 438 428 442 167 283 57 247 432 139 185 366 429 82 272 33 211 173 77</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 429 442 139 167 272 82 212 57 33 173 77 185 211 247 283 201 432 366 428 438</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\common.c</name>
@@ -2400,7 +2476,21 @@
                     <name>ICC430</name>
                     <file> 70</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 122</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 212 185 429 272 428 33 173 57 82 436 442 247 211 77 432 366 283 139 201 167</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 432 82 212 57 33 173 77 185 211 247 283 366 436 428 442 139 167 272 201 429</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\lowpower.c</name>
@@ -2413,7 +2503,21 @@
                     <name>ICC430</name>
                     <file> 183</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 271</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 82 211 201 185 429 247 77 212 167 272 445 33 173 57 139 432 442 366 283 433</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 433 432 82 212 57 33 173 77 185 211 247 283 366 445 442 139 167 272 201 429</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\sys_status.c</name>
@@ -2426,7 +2530,21 @@
                     <name>ICC430</name>
                     <file> 265</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 34</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 82 247 77 201 212 185 439 167 272 432 139 211 421 428 33 173 57 442 283 366</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 442 139 167 272 82 212 57 33 173 77 185 211 247 283 201 421 432 366 428 439</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\debug.c</name>
@@ -2439,7 +2557,21 @@
                     <name>ICC430</name>
                     <file> 127</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 169</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 247 283 82 173 212 436 57 185 432 113 201 33 211 77 366 444</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 444 82 212 57 33 173 77 185 211 247 283 201 432 366 436 113</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\tool.cc</name>
@@ -2452,7 +2584,21 @@
                     <name>ICC430</name>
                     <file> 215</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 78</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 244 212 247 380 224 185 126 209 366 95 77 57 160 168 291 71 125 233 211 82 65 114 285 432 201 268 58 134 90 79 250 205 33 173 260 283 109 36 375 223 72 262 279 206 391 50 47 186 52 288 94 121 197 217 208 263</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 391 95 268 380 90 233 212 57 33 173 77 185 211 205 79 291 50 82 247 283 260 366 285 109 375 36 201 224 250 65 114 47 223 52 126 72 160 186 288 94 262 197 279 206 168 217 208 209 263 244 121 134 71 58 432 125</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\uart_config.c</name>
@@ -2465,7 +2611,21 @@
                     <name>ICC430</name>
                     <file> 35</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 266</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 283 57 366 445 448 185 82 272 428 442 425 212 247 33 211 173 77 139 201 167 432</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 432 82 212 57 33 173 77 185 211 247 283 366 428 445 442 139 167 272 201 425 448</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\Console.c</name>
@@ -2478,7 +2638,21 @@
                     <name>ICC430</name>
                     <file> 100</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 108</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 173 212 33 423 445 366 82 247 211 77 432 442 448 57 283 185 139 201 167 436 272</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 436 432 82 212 57 33 173 77 185 211 247 283 366 445 442 139 167 272 201 423 448</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\led.c</name>
@@ -2491,7 +2665,21 @@
                     <name>ICC430</name>
                     <file> 175</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 281</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 82 212 33 173 57 428 432 139 201 167 272 247 211 77 185 442 283 366</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 442 139 167 272 82 212 57 33 173 77 185 211 247 283 201 432 366 428</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\rom.c</name>
@@ -2504,7 +2692,21 @@
                     <name>ICC430</name>
                     <file> 218</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 138</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 167 247 185 201 212 442 82 57 432 429 366 283 139 438 33 211 173 77 272</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 438 432 82 212 57 33 173 77 185 211 247 283 366 442 139 167 272 201 429</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\driver\uart3.c</name>
@@ -2517,176 +2719,22 @@
                     <name>ICC430</name>
                     <file> 142</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 98</file>
+                </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 247 77 212 82 211 428 425 33 173 57 432 442 423 445 366 283 185 139 201 167 448 272</file>
+                </tool>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 448 432 82 212 57 33 173 77 185 211 247 283 366 428 442 139 167 272 201 423 425 445</file>
+                </tool>
+            </inputs>
         </file>
-        <forcedrebuild>
-            <name>[MULTI_TOOL]</name>
-            <tool>XLINK</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\lcd_b.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\battbak.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\comp_b.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\aes.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\dac12_a.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\adc12_a.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\dma.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\ctsd16.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\eusci_a_uart.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\eusci_b_i2c.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\eusci_a_spi.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\eusci_b_spi.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\flashctl.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\crc.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\gpio.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\adc10_a.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\rtc_c.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\sfr.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\pmm.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\pmap.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\sysctl.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\tec.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\timer_a.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\ldopwr.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\mpy32.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\oa.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\ram.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\ref.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\rtc_a.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\lcd_c.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\sd24_b.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\rtc_b.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\tlv.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\timer_d.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\usci_b_i2c.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\timer_b.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\ucs.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\usci_a_uart.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\usci_b_spi.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\usci_a_spi.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\Driverlib\wdt_a.c</name>
-            <tool>ICC430</tool>
-        </forcedrebuild>
     </configuration>
     <configuration>
         <name>Release</name>
