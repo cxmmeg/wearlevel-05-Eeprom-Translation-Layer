@@ -43,10 +43,10 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
-	Time time;
-	time.GetRtcTime();
-	LOG_INFO("start time : \r\n");
-	time.Show();
+	Time start_time;
+	start_time.GetRtcTime();
+	LOG_INFO("start start_time : \r\n");
+	start_time.Show();
 
 	// BitOperationTest();
 
@@ -66,6 +66,7 @@ int main(void) {
 	// dict.erase(dict.find(1));
 	// printf("largest : %d \r\n", *dict.begin());
 
+	LOG_INFO("takes %d mins \r\n", end_time - start_time);
 	time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
 	time.Show();
