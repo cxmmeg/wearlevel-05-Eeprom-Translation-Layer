@@ -3,6 +3,7 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "etl.h"
+#include "timer.h"
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
@@ -245,37 +246,40 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintEraseCyclePoolInfo();
-	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (unsigned int i = 0; i < write_cycle/5; ++i) {
-		char* write_buff = "111122";
+	char* readbuf	 = ( char* )calloc(100, sizeof(char));
+	char* write_buff = "111122";
+
+	for (unsigned int i = 0; i < write_cycle / 4; ++i) {
 		etl->Write(0, write_buff, strlen(write_buff));
-		etl->Read(0, readbuf, strlen(write_buff));
+		WatchDog_Clear();
+	}
 
-		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
-			printf("oh no, writebuf != readbuf \r\n\r\n");
-			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
-			while (1)
-				;
-		}
+	etl->Read(0, readbuf, strlen(write_buff));
+	if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+		printf("oh no, writebuf != readbuf \r\n\r\n");
+		printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+		while (1)
+			;
 	}
 
 	etl->dualpool_->PrintEraseCyclePoolInfo();
 
+	write_buff = "333322";
 	for (unsigned int i = 0; i < write_cycle; ++i) {
-		char* write_buff = "333322";
-		etl->Write(10, write_buff, strlen(write_buff));
-		etl->Read(10, readbuf, strlen(write_buff));
+		etl->Write(32, write_buff, strlen(write_buff));
+		WatchDog_Clear();
+	}
 
-		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
-			printf("oh no, writebuf != readbuf \r\n\r\n");
-			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
-			while (1)
-				;
-		}
+	etl->Read(32, readbuf, strlen(write_buff));
+
+	if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+		printf("oh no, writebuf != readbuf \r\n\r\n");
+		printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+		while (1)
+			;
 	}
 
 	etl->dualpool_->PrintEraseCyclePoolInfo();
-	// etl->dualpool_->PrintEffectiveEraseCyclePoolInfo();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
 	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());

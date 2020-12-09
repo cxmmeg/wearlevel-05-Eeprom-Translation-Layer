@@ -42,10 +42,10 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
-	Time time;
-	time.GetRtcTime();
-	LOG_INFO("start time : \r\n");
-	time.Show();
+	Time start_time;
+	start_time.GetRtcTime();
+	LOG_INFO("start start_time : \r\n");
+	start_time.Show();
 
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
@@ -63,12 +63,16 @@ int main(void) {
 	// dict.erase(dict.find(1));
 	// printf("largest : %d \r\n", *dict.begin());
 
-	time.GetRtcTime();
+	Time end_time;
+	end_time.GetRtcTime();
 	LOG_INFO("end time : \r\n");
-	time.Show();
+	end_time.Show();
+
+	LOG_INFO("takes %d mins \r\n", end_time - start_time);
 
 	while (1) {
 		System_Delayms(1000);
+		WatchDog_Clear();
 	}
 }
 
