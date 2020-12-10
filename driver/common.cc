@@ -1014,3 +1014,10 @@ char Char_to_Hex(char input_chr) {
 	}
 	return output_chr;
 }
+
+void Free(void* data) {
+	if (!data)
+		return;
+	delete data;
+	data = NULL;
+}

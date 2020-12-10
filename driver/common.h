@@ -142,3 +142,5 @@ void TraceInt4FuncLine(int _val, int _ln, char const* _funcname, int _linename);
 void Clear_ExternWatchdog();
 
 void Delay(unsigned int sec);
+
+void Free(void* data);

@@ -168,6 +168,7 @@ void ETL::InitialPhysicalPages() {
 	}
 }
 void ETL::InitialDualpool() {
+	Free(this->dualpool_);
 	this->dualpool_	   = new DualPool(this->info_page_.thresh_hold, this);
 	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;

@@ -18,7 +18,7 @@ DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hol
 	this->cache_size_ = this->etl_->GetInfoPage().total_page_count * 0.1;
 	if (this->cache_size_ * PRIORITYPAGECYCLECACHE_ITEMSIZE * 5 > ETL::MAX_CACHE_SIZE) {
 		this->cache_size_ = ETL::MAX_CACHE_SIZE / PRIORITYPAGECYCLECACHE_ITEMSIZE / 5;
-		LOG_INFO("cache size out of boundary \r\n\r\n");
+		LOG_INFO("dualpool cache size out of boundary \r\n\r\n");
 	}
 
 	this->hot_ec_head_cache_   = new PriorityPageCycleCache(BIG, this->cache_size_);

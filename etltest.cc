@@ -213,9 +213,9 @@ void TestMultiHotPage() {
 }
 
 void TestHotPageToColdPage(unsigned int write_cycle) {
-	etl = new ETL(1024);
+	etl = new ETL(1024 * 5);
 	etl->Format(8, 20);
-	etl->PrintPMTT();
+	// etl->PrintPMTT();
 	DataPage datapage(etl->GetInfoPage().logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
@@ -263,6 +263,6 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
 	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
 	       etl->dualpool_->GetPoolSize(COLDPOOL));
-	etl->PrintPMTT();
+	// etl->PrintPMTT();
 	printf("test done \r\n");
 }
