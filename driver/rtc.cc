@@ -1511,3 +1511,13 @@ long long Timer::GetInterval() {
 	end_time.GetRtcTime();
 	return end_time - this->start_time_;
 }
+
+/*++++++++++++++++Test++++++++++++++++++++++ */
+void TestTimer() {
+	Timer timer;
+	timer.Start();
+	System_Delayms(5000);
+	long long time_cost_in_sec = timer.GetInterval();
+	LOG_INFO("takes time : %lld min %lld sec \r\n ", time_cost_in_sec / 60, time_cost_in_sec % 60);
+}
+/*----------------Test---------------------- */

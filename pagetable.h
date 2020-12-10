@@ -15,10 +15,10 @@ class PageTable {
 	void Set(int lpn, int ppn);
 
     private:
-	static const int cache_capacity_ = 10;
-	float		 main_cache_ratio;
-	DualLRU*	 cache_;
-	ETL*		 etl_;
+	int	 cache_capacity_;
+	float	 main_cache_ratio;
+	DualLRU* cache_;
+	ETL*	 etl_;
 };
 
 /*++++++++++++++++Test++++++++++++++++*/

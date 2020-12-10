@@ -1,8 +1,14 @@
 #include "pagetable.h"
 #include "etl.h"
 
+/*
+ * cache_capacity : page_cnt * 0.1
+ * main_cache_ratio : 0.7
+ */
 PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7) {
-	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
+
+	this->cache_capacity_ = this->etl_->GetInfoPage().total_page_count * 0.1;
+	cache_		      = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
 }
 
 int PageTable::GetPPN(int lpn) {
