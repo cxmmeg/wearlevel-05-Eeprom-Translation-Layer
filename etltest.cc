@@ -164,8 +164,9 @@ void TestSingleHotPage(unsigned int write_cycle) {
 	}
 	etl->dualpool_->PrintPool();
 
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
-	       etl->dualpool_->GetPoolSize(HOTPOOL), etl->dualpool_->GetPoolSize(COLDPOOL));
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	etl->PrintPMTT();
 	printf("test done \r\n");
 }
@@ -184,7 +185,7 @@ void TestMultiHotPage() {
 	etl = new ETL(512);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
-	DataPage datapage(etl->info_page_.logic_page_size);
+	DataPage datapage(etl->GetInfoPage().logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
@@ -204,8 +205,9 @@ void TestMultiHotPage() {
 
 	etl->dualpool_->PrintPool();
 
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
-	       etl->dualpool_->GetPoolSize(HOTPOOL), etl->dualpool_->GetPoolSize(COLDPOOL));
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	etl->PrintPMTT();
 	printf("test done \r\n");
 }
@@ -214,7 +216,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	etl = new ETL(1024);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
-	DataPage datapage(etl->info_page_.logic_page_size);
+	DataPage datapage(etl->GetInfoPage().logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
@@ -258,8 +260,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	LOG_INFO("takes time : %lld min %lld sec \r\n ", time_cost_in_sec / 60, time_cost_in_sec % 60);
 
 	etl->dualpool_->PrintPool();
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
-	       etl->dualpool_->GetPoolSize(HOTPOOL), etl->dualpool_->GetPoolSize(COLDPOOL));
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	etl->PrintPMTT();
 	printf("test done \r\n");
 }

@@ -2406,7 +2406,13 @@
         </file>
     </group>
     <file>
-        <name>$PROJ_DIR$\driver\common.c</name>
+        <name>$PROJ_DIR$\driver\boardinit.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\driver\boardinit.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\driver\common.cc</name>
     </file>
     <file>
         <name>$PROJ_DIR$\driver\common.h</name>

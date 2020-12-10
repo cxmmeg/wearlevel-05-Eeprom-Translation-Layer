@@ -46,17 +46,21 @@ class ETL {
 	InfoPage GetInfoPage();
 	bool	 Write(unsigned long long addr, const char* src, int length);
 	bool	 Read(unsigned long long addr, char* dest, int length);
+	bool	 WriteDataPage(int physical_page_num, DataPage* datapage);
+	bool	 ReadDataPage(int physical_page_num, DataPage* datapage);
+	void	 PrintPMTT();
 
     public:
-	static const int MAX_CACHE_SIZE  = 1024;
+	static const int MAX_CACHE_SIZE = 1024;
+	DualPool*	 dualpool_;
 
 	/* make public for debug, private for release */
-    public:
+    private:
 	unsigned long long physical_capacity_;
 	InfoPage	   info_page_;
-	DualPool*	   dualpool_;
 	PageTable*	   pagetable_;
 
+    private:
 	int  RomWriteByte(unsigned long long addr, char data);
 	int  RomReadByte(unsigned long long addr, char* dest);
 	bool RomWriteBytes(unsigned long long addr, const char* src, int length);
@@ -64,14 +68,11 @@ class ETL {
 
 	void	     InitialPhysicalPages();
 	void	     InitialDualpool();
-	bool	     WriteDataPage(int physical_page_num, DataPage* datapage);
-	bool	     ReadDataPage(int physical_page_num, DataPage* datapage);
 	unsigned int GetDataPageSize();
 	void	     ClearDataPage(DataPage* datapage);
 	void	     InitLpnToPpnTable();
 	void	     TryToExecDualPoolAlgorithm();
 	static void  PrintDataPage(DataPage* datapage);
-	void	     PrintPMTT();
 
 	/* dual-pool algorithm */
 	void DirtySwap();
