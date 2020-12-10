@@ -1,4 +1,5 @@
 #include "pagetable.h"
+#include "common.h"
 #include "etl.h"
 
 /*
@@ -8,7 +9,12 @@
 PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7) {
 
 	this->cache_capacity_ = this->etl_->GetInfoPage().total_page_count * 0.1;
-	cache_		      = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
+	if (this->cache_capacity_ * PAGETABLE_ITEMSIZE > ETL::MAX_CACHE_SIZE) {
+		LOG_INFO("pagetable's cache size out of boundary \r\n");
+		this->cache_capacity_ = ETL::MAX_CACHE_SIZE / PAGETABLE_ITEMSIZE;
+	}
+
+	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
 }
 
 int PageTable::GetPPN(int lpn) {

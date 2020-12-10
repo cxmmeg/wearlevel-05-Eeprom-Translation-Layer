@@ -47,6 +47,9 @@ class ETL {
 	bool	 Write(unsigned long long addr, const char* src, int length);
 	bool	 Read(unsigned long long addr, char* dest, int length);
 
+    public:
+	static const int MAX_CACHE_SIZE  = 1024;
+
 	/* make public for debug, private for release */
     public:
 	unsigned long long physical_capacity_;
