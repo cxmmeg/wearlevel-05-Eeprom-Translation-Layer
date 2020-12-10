@@ -28,6 +28,10 @@ DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hol
 	this->hot_eec_tail_cache_  = new PriorityPageCycleCache(SMALL, this->cache_size_);
 }
 
+long long DualPool::GetCacheSize() {
+	return this->cache_size_ * PRIORITYPAGECYCLECACHE_ITEMSIZE * 5;
+}
+
 bool DualPool::IsDirtySwapTriggered() {
 	return this->hot_ec_head_cache_->GetTop().cycle - this->cold_ec_tail_cache_->GetTop().cycle
 	       > this->thresh_hold_;

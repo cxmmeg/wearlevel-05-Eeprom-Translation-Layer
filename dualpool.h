@@ -37,7 +37,8 @@ class DualPool {
 	void TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effective_erase_cnt);
 	int  GetPoolSize(enum PoolIdentify pool_identify);
 
-	void PrintPool();
+	void	  PrintPool();
+	long long GetCacheSize();
 
     private:
 	PageCycle GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_identify, bool big,

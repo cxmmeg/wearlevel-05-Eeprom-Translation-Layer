@@ -5,6 +5,7 @@
 #include "dualpool.h"
 #include "infopage.h"
 #include "pagetable.h"
+#include "performance.h"
 #include <map>
 
 /*
@@ -51,8 +52,9 @@ class ETL {
 	void	 PrintPMTT();
 
     public:
-	static const int MAX_CACHE_SIZE = 1024;
-	DualPool*	 dualpool_;
+	static const int      MAX_CACHE_SIZE = 1024;
+	DualPool*	      dualpool_;
+	PerformanceStatistics performance_statistics_;
 
 	/* make public for debug, private for release */
     private:
@@ -78,6 +80,8 @@ class ETL {
 	void DirtySwap();
 	void ColdPoolResize();
 	void HotPoolResize();
+
+	void InitPerformanceStatistics();
 };
 
 #endif

@@ -2508,6 +2508,12 @@
         <name>$PROJ_DIR$\pagetable.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\performance.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\performance.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\prioritypagecyclecache.cc</name>
     </file>
     <file>

@@ -3,6 +3,7 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "etl.h"
+#include "performance.h"
 #include "rtc.h"
 #include "timer.h"
 #include <set>
@@ -223,8 +224,8 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	char* readbuf	 = ( char* )calloc(100, sizeof(char));
 	char* write_buff = "111122";
 
-	Timer timer;
-	timer.Start();
+	ETLPerformance ep(etl);
+	ep.StartTimer();
 
 	for (unsigned int i = 0; i < write_cycle / 4; ++i) {
 		etl->Write(0, write_buff, strlen(write_buff));
@@ -256,8 +257,12 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 			;
 	}
 
-	long long time_cost_in_sec = timer.GetInterval();
-	LOG_INFO("takes time : %lld min %lld sec \r\n ", time_cost_in_sec / 60, time_cost_in_sec % 60);
+	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
+	LOG_INFO("standard deviation\t%f\r\n", ep.GetStandardDeviation());
+	LOG_INFO("overhead ratio\t%f\r\n", ep.GetOverheadRatio());
+	LOG_INFO("RAM cost\t%d\r\n", ep.GetRAMCost());
+	LOG_INFO("write speed\t%fB/sec\r\n", ep.GetWriteSpeed());
+	LOG_INFO("------------ performance ---------------\r\n\r\n");
 
 	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",

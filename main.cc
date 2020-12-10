@@ -22,7 +22,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(1500);
 	// TestMultiHotPage();
-	TestHotPageToColdPage(1500);
+	TestHotPageToColdPage(1000);
 	/* ----------ETL Test---------- */
 
 	while (1) {

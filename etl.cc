@@ -14,6 +14,8 @@ ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_cap
 
 	InitialDualpool();
 	LOG_INFO("initialed dual pool \r\n\r\n");
+
+	this->InitPerformanceStatistics();
 }
 
 bool ETL::NeedFormat() {
@@ -44,6 +46,8 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
 	/* initial dual pool */
 	InitialDualpool();
 	LOG_INFO("initialed dual pool \r\n\r\n");
+
+	this->InitPerformanceStatistics();
 
 	LOG_INFO("FORMAT DONE \r\n\r\n");
 }
@@ -76,10 +80,12 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	datapage.effective_erase_cycle++;
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
+	this->performance_statistics_.total_write_cycles++;
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
 		memcpy(datapage.data + data_offset, src, length);
+		this->performance_statistics_.total_write_bytes += length;
 
 		this->WriteDataPage(start_physical_page_num, &datapage);
 
@@ -92,6 +98,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned int	   front_len		= next_page_start_addr - addr;
 	memcpy(datapage.data + data_offset, src, front_len);
 	this->WriteDataPage(start_physical_page_num, &datapage);
+	this->performance_statistics_.total_write_bytes += front_len;
 
 	/* if triggered, exec dual-pool algorithm */
 	this->TryToExecDualPoolAlgorithm();
@@ -412,6 +419,12 @@ void ETL::HotPoolResize() {
 
 	hot_to_cold_datapage.hot = 0;
 	this->WriteDataPage(hot_to_cold_ppn, &hot_to_cold_datapage);
+}
+
+void ETL::InitPerformanceStatistics() {
+	this->performance_statistics_.RAM_cost = 0;
+	this->performance_statistics_.RAM_cost += this->dualpool_->GetCacheSize();
+	this->performance_statistics_.RAM_cost += this->pagetable_->GetCacheSize();
 }
 
 /* end of private methods */

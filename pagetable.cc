@@ -17,6 +17,10 @@ PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7) {
 	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
 }
 
+long long PageTable::GetCacheSize() {
+	return this->cache_capacity_ * PAGETABLE_ITEMSIZE;
+}
+
 int PageTable::GetPPN(int lpn) {
 	int ppn = this->cache_->Get(lpn);
 	if (ppn != -1)
