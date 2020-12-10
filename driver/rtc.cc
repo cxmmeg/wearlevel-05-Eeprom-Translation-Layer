@@ -1500,3 +1500,14 @@ void Time::Show() {
 	LOG_INFO("%d/%d/%d %d:%d:%d \r\n\r\n", this->year, this->month, this->date, this->hour, this->min,
 		 this->sec);
 }
+
+void Timer::Start() {
+	start_time_.GetRtcTime();
+}
+
+/* in sec */
+long long Timer::GetInterval() {
+	Time end_time;
+	end_time.GetRtcTime();
+	return end_time - this->start_time_;
+}

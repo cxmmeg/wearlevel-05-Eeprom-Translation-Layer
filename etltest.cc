@@ -3,6 +3,7 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "etl.h"
+#include "rtc.h"
 #include "timer.h"
 #include <set>
 #include <stdio.h>
@@ -210,7 +211,7 @@ void TestMultiHotPage() {
 }
 
 void TestHotPageToColdPage(unsigned int write_cycle) {
-	etl = new ETL(512);
+	etl = new ETL(1024);
 	etl->Format(8, 20);
 	etl->PrintPMTT();
 	DataPage datapage(etl->info_page_.logic_page_size);
@@ -220,6 +221,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	char* readbuf	 = ( char* )calloc(100, sizeof(char));
 	char* write_buff = "111122";
 
+	Timer timer;
+	timer.Start();
+
 	for (unsigned int i = 0; i < write_cycle / 4; ++i) {
 		etl->Write(0, write_buff, strlen(write_buff));
 		WatchDog_Clear();
@@ -228,7 +232,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	etl->Read(0, readbuf, strlen(write_buff));
 	if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
 		printf("oh no, writebuf != readbuf \r\n\r\n");
-		printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+		printf("writebuf:%d readbuf:%d \r\n\r\n", write_buff, readbuf);
 		while (1)
 			;
 	}
@@ -249,6 +253,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 		while (1)
 			;
 	}
+
+	long long time_cost_in_sec = timer.GetInterval();
+	LOG_INFO("takes time : %lld min %lld sec \r\n ", time_cost_in_sec / 60, time_cost_in_sec % 60);
 
 	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,

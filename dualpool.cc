@@ -270,18 +270,15 @@ void DualPool::TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effect
 	PageCycle ec(ppn, erase_cnt);
 	PageCycle eec(ppn, effective_erase_cnt);
 
-	if (this->TryToUpdateColdECTail(&ec))
-		LOG_DEBUG("update cold ec tail : %d \r\n", ec.cycle);
+	this->TryToUpdateColdECTail(&ec);
 
 	this->TryToUpdateColdEECHead(&eec);
 
 	this->TryToUpdateHotECHead(&ec);
 
-	if (this->TryToUpdateHotECTail(&ec))
-		LOG_DEBUG("update hot ec tail : %d \r\n", this->hot_ec_tail_cache_->GetTop().cycle);
+	this->TryToUpdateHotECTail(&ec);
 
-	if (this->TryToUpdateHotEECTail(&eec))
-		LOG_DEBUG("update hot eec tail : %d \r\n", this->hot_eec_tail_cache_->GetTop().cycle);
+	this->TryToUpdateHotEECTail(&eec);
 }
 
 int DualPool::GetPoolSize(enum PoolIdentify pool_identify) {
