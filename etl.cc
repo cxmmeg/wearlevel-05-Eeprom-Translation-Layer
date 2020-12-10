@@ -10,10 +10,10 @@ ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_cap
 	if (this->NeedFormat())
 		this->Format(8, 10);
 	this->pagetable_ = new PageTable(this);
-	printf("initialed lpn to pnp table \r\n");
+	LOG_INFO("initialed lpn to pnp table \r\n\r\n");
 
 	InitialDualpool();
-	printf("initialed dual pool \r\n");
+	LOG_INFO("initialed dual pool \r\n\r\n");
 }
 
 bool ETL::NeedFormat() {
@@ -23,6 +23,8 @@ bool ETL::NeedFormat() {
 }
 
 void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
+	LOG_INFO("FORMATING EEPROM! \r\n\r\n");
+
 	/* initial info page */
 	InfoPage infopage;
 	infopage.identify[ 0 ]	  = 'E';
@@ -33,15 +35,17 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
 	infopage.thresh_hold	  = thresh_hold;
 	infopage.total_page_count = (this->physical_capacity_ - sizeof(InfoPage)) / (8 + logic_page_size);
 	this->SetInfoPage(infopage);
-	printf("set info page done\r\n");
+	LOG_INFO("set info page done\r\n\r\n");
 
 	/* map physical page num -> logic page num */
 	InitialPhysicalPages();
-	printf("initialed physical pages\r\n");
+	LOG_INFO("initialed physical pages\r\n\r\n");
 
 	/* initial dual pool */
 	InitialDualpool();
-	printf("initialed dual pool \r\n");
+	LOG_INFO("initialed dual pool \r\n\r\n");
+
+	LOG_INFO("FORMAT DONE \r\n\r\n");
 }
 
 void ETL::SetInfoPage(InfoPage infopage) {
@@ -178,8 +182,9 @@ void ETL::InitialDualpool() {
 	/* should initial TryToUpdatePoolBorder here! */
 	this->dualpool_->InitialPoolBorder();
 
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", this->info_page_.thresh_hold,
-	       this->dualpool_->GetPoolSize(HOTPOOL), this->dualpool_->GetPoolSize(COLDPOOL));
+	LOG_INFO("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n\r\n",
+		 this->info_page_.thresh_hold, this->dualpool_->GetPoolSize(HOTPOOL),
+		 this->dualpool_->GetPoolSize(COLDPOOL));
 }
 
 bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
