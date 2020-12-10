@@ -20,9 +20,9 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestSingleHotPage(1500);
+	TestSingleHotPage(5000);
 	// TestMultiHotPage();
-	TestHotPageToColdPage(1000);
+	// TestHotPageToColdPage(1000);
 	/* ----------ETL Test---------- */
 
 	while (1) {

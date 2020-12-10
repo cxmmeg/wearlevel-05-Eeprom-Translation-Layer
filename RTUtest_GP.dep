@@ -477,10 +477,6 @@
             <name>$PROJ_DIR$\performance.cc</name>
             <outputs>
                 <tool>
-                    <name>ICC430</name>
-                    <file> 3</file>
-                </tool>
-                <tool>
                     <name>__cstat</name>
                     <file> 2</file>
                 </tool>

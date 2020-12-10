@@ -154,21 +154,24 @@ void ETLFullWriteAndReadFullTest() {
 }
 
 void TestSingleHotPage(unsigned int write_cycle) {
-	etl = new ETL(512);
+	etl = new ETL(1024 * 5);
 	etl->Format(8, 20);
-	etl->PrintPMTT();
 	etl->dualpool_->PrintPool();
+
+	ETLPerformance ep(etl);
+	ep.StartTimer();
 
 	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "111122";
 		etl->Write(0, write_buff, strlen(write_buff));
 	}
-	etl->dualpool_->PrintPool();
 
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
 	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
 	       etl->dualpool_->GetPoolSize(COLDPOOL));
-	etl->PrintPMTT();
 	printf("test done \r\n");
 }
 
@@ -216,10 +219,7 @@ void TestMultiHotPage() {
 void TestHotPageToColdPage(unsigned int write_cycle) {
 	etl = new ETL(1024 * 5);
 	etl->Format(8, 20);
-	// etl->PrintPMTT();
 	DataPage datapage(etl->GetInfoPage().logic_page_size);
-	// etl->ReadDataPage(0, &datapage);
-	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
 	char* readbuf	 = ( char* )calloc(100, sizeof(char));
 	char* write_buff = "111122";
@@ -257,12 +257,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 			;
 	}
 
-	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
-	LOG_INFO("standard deviation\t%f\r\n", ep.GetStandardDeviation());
-	LOG_INFO("overhead ratio\t%f\r\n", ep.GetOverheadRatio());
-	LOG_INFO("RAM cost\t%d\r\n", ep.GetRAMCost());
-	LOG_INFO("write speed\t%fB/sec\r\n", ep.GetWriteSpeed());
-	LOG_INFO("------------ performance ---------------\r\n\r\n");
+	ep.PrintInfo();
 
 	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",

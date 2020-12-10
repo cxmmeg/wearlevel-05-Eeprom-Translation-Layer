@@ -35,11 +35,11 @@ bool Is_RS485_1 = false, Is_bluetooth = false,
 void UpdateDebugState() {
 	GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P2, GPIO_PIN4);
 	if (GPIO_getInputPinValue(GPIO_PORT_P2, GPIO_PIN4) == 0) {
-		printf("IsDebug : 1\r\n");
+		LOG_INFO("IsDebug : true\r\n");
 		IsDebug = 1;
 	}
 	else {
-		printf("IsDebug : 0\r\n");
+		LOG_INFO("IsDebug : false\r\n");
 		IsDebug = 0;
 	}
 }
@@ -172,6 +172,6 @@ void BoardInit() {
 
 	Led_Round();
 	Max3222_Open();
-	TraceMsg("Device Open !", 1);
+	LOG_INFO("Device Open !");
 	UpdateDebugState();  // p2.4为低电平时，IsDebug=1;
 }

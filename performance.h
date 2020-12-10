@@ -31,6 +31,7 @@ class ETLPerformance {
 	int32_t GetRAMCost();
 	float	GetWriteSpeed();
 	void	StartTimer();
+	void	PrintInfo();
 
     private:
 	ETL*  etl_;

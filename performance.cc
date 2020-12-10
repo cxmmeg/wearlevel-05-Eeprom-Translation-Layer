@@ -1,4 +1,5 @@
 #include "performance.h"
+#include "common.h"
 #include "etl.h"
 #include <cmath>
 
@@ -44,4 +45,13 @@ float ETLPerformance::GetWriteSpeed() {
 
 void ETLPerformance::StartTimer() {
 	this->timer_.Start();
+}
+
+void ETLPerformance::PrintInfo() {
+	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
+	LOG_INFO("write speed\t\t%f B/sec\r\n", this->GetWriteSpeed());
+	LOG_INFO("standard deviation\t\t%f\r\n", this->GetStandardDeviation());
+	LOG_INFO("overhead ratio\t\t%f\r\n", this->GetOverheadRatio());
+	LOG_INFO("RAM cost\t\t%d B\r\n", this->GetRAMCost());
+	LOG_INFO("------------ performance ---------------\r\n\r\n");
 }
