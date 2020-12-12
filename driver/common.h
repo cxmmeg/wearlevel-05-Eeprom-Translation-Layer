@@ -146,3 +146,5 @@ void Delay(unsigned int sec);
 void Free(void* data);
 
 void Loop();
+
+void ClearWatchdog();

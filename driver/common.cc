@@ -145,6 +145,11 @@ void System_Delayms(unsigned int nValue) {  //函数参数是寄存器,操作速度过快,所以
 	return;
 }
 
+void ClearWatchdog() {
+	WatchDog_Clear();
+	Clear_ExternWatchdog();
+}
+
 void Delay(unsigned int sec) {
 	System_Delayms(1000);
 	WatchDog_Clear();

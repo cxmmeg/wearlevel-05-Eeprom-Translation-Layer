@@ -171,7 +171,7 @@ __interrupt void TIMERB1_ISR(void) {
 	case 2:
 		//半分钟来一次
 		//计数如果超过1000
-		++s_reset_count;
+		// ++s_reset_count;
 		// if (s_reset_count > 60) {  //超过30分钟就重启
 		// 	System_Reset();
 		// }

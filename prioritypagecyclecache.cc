@@ -80,12 +80,9 @@ PageCycle PriorityPageCycleCache::GetSecondTop() {
 	return *it;
 }
 void PriorityPageCycleCache::PopItem(PageCycle pc) {
-
-	// if (this->cache_.FindItem(pc.physical_page_num) != this->cache_.data.end())
-	// 	this->cache_.data.erase(this->cache_.FindItem(pc.physical_page_num));
-
-	for (list< PageCycle >::iterator it = this->cache_.data.begin(); it != this->cache_.data.end();
-	     it++) {
+	size_t i = 0;
+	for (list< PageCycle >::iterator it = this->cache_.data.begin() ;
+	     i < this->cache_.data.size(); it++,i++) {
 		if (it->physical_page_num == pc.physical_page_num) {
 			this->cache_.data.erase(it);
 			return;

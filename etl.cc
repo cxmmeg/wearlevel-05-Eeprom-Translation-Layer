@@ -1,6 +1,7 @@
 #include "etl.h"
 #include "common.h"
 #include "rom.h"
+#include "timer.h"
 #include "tool.h"
 #include <stddef.h>
 #include <string.h>
@@ -176,16 +177,23 @@ void ETL::InitialPhysicalPages() {
 }
 void ETL::InitialDualpool() {
 	Free(this->dualpool_);
-	this->dualpool_	   = new DualPool(this->info_page_.thresh_hold, this);
-	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
-	if (!datapage) {
-		LOG_ERROR("out of memory !\r\n\r\n");
+	this->dualpool_ = new DualPool(this->info_page_.thresh_hold, this);
+	if (!this->dualpool_) {
+		LOG_ERROR("out of memory ! new failed \r\n\r\n");
 		Loop();
 	}
 
-	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
+	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
+	if (!datapage) {
+		LOG_ERROR("out of memory ! new failed \r\n\r\n");
+		Loop();
+	}
+
+	LOG_DEBUG("total page cnt : %u \r\n\r\n", this->info_page_.total_page_count);
+	for (unsigned int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
 		this->ReadDataPage(physical_page_num, datapage);
+		LOG_DEBUG("initialing dualpool : % u \r\n", physical_page_num);
 		if (datapage->hot == 1)
 			this->dualpool_->AddPageIntoPool(physical_page_num, datapage, HOTPOOL);
 		else
@@ -230,13 +238,18 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	this->RomWriteBytes(physical_addr, buff, datapage_size);
 	Free(buff);
 
+	ClearWatchdog();
+
 	return true;
 }
 
 bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	const unsigned int datapage_size = this->GetDataPageSize();
 	char*		   buff		 = ( char* )calloc(datapage_size + 1, sizeof(char));
-	assert(buff);
+	if (!buff) {
+		LOG_ERROR("out of memory , calloc failed \r\n\r\n");
+		Loop();
+	}
 	unsigned int offest = 0;
 
 	this->RomReadBytes(( unsigned long long )datapage_size * ( unsigned long long )physical_page_num,
@@ -261,6 +274,8 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
 
 	Free(buff);
+
+	ClearWatchdog();
 
 	return true;
 }

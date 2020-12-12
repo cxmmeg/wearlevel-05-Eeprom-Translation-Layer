@@ -26,6 +26,12 @@ DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hol
 	this->cold_ec_tail_cache_  = new PriorityPageCycleCache(SMALL, this->cache_size_);
 	this->cold_eec_head_cache_ = new PriorityPageCycleCache(BIG, this->cache_size_);
 	this->hot_eec_tail_cache_  = new PriorityPageCycleCache(SMALL, this->cache_size_);
+
+	if (!this->hot_ec_head_cache_ || !this->hot_ec_tail_cache_ || !this->cold_ec_tail_cache_
+	    || !this->cold_eec_head_cache_ || !this->hot_eec_tail_cache_) {
+		LOG_ERROR("out of memory ! new failed \r\n\r\n");
+		Loop();
+	}
 }
 
 long long DualPool::GetCacheSize() {
