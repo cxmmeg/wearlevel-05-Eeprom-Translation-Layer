@@ -15,6 +15,7 @@ class Tool {
 	static bool IsBitSet(const vector< char >& data, int pos);
 	static bool IsBitUnSet(const vector< char >& data, int pos);
 	static int  CountSelBitCnt(const vector< char >& bitmap);
+	static int  GetRandomNum(int max);
 };
 
 /*++++++++++++++ Test +++++++++++++++*/

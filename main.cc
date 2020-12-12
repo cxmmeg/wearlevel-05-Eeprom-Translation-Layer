@@ -12,6 +12,7 @@ int main(void) {
 	// TestPageTable();
 	// TestPriorityPagecycleCache();
 	// TestTimer();
+
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */
@@ -20,12 +21,14 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(5000);
+	// TestSingleHotPage(5000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
+	SampleSimulation(5);
 	/* ----------ETL Test---------- */
 
 	while (1) {
-		Delay(1);
+		// LOG_INFO("alive \r\n\r\n");
+		Delay(5);
 	}
 }

@@ -4,15 +4,15 @@
 #include <cmath>
 
 float ETLPerformance::GetStandardDeviation() {
-	int32_t avrg_write_cycle = this->etl_->performance_statistics_.actual_total_write_cycles
-				   / this->etl_->GetInfoPage().total_page_count;
+	long long avrg_write_cycle = this->etl_->performance_statistics_.actual_total_write_cycles
+				     / this->etl_->GetInfoPage().total_page_count;
 
 	float	 square_sum = 0;
 	int	 page_cnt   = this->etl_->GetInfoPage().total_page_count;
 	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
 	for (int ppn = 0; ppn < page_cnt; ppn++) {
 		etl_->ReadDataPage(ppn, &datapage_temp);
-		int32_t delta = datapage_temp.erase_cycle - avrg_write_cycle;
+		long long delta = datapage_temp.erase_cycle - avrg_write_cycle;
 		square_sum += delta * delta;
 	}
 
@@ -33,13 +33,13 @@ float ETLPerformance::GetOverheadRatio() {
 	       / this->etl_->performance_statistics_.total_write_cycles;
 }
 
-int32_t ETLPerformance::GetRAMCost() {
+long long ETLPerformance::GetRAMCost() {
 	return this->etl_->performance_statistics_.RAM_cost;
 }
 
-float ETLPerformance::GetWriteSpeed() {
+long long ETLPerformance::GetWriteSpeed() {
 	this->etl_->performance_statistics_.time_cost_in_sec = this->timer_.GetInterval();
-	return ( float )this->etl_->performance_statistics_.total_write_bytes
+	return this->etl_->performance_statistics_.total_write_bytes
 	       / this->etl_->performance_statistics_.time_cost_in_sec;
 }
 
@@ -49,7 +49,7 @@ void ETLPerformance::StartTimer() {
 
 void ETLPerformance::PrintInfo() {
 	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
-	LOG_INFO("write speed\t\t%f B/sec\r\n", this->GetWriteSpeed());
+	LOG_INFO("write speed\t\t%lld B/sec\r\n", this->GetWriteSpeed());
 	LOG_INFO("standard deviation\t\t%f\r\n", this->GetStandardDeviation());
 	LOG_INFO("overhead ratio\t\t%f\r\n", this->GetOverheadRatio());
 	LOG_INFO("RAM cost\t\t%d B\r\n", this->GetRAMCost());

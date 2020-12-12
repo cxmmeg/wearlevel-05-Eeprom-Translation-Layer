@@ -2544,7 +2544,7 @@
         <name>$PROJ_DIR$\driver\timer.h</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\driver\tool.cc</name>
+        <name>$PROJ_DIR$\tool.cc</name>
     </file>
     <file>
         <name>$PROJ_DIR$\tool.h</name>

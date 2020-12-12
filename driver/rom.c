@@ -214,23 +214,23 @@ int IsSame_(const char* data1, const char* data2, size_t len) {
 }
 
 int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
-			 int length)  //修改了addr的数据类型以满足addr长度要求
-{				      //修改了数据的长度要求
-	DownInt();		      //修改为at24c1024b的时序
-	if (addr > 524287 - 32)	      //地址空间 0x0000  -- 0x0007ffe0
+			 int length)		       //修改了addr的数据类型以满足addr长度要求
+{						       //修改了数据的长度要求
+	DownInt();				       //修改为at24c1024b的时序
+	if (addr > ( unsigned long long )524287 - 32)  //地址空间 0x0000  -- 0x0007ffe0
 	{
 		UpInt();
-		printf("addr out of bound!!\r\naddr:%ld , len : %d\r\n", addr, length);
+		LOG_ERROR("addr out of bound!!\r\naddr:%lu , len : %d\r\n", addr, length);
 		return -1;
 	}
-	if (addr + length > 524287 - 32) {
+	if (addr + length > ( unsigned long long )524287 - 32) {
 		UpInt();
-		printf("end addr out of bound!!\r\naddr:%ld , len : %d\r\n", addr, length);
+		LOG_ERROR("end addr out of bound!!\r\naddr:%lu , len : %d\r\n", addr, length);
 		return -1;
 	}
 	if (length < 1) {
 		UpInt();
-		printf("length must > 0!!\r\naddr:%ld , len : %d\r\n", addr, length);
+		LOG_ERROR("length must > 0!!\r\naddr:%lu , len : %d\r\n", addr, length);
 		return -1;
 	}
 	//
@@ -365,11 +365,11 @@ int ROM_ReadBytes_Page(unsigned long long addr, char* dest,
 		       int length)  //修改了addr的数据类型以满足addr长度要求
 {				    //修改发送数据长度要求
 	DownInt();		    //修改为at24c1024b的时序
-	if (addr > 524287) {
+	if (addr > ( unsigned long long )524287) {
 		UpInt();
 		return -1;
 	}
-	if (addr + length > 524287 - 32) {
+	if (addr + length > ( unsigned long long )524287 - 32) {
 		UpInt();
 		return -1;
 	}

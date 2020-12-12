@@ -6,6 +6,7 @@
 #include "performance.h"
 #include "rtc.h"
 #include "timer.h"
+#include "tool.h"
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
@@ -257,6 +258,58 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 			;
 	}
 
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	// etl->PrintPMTT();
+	printf("test done \r\n");
+}
+
+static int GetRandomFlowrateRound() {
+	int randnum = Tool::GetRandomNum(100);
+	if (randnum < 30)
+		return 0;
+	return randnum;
+}
+
+/*
+ * 模拟RTU的真实采样
+ */
+void SampleSimulation(unsigned int round) {
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 1000;
+
+	char* configtable_data = "abcdefgh";
+	char* flowrate_data    = "11.222012111652";
+	char* waterlevel_data  = "10.22012111652";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )120 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 16;
+	const unsigned int	 THRESH_HOLD	 = 100;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, 100);
+
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	for (unsigned int r = 0; r < round; r++) {
+		/* 随机频率测流速 */
+		int flowrate_sample_round = GetRandomFlowrateRound();
+		for (int fround = 0; fround < flowrate_sample_round; fround++)
+			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+	}
+
+	/* show test result */
 	ep.PrintInfo();
 
 	etl->dualpool_->PrintPool();

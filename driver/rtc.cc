@@ -1502,7 +1502,7 @@ void Time::Show() {
 }
 
 void Timer::Start() {
-	start_time_.GetRtcTime();
+	this->start_time_.GetRtcTime();
 }
 
 /* in sec */
@@ -1514,10 +1514,8 @@ long long Timer::GetInterval() {
 
 /*++++++++++++++++Test++++++++++++++++++++++ */
 void TestTimer() {
-	Timer timer;
-	timer.Start();
-	System_Delayms(5000);
-	long long time_cost_in_sec = timer.GetInterval();
-	LOG_INFO("takes time : %lld min %lld sec \r\n ", time_cost_in_sec / 60, time_cost_in_sec % 60);
+	Time t1(20, 12, 12, 7, 5, 15);
+	Time t2(20, 12, 12, 10, 1, 50);
+	LOG_DEBUG("interval : %lld \r\n", t2 - t1);
 }
 /*----------------Test---------------------- */

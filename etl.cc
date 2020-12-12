@@ -219,11 +219,11 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 
 	memcpy(buff + offest, datapage->data, this->info_page_.logic_page_size);
 
-	this->RomWriteBytes(datapage_size * physical_page_num, buff, datapage_size);
-	if (buff) {
-		free(buff);
-		buff = NULL;
-	}
+	unsigned long long physical_addr =
+		( unsigned long long )datapage_size * ( unsigned long long )physical_page_num;
+
+	this->RomWriteBytes(physical_addr, buff, datapage_size);
+	Free(buff);
 
 	return true;
 }
@@ -234,7 +234,8 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	assert(buff);
 	unsigned int offest = 0;
 
-	this->RomReadBytes(datapage_size * physical_page_num, buff, datapage_size);
+	this->RomReadBytes(( unsigned long long )datapage_size * ( unsigned long long )physical_page_num,
+			   buff, datapage_size);
 
 	memcpy(( char* )&datapage->erase_cycle, buff + offest, sizeof(datapage->erase_cycle));
 	offest += sizeof(datapage->erase_cycle);
@@ -254,10 +255,7 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 
 	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
 
-	if (buff) {
-		free(buff);
-		buff = NULL;
-	}
+	Free(buff);
 
 	return true;
 }
