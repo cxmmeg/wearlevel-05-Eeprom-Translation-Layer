@@ -265,6 +265,13 @@ void DualPool::InitialPoolBorder() {
 	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
 
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
+		if (this->hot_ec_head_cache_->GetSize() >= this->cache_size_
+		    && this->hot_ec_tail_cache_->GetSize() >= this->cache_size_
+		    && this->hot_eec_tail_cache_->GetSize() >= this->cache_size_
+		    && this->cold_ec_tail_cache_->GetSize() >= this->cache_size_
+		    && this->cold_eec_head_cache_->GetSize() >= this->cache_size_)
+			return;
+
 		this->etl_->ReadDataPage(ppn, &datapage_temp);
 		if (Tool::IsBitSet(this->hot_pool_, ppn)) {
 			this->hot_ec_head_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));

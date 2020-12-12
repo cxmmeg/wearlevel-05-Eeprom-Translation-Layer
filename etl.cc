@@ -189,11 +189,9 @@ void ETL::InitialDualpool() {
 		Loop();
 	}
 
-	LOG_DEBUG("total page cnt : %u \r\n\r\n", this->info_page_.total_page_count);
 	for (unsigned int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
 		this->ReadDataPage(physical_page_num, datapage);
-		LOG_DEBUG("initialing dualpool : % u \r\n", physical_page_num);
 		if (datapage->hot == 1)
 			this->dualpool_->AddPageIntoPool(physical_page_num, datapage, HOTPOOL);
 		else

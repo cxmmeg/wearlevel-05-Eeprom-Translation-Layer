@@ -54,7 +54,7 @@ class DualPool {
 	PriorityPageCycleCache* SelectPriorityCache(PoolIdentify pool_identify, bool big,
 						    bool sort_by_erasecycle);
 
-    public:
+    private:
 	int thresh_hold_;
 
 	/* 按at24c512(512Kbit)，每个物理页16B来算， 需要(512 * 1024) / (8 * 16 * 8) = 512B大小的bitmap
@@ -64,6 +64,7 @@ class DualPool {
 	vector< char >	 hot_pool_;
 	vector< char >	 cold_pool_;
 
+    public:
 	size_t			cache_size_;
 	PriorityPageCycleCache* hot_ec_head_cache_;
 	PriorityPageCycleCache* hot_ec_tail_cache_;
