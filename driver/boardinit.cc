@@ -172,6 +172,6 @@ void BoardInit() {
 
 	Led_Round();
 	Max3222_Open();
-	LOG_INFO("Device Open !");
+	LOG_INFO("Device Open !\r\n\r\n");
 	UpdateDebugState();  // p2.4为低电平时，IsDebug=1;
 }

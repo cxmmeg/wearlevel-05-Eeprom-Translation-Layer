@@ -144,3 +144,5 @@ void Clear_ExternWatchdog();
 void Delay(unsigned int sec);
 
 void Free(void* data);
+
+void Loop();

@@ -10,7 +10,7 @@ PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7) {
 
 	this->cache_capacity_ = this->etl_->GetInfoPage().total_page_count * 0.1;
 	if (this->cache_capacity_ * PAGETABLE_ITEMSIZE > ETL::MAX_CACHE_SIZE) {
-		LOG_INFO("pagetable's cache size out of boundary \r\n");
+		LOG_INFO("pagetable's cache size out of boundary \r\n\r\n");
 		this->cache_capacity_ = ETL::MAX_CACHE_SIZE / PAGETABLE_ITEMSIZE;
 	}
 

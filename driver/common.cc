@@ -1021,3 +1021,10 @@ void Free(void* data) {
 	delete data;
 	data = NULL;
 }
+
+void Loop() {
+	while (1) {
+		System_Delayms(1000);
+		WatchDog_Clear();
+	}
+}
