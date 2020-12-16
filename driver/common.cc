@@ -152,7 +152,7 @@ void ClearWatchdog() {
 
 void Delay(unsigned int sec) {
 	System_Delayms(1000);
-	WatchDog_Clear();
+	ClearWatchdog();
 }
 
 void System_Delayus(unsigned int nValue) {  //函数参数是寄存器,操作速度过快,所以我们不用nValue

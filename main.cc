@@ -1,6 +1,8 @@
 #include "boardinit.h"
 #include "common.h"
 #include "etltest.h"
+#include "tool.h"
+#include <stdlib.h>
 
 int main(void) {
 	BoardInit();
@@ -12,7 +14,7 @@ int main(void) {
 	// TestPageTable();
 	// TestPriorityPagecycleCache();
 	// TestTimer();
-
+	GetRandomNumTest();
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */
@@ -24,7 +26,7 @@ int main(void) {
 	// TestSingleHotPage(5000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
-	SampleSimulation(5);
+	SampleSimulation(100);
 	/* ----------ETL Test---------- */
 
 	while (1) {

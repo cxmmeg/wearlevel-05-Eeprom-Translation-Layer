@@ -20,6 +20,7 @@ class Tool {
 
 /*++++++++++++++ Test +++++++++++++++*/
 void BitOperationTest();
+void GetRandomNumTest();
 /*-------------- Test ---------------*/
 
 #endif

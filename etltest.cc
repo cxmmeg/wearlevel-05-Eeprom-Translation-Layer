@@ -270,9 +270,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 
 static int GetRandomFlowrateRound() {
 	int randnum = Tool::GetRandomNum(100);
-	if (randnum < 30)
+	if (randnum <= 30)
 		return 0;
-	return randnum;
+	return randnum - 30;
 }
 
 /*
@@ -287,26 +287,31 @@ void SampleSimulation(unsigned int round) {
 	char* flowrate_data    = "11.222012111652";
 	char* waterlevel_data  = "10.22012111652";
 
-	const unsigned long long ROM_SIZE	 = ( unsigned long long )64 * ( unsigned long long )1024;
-	const unsigned char	 LOGIC_PAGE_SIZE = 16;
-	const unsigned int	 THRESH_HOLD	 = 100;
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )9 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
 
 	etl = new ETL(ROM_SIZE);
-	etl->Format(LOGIC_PAGE_SIZE, 100);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
 
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
 	for (unsigned int r = 0; r < round; r++) {
+
+		LOG_INFO("round %u \r\n", round);
+
 		/* 随机频率测流速 */
 		int flowrate_sample_round = GetRandomFlowrateRound();
+		LOG_INFO("water sample write cycles : %d \r\n", flowrate_sample_round);
 		for (int fround = 0; fround < flowrate_sample_round; fround++)
 			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
 
 		for (int wround = 0; wround < 10; wround++)
 			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
 
-		etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+		if (r % 10 == 0)
+			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
 	}
 
 	/* show test result */

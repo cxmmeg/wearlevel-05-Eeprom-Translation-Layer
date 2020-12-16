@@ -1,9 +1,11 @@
 #include "tool.h"
 #include "common.h"
+#include "rtc.h"
 #include <assert.h>
 #include <ctime>
 #include <stdlib.h>
 #include <string.h>
+#include <timer.h>
 
 void Tool::SwapMemory(void* mem1, void* mem2, unsigned int length) {
 	char* buffer = ( char* )malloc(length + 1);
@@ -83,7 +85,20 @@ int Tool::CountSelBitCnt(const vector< char >& bitmap) {
 }
 
 int Tool::GetRandomNum(int max) {
-	srand(( unsigned )time(NULL));
+	Time rtc_time;
+	rtc_time.GetRtcTime();
+
+	struct tm local_time;
+	local_time.tm_sec  = rtc_time.sec;
+	local_time.tm_min  = rtc_time.min;
+	local_time.tm_hour = rtc_time.hour;
+	local_time.tm_mday = rtc_time.date;
+	local_time.tm_mon  = rtc_time.month;
+	local_time.tm_year = rtc_time.year;
+
+	time_t time_stamp = mktime(&local_time);
+
+	srand(( unsigned int )time_stamp);
 	return rand() % max;
 }
 
@@ -97,6 +112,13 @@ void BitOperationTest() {
 
 		if (Tool::IsBitUnSet(test_cast, pos))
 			LOG_INFO("bit%d is unset\r\n", pos);
+	}
+}
+
+void GetRandomNumTest() {
+	for (int i = 0; i < 100; i++) {
+		LOG_INFO("round %d : %d \r\n", i, Tool::GetRandomNum(100));
+		Delay(1);
 	}
 }
 
