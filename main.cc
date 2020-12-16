@@ -8,13 +8,6 @@ int main(void) {
 	BoardInit();
 
 	/* +++++++++++++++Tool Test++++++++++++++ */
-	// BitOperationTest();
-	// TestLRU();
-	// TestDualLRU();
-	// TestPageTable();
-	// TestPriorityPagecycleCache();
-	// TestTimer();
-	GetRandomNumTest();
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */

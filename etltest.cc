@@ -270,9 +270,9 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 
 static int GetRandomFlowrateRound() {
 	int randnum = Tool::GetRandomNum(100);
-	if (randnum <= 30)
+	if (randnum <= 50)
 		return 0;
-	return randnum - 30;
+	return randnum - 50;
 }
 
 /*
