@@ -287,7 +287,7 @@ void SampleSimulation(unsigned int round) {
 	char* flowrate_data    = "11.222012111652";
 	char* waterlevel_data  = "10.22012111652";
 
-	const unsigned long long ROM_SIZE	 = ( unsigned long long )9 * ( unsigned long long )1024;
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
@@ -299,7 +299,7 @@ void SampleSimulation(unsigned int round) {
 
 	for (unsigned int r = 0; r < round; r++) {
 
-		LOG_INFO("round %u \r\n", round);
+		LOG_INFO("round %u \r\n", r);
 
 		/* 随机频率测流速 */
 		int flowrate_sample_round = GetRandomFlowrateRound();

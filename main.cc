@@ -19,7 +19,7 @@ int main(void) {
 	// TestSingleHotPage(5000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
-	SampleSimulation(100);
+	SampleSimulation(200);
 	/* ----------ETL Test---------- */
 
 	while (1) {

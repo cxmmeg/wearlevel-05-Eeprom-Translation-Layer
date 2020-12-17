@@ -50,8 +50,8 @@ void ETLPerformance::StartTimer() {
 void ETLPerformance::PrintInfo() {
 	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
 	LOG_INFO("write speed\t\t%lld B/sec\r\n", this->GetWriteSpeed());
-	LOG_INFO("standard deviation\t\t%f\r\n", this->GetStandardDeviation());
 	LOG_INFO("overhead ratio\t\t%f\r\n", this->GetOverheadRatio());
+	LOG_INFO("standard deviation\t%f\r\n", this->GetStandardDeviation());
 	LOG_INFO("RAM cost\t\t%d B\r\n", this->GetRAMCost());
 	LOG_INFO("total write cycles : %lld \r\n", this->etl_->performance_statistics_.total_write_bytes);
 	LOG_INFO("------------ performance ---------------\r\n\r\n");

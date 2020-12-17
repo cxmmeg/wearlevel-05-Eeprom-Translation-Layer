@@ -5,7 +5,7 @@
 #include <ctime>
 #include <stdlib.h>
 #include <string.h>
-#include <timer.h>
+#include <time.h>
 
 void Tool::SwapMemory(void* mem1, void* mem2, unsigned int length) {
 	char* buffer = ( char* )malloc(length + 1);

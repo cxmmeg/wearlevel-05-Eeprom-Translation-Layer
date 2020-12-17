@@ -46,3 +46,140 @@ takes 3mins
 
 [INFO main.cc:88] end time : 
 [INFO rtc.cc:1501] 20/12/9 20:52:33 
+
+
+**++++++++++++SampleSimulation(200)++++++++++++++**
+
+
+[INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
+
+[INFO performance.cc:52] write speed		105 B/sec
+[INFO performance.cc:53] overhead ratio		1.064643
+[INFO performance.cc:54] standard deviation	153.707520
+[INFO performance.cc:55] RAM cost		572 B
+[INFO performance.cc:56] total write cycles : 64490 
+[INFO performance.cc:57] ------------ performance ---------------
+
+++++++++++++++++Erase Cycle Pool Info+++++++++++++
+
+hot pool : 
+ppn : 13 	 erase cycle : 81 	 effective erase cycle : 15 
+ppn : 15 	 erase cycle : 80 	 effective erase cycle : 14 
+ppn : 21 	 erase cycle : 84 	 effective erase cycle : 18 
+ppn : 23 	 erase cycle : 81 	 effective erase cycle : 15 
+cold pool : 
+ppn : 0 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 1 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 2 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 3 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 4 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 5 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 6 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 7 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 8 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 9 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 10 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 11 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 12 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 14 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 16 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 17 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 18 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 19 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 20 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 22 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 24 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 25 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 26 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 27 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 28 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 29 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 30 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 31 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 32 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 33 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 34 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 35 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 36 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 37 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 38 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 39 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 40 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 41 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 42 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 43 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 44 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 45 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 46 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 47 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 48 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 49 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 50 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 51 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 52 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 53 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 54 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 55 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 56 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 57 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 58 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 59 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 60 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 61 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 62 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 63 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 64 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 65 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 66 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 67 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 68 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 69 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 70 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 71 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 72 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 73 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 74 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 75 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 76 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 77 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 78 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 79 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 80 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 81 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 82 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 83 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 84 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 85 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 86 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 87 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 88 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 89 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 90 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 91 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 92 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 93 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 94 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 95 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 96 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 97 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 98 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 99 	 erase cycle : 66 	 effective erase cycle : 0 
+ppn : 100 	 erase cycle : 85 	 effective erase cycle : 4 
+ppn : 101 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 102 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 103 	 erase cycle : 67 	 effective erase cycle : 0 
+ppn : 104 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 105 	 erase cycle : 95 	 effective erase cycle : 0 
+ppn : 106 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 107 	 erase cycle : 97 	 effective erase cycle : 0 
+ppn : 108 	 erase cycle : 96 	 effective erase cycle : 0 
+ppn : 109 	 erase cycle : 96 	 effective erase cycle : 0 
+ppn : 110 	 erase cycle : 65 	 effective erase cycle : 0 
+ppn : 111 	 erase cycle : 96 	 effective erase cycle : 0 
+ppn : 112 	 erase cycle : 65 	 effective erase cycle : 0 
+---------------Erase Cycle Pool Info---------------
+
+thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109 
+
+
+**----------------SampleSimulation(200)------------------**Fd
