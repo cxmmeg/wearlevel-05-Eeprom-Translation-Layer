@@ -42,10 +42,10 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
-	Time start_time;
-	start_time.GetRtcTime();
-	LOG_INFO("start start_time : \r\n");
-	start_time.Show();
+	// Time start_time;
+	// start_time.GetRtcTime();
+	// LOG_INFO("start start_time : \r\n");
+	// start_time.Show();
 
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
@@ -54,25 +54,19 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage();
 	// TestMultiHotPage();
-	TestHotPageToColdPage(1500);
-	// set< int > dict;
-	// dict.insert(3);
-	// dict.insert(2);
-	// dict.insert(1);
-	// printf("smallest : %d\r\n", *dict.begin());
-	// dict.erase(dict.find(1));
-	// printf("largest : %d \r\n", *dict.begin());
+	// TestHotPageToColdPage(1500);
+	SampleSimulation(200);
 
-	Time end_time;
-	end_time.GetRtcTime();
-	LOG_INFO("end time : \r\n");
-	end_time.Show();
+	// Time end_time;
+	// end_time.GetRtcTime();
+	// LOG_INFO("end time : \r\n");
+	// end_time.Show();
 
-	LOG_INFO("takes %d mins \r\n", end_time - start_time);
+	// LOG_INFO("takes %d mins \r\n", end_time - start_time);
 
 	while (1) {
 		System_Delayms(1000);
-		WatchDog_Clear();
+		ClearWatchdog();
 	}
 }
 

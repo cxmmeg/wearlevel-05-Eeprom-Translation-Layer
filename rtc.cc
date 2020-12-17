@@ -57,12 +57,12 @@ char g_rtc_nowTime[ 5 ] = { 0, 0, 0, 0, 0 };
 //  3.RTC初始化的时候,根据XY关系 更正XY.
 //
 
-char s_RTC_lastTime[ 5 ] = { 0x00, 0x00, 0x00, 0x00, 0x00 };
-char s_RTC_CheckTime[ 5 ] = { 0x00, 0x00, 0x00, 0x00, 0x00 };  //初始化为错误值
-char s_RTC_SaveTime[ 5 ] = { 0x00, 0x00, 0x00, 0x00, 0x00 };  //初始化为错误值
+char s_RTC_lastTime[ 5 ]   = { 0x00, 0x00, 0x00, 0x00, 0x00 };
+char s_RTC_CheckTime[ 5 ]  = { 0x00, 0x00, 0x00, 0x00, 0x00 };	//初始化为错误值
+char s_RTC_SaveTime[ 5 ]   = { 0x00, 0x00, 0x00, 0x00, 0x00 };	//初始化为错误值
 char s_RTC_ReportTime[ 5 ] = { 0x00, 0x00, 0x00, 0x00, 0x00 };	//初始化为错误值
-char s_RTC_StartIdx	   = 240;  //初始化为错误值  范围为1~200
-char s_RTC_EndIdx	   = 240;  //初始化为错误值    范围为1~200
+char s_RTC_StartIdx	   = 240;				//初始化为错误值  范围为1~200
+char s_RTC_EndIdx	   = 240;				//初始化为错误值    范围为1~200
 
 //储存脉冲设备度数(对应 脉冲计数设备 上面的值)
 char s_RTC_PulseBytes[ 4 ][ 3 ] = {
@@ -99,7 +99,7 @@ char s_RTC_PulseBytes[ 4 ][ 3 ] = {
 
 int RTC_ReadStartIdx(char* dest) {
 	DownInt();
-	if (s_RTC_StartIdx <= 0//0
+	if (s_RTC_StartIdx <= 0	       // 0
 	    && s_RTC_StartIdx >= 0) {  //内存值正确
 		*dest = s_RTC_StartIdx;
 		//写入RTC,保证RTC里的值的正确
@@ -109,9 +109,8 @@ int RTC_ReadStartIdx(char* dest) {
 	}
 	else {	//内存值错误
 		*dest = _RTC_ReadRAM(STARTIDX_ADDR);
-		if ((*dest) <= 0
-		    && (*dest) >= 0) {  // RTC值可能正确
-			s_RTC_StartIdx = (*dest);  //更新内存值
+		if ((*dest) <= 0 && (*dest) >= 0) {  // RTC值可能正确
+			s_RTC_StartIdx = (*dest);    //更新内存值
 			UpInt();
 			return 0;
 		}
@@ -132,8 +131,7 @@ int RTC_SetStartIdx(char src) {
 
 int RTC_ReadEndIdx(char* dest) {
 	DownInt();
-	if (s_RTC_EndIdx <= 0
-	    && s_RTC_EndIdx >= 0) {	//内存值正确
+	if (s_RTC_EndIdx <= 0 && s_RTC_EndIdx >= 0) {  //内存值正确
 		*dest = s_RTC_EndIdx;
 		//写入RTC,保证RTC里的值的正确
 		_RTC_WriteRAM(ENDIDX_ADDR, s_RTC_EndIdx);
@@ -142,9 +140,8 @@ int RTC_ReadEndIdx(char* dest) {
 	}
 	else {	//内存值错误
 		*dest = _RTC_ReadRAM(ENDIDX_ADDR);
-		if ((*dest) <= 0
-		    && (*dest) >= 0) {  // RTC值可能正确
-			s_RTC_EndIdx = (*dest);	   //更新内存值
+		if ((*dest) <= 0 && (*dest) >= 0) {  // RTC值可能正确
+			s_RTC_EndIdx = (*dest);	     //更新内存值
 			UpInt();
 			return 0;
 		}
@@ -434,15 +431,11 @@ int RTC_ReadPulseBytes(int _index, char* _dest) {
 		return -2;
 	}
 	DownInt();
-	if (s_RTC_PulseBytes[ _index - 1 ][ 0 ] == 0xFF
-	    && s_RTC_PulseBytes[ _index - 1 ][ 1 ] == 0xFF
+	if (s_RTC_PulseBytes[ _index - 1 ][ 0 ] == 0xFF && s_RTC_PulseBytes[ _index - 1 ][ 1 ] == 0xFF
 	    && s_RTC_PulseBytes[ _index - 1 ][ 2 ] == 0xFF) {  //内存值错误
-		s_RTC_PulseBytes[ _index - 1 ][ 0 ] =
-			_RTC_ReadRAM(PULSE1_BYTE1 + (_index - 1) * 3);
-		s_RTC_PulseBytes[ _index - 1 ][ 1 ] =
-			_RTC_ReadRAM(PULSE1_BYTE2 + (_index - 1) * 3);
-		s_RTC_PulseBytes[ _index - 1 ][ 2 ] =
-			_RTC_ReadRAM(PULSE1_BYTE3 + (_index - 1) * 3);
+		s_RTC_PulseBytes[ _index - 1 ][ 0 ] = _RTC_ReadRAM(PULSE1_BYTE1 + (_index - 1) * 3);
+		s_RTC_PulseBytes[ _index - 1 ][ 1 ] = _RTC_ReadRAM(PULSE1_BYTE2 + (_index - 1) * 3);
+		s_RTC_PulseBytes[ _index - 1 ][ 2 ] = _RTC_ReadRAM(PULSE1_BYTE3 + (_index - 1) * 3);
 	}
 	_dest[ 0 ] = s_RTC_PulseBytes[ _index - 1 ][ 0 ];
 	_dest[ 1 ] = s_RTC_PulseBytes[ _index - 1 ][ 1 ];
@@ -485,17 +478,16 @@ int RTC_IncPulseBytes(int _index) {  // 此函数 在中断中调用,
 	char _old_byte2 = _byte2;
 	char _byte3	= s_RTC_PulseBytes[ _index - 1 ][ 2 ];
 	char _old_byte3 = _byte3;
-	//char 0 = g_pulse_range[ _index - 1 ][ 0 ];
-	//char 0 = g_pulse_range[ _index - 1 ][ 1 ];
-	//char 0 = g_pulse_range[ _index - 1 ][ 2 ];
+	// char 0 = g_pulse_range[ _index - 1 ][ 0 ];
+	// char 0 = g_pulse_range[ _index - 1 ][ 1 ];
+	// char 0 = g_pulse_range[ _index - 1 ][ 2 ];
 
 	if (_byte3 == 255) {  //第3字节溢出的话
 		_byte3 = 0;
 		if (_byte2 == 255) {  //第2字节溢出的话
 			_byte2 = 0;
 			if (_byte1 == 255)  //第1字节溢出的话
-				_byte1 =
-					0;  //实际上这个不可能发生,但就丢这吧.反正不影响速度.
+				_byte1 = 0;  //实际上这个不可能发生,但就丢这吧.反正不影响速度.
 			else
 				++_byte1;
 		}
@@ -545,8 +537,7 @@ Update_And_Return:
 			_RTC_WriteRAM(PULSE1_BYTE2 + (_index - 1) * 3, _byte2);
 			if (_byte1 != _old_byte1) {
 				s_RTC_PulseBytes[ _index - 1 ][ 0 ] = _byte1;
-				_RTC_WriteRAM(PULSE1_BYTE1 + (_index - 1) * 3,
-					      _byte1);
+				_RTC_WriteRAM(PULSE1_BYTE1 + (_index - 1) * 3, _byte1);
 			}
 		}
 	}
@@ -591,25 +582,21 @@ int RTC_IsBadTime(char* time, int isTime) {  //无错返回0,否则返回-1.
 	//首先这个lastTime自己要是正确的
 	//主要是怕这个变量被错误修改.概率非常的小,但还是防范下
 	//我们主要在乎 年  月 和 时
-	if (s_RTC_lastTime[ 0 ] >= 9 && s_RTC_lastTime[ 1 ] <= 12
-	    && s_RTC_lastTime[ 1 ] >= 1 && s_RTC_lastTime[ 3 ] <= 23) {
+	if (s_RTC_lastTime[ 0 ] >= 9 && s_RTC_lastTime[ 1 ] <= 12 && s_RTC_lastTime[ 1 ] >= 1
+	    && s_RTC_lastTime[ 3 ] <= 23) {
 		//开始比较
 
 		//年
 		if (time[ 0 ] != s_RTC_lastTime[ 0 ]
-		    && time[ 0 ]
-			       != s_RTC_lastTime[ 0 ]
-					  + 1) {  //即不为今年
-						  //也不为去年.那么就是个错误
+		    && time[ 0 ] != s_RTC_lastTime[ 0 ] + 1) {	//即不为今年
+								//也不为去年.那么就是个错误
 			return -1;
 		}
 
 		//月
 		//考虑1月的情况
 		if (time[ 1 ] != s_RTC_lastTime[ 1 ]
-		    && time[ 1 ]
-			       != s_RTC_lastTime[ 1 ]
-					  + 1) {  //即不为当月,也不为前一个月,
+		    && time[ 1 ] != s_RTC_lastTime[ 1 ] + 1) {	//即不为当月,也不为前一个月,
 			//考虑为1月的情况,它的前一个月为12月
 			//而且月不为1月, 为1月时,last不为12.
 			if (time[ 1 ] != 1) {
@@ -624,8 +611,7 @@ int RTC_IsBadTime(char* time, int isTime) {  //无错返回0,否则返回-1.
 
 		//时
 		//考虑00时的情况
-		if (time[ 3 ] != s_RTC_lastTime[ 3 ]
-		    && time[ 3 ] != s_RTC_lastTime[ 3 ] + 1) {
+		if (time[ 3 ] != s_RTC_lastTime[ 3 ] && time[ 3 ] != s_RTC_lastTime[ 3 ] + 1) {
 			if (time[ 3 ] != 0) {
 				return -1;
 			}
@@ -695,8 +681,7 @@ void RTC_ReadTimeStr6_A(char* dest) {
 	char second;
 	char control;
 	DownInt();
-	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year,
-		      &control);
+	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year, &control);
 	UpInt();
 	dest[ 0 ]  = year / 10 + '0';
 	dest[ 1 ]  = year % 10 + '0';
@@ -729,8 +714,7 @@ void RTC_ReadTimeStr5_A(char* dest) {
 	char second;
 	char control;
 	DownInt();
-	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year,
-		      &control);
+	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year, &control);
 	UpInt();
 	dest[ 0 ]  = year / 10 + '0';
 	dest[ 1 ]  = year % 10 + '0';
@@ -759,8 +743,7 @@ void RTC_ReadTimeStr6_B(char* dest) {
 	char second;
 	char control;
 	DownInt();
-	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year,
-		      &control);
+	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year, &control);
 	UpInt();
 	dest[ 0 ]  = year / 10 + '0';
 	dest[ 1 ]  = year % 10 + '0';
@@ -786,8 +769,7 @@ void RTC_ReadTimeStr5_B(char* dest) {
 	char second;
 	char control;
 	DownInt();
-	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year,
-		      &control);
+	_RTC_ReadTime(&second, &minute, &hour, &date, &month, &day, &year, &control);
 	UpInt();
 	dest[ 0 ] = year / 10 + '0';
 	dest[ 1 ] = year % 10 + '0';
@@ -804,34 +786,25 @@ void RTC_ReadTimeStr5_B(char* dest) {
 // 09/10/14/10:00:00
 void RTC_SetTimeStr6_A(const char* src) {
 	DownInt();
-	_RTC_SetTime((src[ 15 ] - '0') * 10 + src[ 16 ] - '0',
-		     (src[ 12 ] - '0') * 10 + src[ 13 ] - '0',
-		     (src[ 9 ] - '0') * 10 + src[ 10 ] - '0',
-		     (src[ 6 ] - '0') * 10 + src[ 7 ] - '0',
-		     (src[ 3 ] - '0') * 10 + src[ 4 ] - '0', 1,
-		     (src[ 0 ] - '0') * 10 + src[ 1 ] - '0', 0);
+	_RTC_SetTime((src[ 15 ] - '0') * 10 + src[ 16 ] - '0', (src[ 12 ] - '0') * 10 + src[ 13 ] - '0',
+		     (src[ 9 ] - '0') * 10 + src[ 10 ] - '0', (src[ 6 ] - '0') * 10 + src[ 7 ] - '0',
+		     (src[ 3 ] - '0') * 10 + src[ 4 ] - '0', 1, (src[ 0 ] - '0') * 10 + src[ 1 ] - '0', 0);
 	UpInt();
 }
 
 void RTC_SetTimeStr6_B(const char* src) {
 	DownInt();
-	_RTC_SetTime((src[ 10 ] - '0') * 10 + src[ 11 ] - '0',
-		     (src[ 8 ] - '0') * 10 + src[ 9 ] - '0',
-		     (src[ 6 ] - '0') * 10 + src[ 7 ] - '0',
-		     (src[ 4 ] - '0') * 10 + src[ 5 ] - '0',
-		     (src[ 2 ] - '0') * 10 + src[ 3 ] - '0', 1,
-		     (src[ 0 ] - '0') * 10 + src[ 1 ] - '0', 0);
+	_RTC_SetTime((src[ 10 ] - '0') * 10 + src[ 11 ] - '0', (src[ 8 ] - '0') * 10 + src[ 9 ] - '0',
+		     (src[ 6 ] - '0') * 10 + src[ 7 ] - '0', (src[ 4 ] - '0') * 10 + src[ 5 ] - '0',
+		     (src[ 2 ] - '0') * 10 + src[ 3 ] - '0', 1, (src[ 0 ] - '0') * 10 + src[ 1 ] - '0', 0);
 	UpInt();
 }
 
 void RTC_SetTimeStr6_C(const char* src) {
 	DownInt();
-	_RTC_SetTime((src[ 10 ] - '0') * 16 + src[ 11 ] - '0',
-		     (src[ 8 ] - '0') * 16 + src[ 9 ] - '0',
-		     (src[ 6 ] - '0') * 16 + src[ 7 ] - '0',
-		     (src[ 4 ] - '0') * 16 + src[ 5 ] - '1',
-		     (src[ 2 ] - '0') * 16 + src[ 3 ] - '1', 1,
-		     (src[ 0 ] - '0') * 16 + src[ 1 ] - '0', 0);
+	_RTC_SetTime((src[ 10 ] - '0') * 16 + src[ 11 ] - '0', (src[ 8 ] - '0') * 16 + src[ 9 ] - '0',
+		     (src[ 6 ] - '0') * 16 + src[ 7 ] - '0', (src[ 4 ] - '0') * 16 + src[ 5 ] - '1',
+		     (src[ 2 ] - '0') * 16 + src[ 3 ] - '1', 1, (src[ 0 ] - '0') * 16 + src[ 1 ] - '0', 0);
 	UpInt();
 }
 //以 年年月月日日时时分分 的格式来设置时间
@@ -841,10 +814,8 @@ void RTC_SetTimeStr6_C(const char* src) {
 void RTC_SetTimeStr5_B(const char* src) {
 	DownInt();
 	char second = _RTC_ReadSecond();
-	_RTC_SetTime(second, (src[ 8 ] - '0') * 10 + src[ 9 ] - '0',
-		     (src[ 6 ] - '0') * 10 + src[ 7 ] - '0',
-		     (src[ 4 ] - '0') * 10 + src[ 5 ] - '0',
-		     (src[ 2 ] - '0') * 10 + src[ 3 ] - '0', 1,
+	_RTC_SetTime(second, (src[ 8 ] - '0') * 10 + src[ 9 ] - '0', (src[ 6 ] - '0') * 10 + src[ 7 ] - '0',
+		     (src[ 4 ] - '0') * 10 + src[ 5 ] - '0', (src[ 2 ] - '0') * 10 + src[ 3 ] - '0', 1,
 		     (src[ 0 ] - '0') * 10 + src[ 1 ] - '0', 0);
 	UpInt();
 }
@@ -854,15 +825,14 @@ void RTC_ReadTimeBytes5(char* dest) {
 	char control;
 	char day;
 	DownInt();
-	_RTC_ReadTime(&second, &(dest[ 4 ]), &(dest[ 3 ]), &(dest[ 2 ]),
-		      &(dest[ 1 ]), &day, &(dest[ 0 ]), &control);
+	_RTC_ReadTime(&second, &(dest[ 4 ]), &(dest[ 3 ]), &(dest[ 2 ]), &(dest[ 1 ]), &day, &(dest[ 0 ]),
+		      &control);
 	UpInt();
 }
 int RTC_SetTimeBytes5(const char* src) {
 	DownInt();
 	char second = _RTC_ReadSecond();
-	int  ret = _RTC_SetTime(second, src[ 4 ], src[ 3 ], src[ 2 ], src[ 1 ],
-				1, src[ 0 ], 0);
+	int  ret    = _RTC_SetTime(second, src[ 4 ], src[ 3 ], src[ 2 ], src[ 1 ], 1, src[ 0 ], 0);
 	UpInt();
 	return ret;
 }
@@ -902,24 +872,22 @@ void RTC_ReadTimeBytes6(char* dest) {
 	char day;
 	DownInt();
 
-	_RTC_ReadTime(&(dest[ 5 ]), &(dest[ 4 ]), &(dest[ 3 ]), &(dest[ 2 ]),
-		      &(dest[ 1 ]), &day, &(dest[ 0 ]), &control);
+	_RTC_ReadTime(&(dest[ 5 ]), &(dest[ 4 ]), &(dest[ 3 ]), &(dest[ 2 ]), &(dest[ 1 ]), &day,
+		      &(dest[ 0 ]), &control);
 
 	UpInt();
 #endif
 }
 int RTC_SetTimeBytes6(const char* src) {
 	DownInt();
-	int ret = _RTC_SetTime(src[ 5 ], src[ 4 ], src[ 3 ], src[ 2 ], src[ 1 ],
-			       1, src[ 0 ], 0);
+	int ret = _RTC_SetTime(src[ 5 ], src[ 4 ], src[ 3 ], src[ 2 ], src[ 1 ], 1, src[ 0 ], 0);
 	UpInt();
 	return ret;
 }
 
 //定义待设置的时间：秒、分、时、日、月、星期、年、控制字
-int _RTC_SetTime(const char second, const char minute, const char hour,
-		 const char date, const char month, const char day,
-		 const char year,
+int _RTC_SetTime(const char second, const char minute, const char hour, const char date, const char month,
+		 const char day, const char year,
 		 const char control)  //设置99年12月31日 星期7 23点59分00秒
 {
 	//  char second1=second;
@@ -938,8 +906,8 @@ int _RTC_SetTime(const char second, const char minute, const char hour,
 	//  TraceHexMsg(&year1,1);
 	// TraceHexMsg(&control,1);
 
-	if (second > 59 || minute > 59 || hour > 23 || day > 7 || day == 0
-	    || date > 31 || date == 0 || month > 12 || month == 0 || year > 99)
+	if (second > 59 || minute > 59 || hour > 23 || day > 7 || day == 0 || date > 31 || date == 0
+	    || month > 12 || month == 0 || year > 99)
 
 	// if(second >59 || minute >59 || hour >23|| day>7 || day ==0
 	//  || date==0  || month ==0 || year >99||year==0)
@@ -994,8 +962,8 @@ char _RTC_ReadSecond() {
 	return _BCDtoHEX(temp);
 }
 
-void _RTC_ReadTime(char* second, char* minute, char* hour, char* date,
-		   char* month, char* day, char* year, char* control) {
+void _RTC_ReadTime(char* second, char* minute, char* hour, char* date, char* month, char* day, char* year,
+		   char* control) {
 	char temp[ 8 ];
 	//  _RTC_MultiRead(CMD_READ_BATCH,temp,8);
 
@@ -1520,7 +1488,6 @@ u8 IIC_Read_Byte(unsigned char ack) {
 		IIC_Ack();  //发送ACK
 	return receive;
 }
-
 void Time::GetRtcTime() {
 	char day;
 	char control;
@@ -1532,3 +1499,22 @@ void Time::Show() {
 	LOG_INFO("%d/%d/%d %d:%d:%d \r\n\r\n", this->year, this->month, this->date, this->hour, this->min,
 		 this->sec);
 }
+
+void Timer::Start() {
+	this->start_time_.GetRtcTime();
+}
+
+/* in sec */
+long long Timer::GetInterval() {
+	Time end_time;
+	end_time.GetRtcTime();
+	return end_time - this->start_time_;
+}
+
+/*++++++++++++++++Test++++++++++++++++++++++ */
+void TestTimer() {
+	Time t1(20, 12, 12, 7, 5, 15);
+	Time t2(20, 12, 12, 10, 1, 50);
+	LOG_DEBUG("interval : %lld \r\n", t2 - t1);
+}
+/*----------------Test---------------------- */

@@ -13,6 +13,7 @@
 #include "led.h"
 #include "msp430common.h"
 #include "rtc.h"
+#include "timer.h"
 //#include "store.h"
 //#include "wifi_config.h"
 
@@ -1025,4 +1026,8 @@ char Char_to_Hex(char input_chr) {
 		output_chr = input_chr - 'A' + 0x0a;
 	}
 	return output_chr;
+}
+void ClearWatchdog() {
+	WatchDog_Clear();
+	Clear_ExternWatchdog();
 }

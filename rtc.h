@@ -406,13 +406,26 @@ struct Time {
 	Time(char y, char m, char d, char h, char _min, char s)
 		: year(y), month(m), date(d), hour(h), min(_min), sec(s) {
 	}
-	void GetRtcTime();
-	void Show();
-	int  operator-(const Time& t) const {
-		 int sec_head = this->min + this->hour * 60;
-		 int sec_tail = t.min + t.hour * 60;
-		 return sec_head - sec_tail;
+	void	  GetRtcTime();
+	void	  Show();
+	long long operator-(const Time& t) const {
+		long sec_head = this->sec + ( long )this->min * 60 + ( long )this->hour * 60 * 60;
+		long sec_tail = t.sec + ( long )t.min * 60 + ( long )t.hour * 60 * 60;
+		return sec_head - sec_tail;
 	}
 };
+
+class Timer {
+    public:
+	void	  Start();
+	long long GetInterval();  // sec
+
+    private:
+	Time start_time_;
+};
+
+/*++++++++++++++++Test++++++++++++++++++++++ */
+void TestTimer();
+/*----------------Test---------------------- */
 
 #endif

@@ -4,6 +4,7 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "infopage.h"
+#include "performance.h"
 #include <map>
 
 /*
@@ -52,6 +53,7 @@ class ETL {
 	InfoPage			  info_page_;
 	DualPool*			  dualpool_;
 	map< unsigned int, unsigned int > lpn_to_ppn_;
+	PerformanceStatistics		  performance_statistics_;
 
 	int  RomWriteByte(unsigned long long addr, char data);
 	int  RomReadByte(unsigned long long addr, char* dest);
@@ -73,6 +75,8 @@ class ETL {
 	void DirtySwap();
 	void ColdPoolResize();
 	void HotPoolResize();
+
+	void InitPerformanceStatistics();
 };
 
 #endif

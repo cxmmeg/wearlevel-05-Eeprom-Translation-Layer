@@ -140,3 +140,5 @@ void TraceStrFuncLine(char* _str, int _len, int _ln, char const* _funcname, int 
 void TraceInt4FuncLine(int _val, int _ln, char const* _funcname, int _linename);
 
 void Clear_ExternWatchdog();
+
+void ClearWatchdog();

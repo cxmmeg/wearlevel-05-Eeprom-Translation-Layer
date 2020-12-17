@@ -3,10 +3,12 @@
 #include "datapage.h"
 #include "dualpool.h"
 #include "etl.h"
+#include "performance.h"
 #include "timer.h"
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
+#include "tool.h"
 #include <vector>
 
 ETL* etl = NULL;
@@ -284,5 +286,61 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
 	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
 	etl->PrintPMTT();
+	printf("test done \r\n");
+}
+static int GetRandomFlowrateRound() {
+	int randnum = Tool::GetRandomNum(100);
+	if (randnum <= 50)
+		return 0;
+	return randnum - 50;
+}
+/*
+ * 模拟RTU的真实采样
+ */
+void SampleSimulation(unsigned int round) {
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 1000;
+
+	char* configtable_data = "abcdefgh";
+	char* flowrate_data    = "11.222012111652";
+	char* waterlevel_data  = "10.22012111652";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	for (unsigned int r = 0; r < round; r++) {
+
+		LOG_INFO("round %u \r\n", r);
+
+		/* 随机频率测流速 */
+		int flowrate_sample_round = GetRandomFlowrateRound();
+		LOG_INFO("water sample write cycles : %d \r\n", flowrate_sample_round);
+		for (int fround = 0; fround < flowrate_sample_round; fround++)
+			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		if (r % 10 == 0)
+			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+	}
+
+	/* show test result */
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
+	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+
+	// etl->PrintPMTT();
 	printf("test done \r\n");
 }
