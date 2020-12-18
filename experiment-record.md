@@ -23,26 +23,43 @@ takes 1min+40s
 [INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
 
 [INFO performance.cc:52] write speed		136 B/sec
-[INFO performance.cc:53] overhead ratio		1.064384
-[INFO performance.cc:54] standard deviation	156.582250
+[INFO performance.cc:53] overhead ratio		1.064540
+[INFO performance.cc:54] standard deviation	129.626390
 [INFO performance.cc:55] RAM cost		1356 B
-[INFO performance.cc:56] total write cycles : 65690 
+[INFO performance.cc:56] total write cycles : 69710 
 [INFO performance.cc:57] ------------ performance ---------------
 
 ++++++++++++++++Erase Cycle Pool Info+++++++++++++
 
 hot erase cycle pool : 
-ppn : 89 , cycle : 76 
-ppn : 85 , cycle : 75 
-ppn : 83 , cycle : 69 
-ppn : 87 , cycle : 68 
+ppn : 53 , cycle : 78 
+ppn : 49 , cycle : 75 
+ppn : 47 , cycle : 74 
+ppn : 51 , cycle : 66 
 cold erase cycle pool : 
-ppn : 8 , cycle : 116 
+ppn : 4 , cycle : 112 
 ppn : 3 , cycle : 97 
-ppn : 13 , cycle : 97 
-ppn : 14 , cycle : 97 
+ppn : 7 , cycle : 97 
+ppn : 18 , cycle : 97 
 ppn : 22 , cycle : 97 
-
+ppn : 55 , cycle : 97 
+ppn : 57 , cycle : 97 
+ppn : 59 , cycle : 97 
+ppn : 61 , cycle : 97 
+ppn : 63 , cycle : 97 
+ppn : 65 , cycle : 97 
+ppn : 67 , cycle : 97 
+ppn : 69 , cycle : 97 
+ppn : 71 , cycle : 97 
+ppn : 73 , cycle : 97 
+ppn : 75 , cycle : 97 
+ppn : 77 , cycle : 97 
+ppn : 79 , cycle : 97 
+ppn : 81 , cycle : 97 
+ppn : 83 , cycle : 97 
+ppn : 85 , cycle : 97 
+ppn : 87 , cycle : 97 
+ppn : 89 , cycle : 97 
 ppn : 91 , cycle : 97 
 ppn : 93 , cycle : 97 
 ppn : 95 , cycle : 97 
@@ -53,23 +70,22 @@ ppn : 101 , cycle : 97
 ppn : 103 , cycle : 97 
 ppn : 105 , cycle : 97 
 ppn : 107 , cycle : 97 
-ppn : 111 , cycle : 97 
+ppn : 109 , cycle : 97 
 ppn : 1 , cycle : 96 
-ppn : 6 , cycle : 96 
-ppn : 9 , cycle : 96 
-ppn : 12 , cycle : 96 
-ppn : 18 , cycle : 96 
+ppn : 2 , cycle : 96 
+ppn : 5 , cycle : 96 
+ppn : 14 , cycle : 96 
+ppn : 20 , cycle : 96 
 ppn : 26 , cycle : 96 
 ppn : 30 , cycle : 96 
 ppn : 34 , cycle : 96 
 ppn : 38 , cycle : 96 
 ppn : 42 , cycle : 96 
 ppn : 46 , cycle : 96 
-ppn : 50 , cycle : 96 
 ppn : 54 , cycle : 96 
-ppn : 58 , cycle : 96 
-ppn : 64 , cycle : 96 
+ppn : 62 , cycle : 96 
 ppn : 66 , cycle : 96 
+ppn : 70 , cycle : 96 
 ppn : 74 , cycle : 96 
 ppn : 78 , cycle : 96 
 ppn : 82 , cycle : 96 
@@ -80,12 +96,12 @@ ppn : 98 , cycle : 96
 ppn : 104 , cycle : 96 
 ppn : 108 , cycle : 96 
 ppn : 112 , cycle : 96 
-ppn : 5 , cycle : 95 
-ppn : 7 , cycle : 95 
+ppn : 9 , cycle : 95 
 ppn : 10 , cycle : 95 
 ppn : 11 , cycle : 95 
+ppn : 12 , cycle : 95 
+ppn : 15 , cycle : 95 
 ppn : 16 , cycle : 95 
-ppn : 20 , cycle : 95 
 ppn : 24 , cycle : 95 
 ppn : 28 , cycle : 95 
 ppn : 32 , cycle : 95 
@@ -93,12 +109,13 @@ ppn : 36 , cycle : 95
 ppn : 40 , cycle : 95 
 ppn : 44 , cycle : 95 
 ppn : 48 , cycle : 95 
+ppn : 50 , cycle : 95 
 ppn : 52 , cycle : 95 
 ppn : 56 , cycle : 95 
+ppn : 58 , cycle : 95 
 ppn : 60 , cycle : 95 
-ppn : 62 , cycle : 95 
+ppn : 64 , cycle : 95 
 ppn : 68 , cycle : 95 
-ppn : 70 , cycle : 95 
 ppn : 72 , cycle : 95 
 ppn : 76 , cycle : 95 
 ppn : 80 , cycle : 95 
@@ -109,12 +126,12 @@ ppn : 96 , cycle : 95
 ppn : 102 , cycle : 95 
 ppn : 106 , cycle : 95 
 ppn : 110 , cycle : 95 
-ppn : 17 , cycle : 85 
-ppn : 109 , cycle : 70 
+ppn : 13 , cycle : 85 
+ppn : 111 , cycle : 66 
 ppn : 0 , cycle : 65 
-ppn : 2 , cycle : 65 
-ppn : 4 , cycle : 65 
-ppn : 15 , cycle : 65 
+ppn : 6 , cycle : 65 
+ppn : 8 , cycle : 65 
+ppn : 17 , cycle : 65 
 ppn : 19 , cycle : 65 
 ppn : 21 , cycle : 65 
 ppn : 23 , cycle : 65 
@@ -129,26 +146,10 @@ ppn : 39 , cycle : 65
 ppn : 41 , cycle : 65 
 ppn : 43 , cycle : 65 
 ppn : 45 , cycle : 65 
-ppn : 47 , cycle : 65 
-ppn : 49 , cycle : 65 
-ppn : 51 , cycle : 65 
-ppn : 53 , cycle : 65 
-ppn : 55 , cycle : 65 
-ppn : 57 , cycle : 65 
-ppn : 59 , cycle : 65 
-ppn : 61 , cycle : 65 
-ppn : 63 , cycle : 65 
-ppn : 65 , cycle : 65 
-ppn : 67 , cycle : 65 
-ppn : 69 , cycle : 65 
-ppn : 71 , cycle : 65 
-ppn : 73 , cycle : 65 
-ppn : 75 , cycle : 65 
-ppn : 77 , cycle : 65 
-ppn : 79 , cycle : 65 
-ppn : 81 , cycle : 65 
 ---------------Erase Cycle Pool Info---------------
 
+thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109 
+test done 
 
 
 **-------------SampleSimulation(200)----------------**

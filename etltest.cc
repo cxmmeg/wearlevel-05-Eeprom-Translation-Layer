@@ -5,10 +5,10 @@
 #include "etl.h"
 #include "performance.h"
 #include "timer.h"
+#include "tool.h"
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
-#include "tool.h"
 #include <vector>
 
 ETL* etl = NULL;
