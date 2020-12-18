@@ -39,9 +39,9 @@ def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_c
     for i in range(4):
         ax = plt.subplot(2, 2, i+1)
         rects1 = plt.bar(x - width/2, {edgecache_dp_data[i]},
-                         width=width, label='edge-cache dualpool')
+                         width=width, label='edge-cache dualpool', color='#0099FF')
         rects2 = plt.bar(x + width/2, {orgin_dp_data[i]},
-                         width=width, label='origin dualpool')
+                         width=width, label='origin dualpool', color='#FF9900')
         autolabel(rects1, ax)
         autolabel(rects2, ax)
         plt.xlim(-1, 1)
