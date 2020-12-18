@@ -14,7 +14,7 @@ def autolabel(rects, ax):
                     ha='center', va='bottom')
 
 
-def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data):
+def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_cycles):
 
     # +++++++++++++++++++++++params+++++++++++++++++++++++++++
 
@@ -34,6 +34,7 @@ def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data):
     # ----------------------params---------------------------
 
     plt.figure(1)
+    plt.title('after 46896 page write cycles')
 
     for i in range(4):
         ax = plt.subplot(2, 2, i+1)
@@ -54,5 +55,7 @@ def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data):
     plt.subplot(2, 2, 2)
     plt.subplots_adjust(top=0.8)
     plt.legend(bbox_to_anchor=(0.1, 1.5), loc=2, borderaxespad=0)
+
+    plt.suptitle('after ' + str(total_write_cycles) + 'page write cycles')
 
     plt.show()

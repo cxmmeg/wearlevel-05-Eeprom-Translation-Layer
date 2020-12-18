@@ -2,8 +2,8 @@ import makefigure as mf
 
 
 def main():
-    mf.makeBarEdgecachedpVsOrigindp([156.8, 1.06, 101, 584], [
-        129.62, 1.06, 136, 1356])
+    mf.makeBarEdgecachedpVsOrigindp([99.43, 1.065, 110, 584], [
+        113.06, 1.065, 128, 1356], 46896)
 
 
 if __name__ == "__main__":
