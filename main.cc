@@ -8,7 +8,7 @@ int main(void) {
 	BoardInit();
 
 	/* +++++++++++++++Tool Test++++++++++++++ */
-	GetRandomNumTest();
+	// GetRandomNumTest();
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */
