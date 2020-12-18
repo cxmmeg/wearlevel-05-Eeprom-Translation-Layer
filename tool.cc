@@ -85,21 +85,13 @@ int Tool::CountSelBitCnt(const vector< char >& bitmap) {
 }
 
 int Tool::GetRandomNum(int max) {
+
 	Time rtc_time;
-	rtc_time.GetRtcTime();
 
-	struct tm local_time;
-	local_time.tm_sec  = rtc_time.sec;
-	local_time.tm_min  = rtc_time.min;
-	local_time.tm_hour = rtc_time.hour;
-	local_time.tm_mday = rtc_time.date;
-	local_time.tm_mon  = rtc_time.month;
-	local_time.tm_year = rtc_time.year;
+	srand(( unsigned int )rtc_time.GetTimestamp());
 
-	time_t time_stamp = mktime(&local_time);
-
-	srand(( unsigned int )time_stamp);
 	return rand() % max;
+	
 }
 
 /*++++++++++++++++++++Test++++++++++++++++++++++++*/

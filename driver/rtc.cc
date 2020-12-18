@@ -29,13 +29,14 @@
  */
 
 #include "rtc.h"
-//#include "Sampler.h"
-//#include "Store.h"
 #include "common.h"
-//#include "hydrologycommand.h"
 #include "led.h"
 #include "msp430common.h"
 #include "rom.h"
+#include <ctime>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 //¸ß¼¶º¯Êý
 
@@ -1499,6 +1500,22 @@ void Time::GetRtcTime() {
 void Time::Show() {
 	LOG_INFO("%d/%d/%d %d:%d:%d \r\n\r\n", this->year, this->month, this->date, this->hour, this->min,
 		 this->sec);
+}
+
+unsigned long long Time::GetTimestamp() {
+
+	this->GetRtcTime();
+
+	struct tm local_time;
+	local_time.tm_sec  = this->sec;
+	local_time.tm_min  = this->min;
+	local_time.tm_hour = this->hour;
+	local_time.tm_mday = this->date;
+	local_time.tm_mon  = this->month;
+	local_time.tm_year = this->year;
+
+	time_t time_stamp = mktime(&local_time);
+	return ( unsigned long long )time_stamp;
 }
 
 void Timer::Start() {

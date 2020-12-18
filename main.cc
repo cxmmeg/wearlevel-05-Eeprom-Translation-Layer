@@ -8,6 +8,7 @@ int main(void) {
 	BoardInit();
 
 	/* +++++++++++++++Tool Test++++++++++++++ */
+	GetRandomNumTest();
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */
@@ -19,7 +20,8 @@ int main(void) {
 	// TestSingleHotPage(5000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
-	SampleSimulation(200);
+	// SampleSimulation(200);
+	MultiWriteTest(120);
 	/* ----------ETL Test---------- */
 
 	while (1) {

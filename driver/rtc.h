@@ -413,6 +413,7 @@ struct Time {
 		long sec_tail = t.sec + ( long )t.min * 60 + ( long )t.hour * 60 * 60;
 		return sec_head - sec_tail;
 	}
+	unsigned long long GetTimestamp();
 };
 
 class Timer {
