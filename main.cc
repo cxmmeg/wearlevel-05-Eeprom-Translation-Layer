@@ -42,11 +42,6 @@ int main(void) {
 	Max3222_Open();
 	TraceMsg("Device Open !", 1);
 
-	// Time start_time;
-	// start_time.GetRtcTime();
-	// LOG_INFO("start start_time : \r\n");
-	// start_time.Show();
-
 	// TestETLWriteByte();
 	// ETLWriteDataPage();
 	// ETLWriteAndReadTest();
@@ -55,14 +50,8 @@ int main(void) {
 	// TestSingleHotPage();
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1500);
-	SampleSimulation(200);
-
-	// Time end_time;
-	// end_time.GetRtcTime();
-	// LOG_INFO("end time : \r\n");
-	// end_time.Show();
-
-	// LOG_INFO("takes %d mins \r\n", end_time - start_time);
+	// SampleSimulation(200);
+	MultiWriteTest(120);
 
 	while (1) {
 		System_Delayms(1000);

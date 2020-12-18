@@ -153,3 +153,138 @@ test done
 
 
 **-------------SampleSimulation(200)----------------**
+
+
+**++++++++++++++++++++MultiWriteTest(120)++++++++++++++++++++++++++**
+
+[INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
+
+[INFO performance.cc:52] write speed        138 B/sec
+[INFO performance.cc:53] overhead ratio     1.064722
+[INFO performance.cc:54] standard deviation 113.061940
+[INFO performance.cc:55] RAM cost       1356 B
+[INFO performance.cc:56] total write cycles : 46896 
+[INFO performance.cc:57] ------------ performance ---------------
+
+++++++++++++++++Erase Cycle Pool Info+++++++++++++
+
+hot erase cycle pool : 
+ppn : 41 , cycle : 56 
+ppn : 43 , cycle : 56 
+ppn : 35 , cycle : 43 
+ppn : 33 , cycle : 41 
+cold erase cycle pool : 
+ppn : 4 , cycle : 98 
+ppn : 0 , cycle : 65 
+ppn : 6 , cycle : 65 
+ppn : 8 , cycle : 65 
+ppn : 37 , cycle : 65 
+ppn : 39 , cycle : 65 
+ppn : 45 , cycle : 65 
+ppn : 47 , cycle : 65 
+ppn : 49 , cycle : 65 
+ppn : 51 , cycle : 65 
+ppn : 53 , cycle : 65 
+ppn : 55 , cycle : 65 
+ppn : 57 , cycle : 65 
+ppn : 59 , cycle : 65 
+ppn : 61 , cycle : 65 
+ppn : 63 , cycle : 65 
+ppn : 65 , cycle : 65 
+ppn : 67 , cycle : 65 
+ppn : 69 , cycle : 65 
+ppn : 71 , cycle : 65 
+ppn : 73 , cycle : 65 
+ppn : 75 , cycle : 65 
+ppn : 77 , cycle : 65 
+ppn : 79 , cycle : 65 
+ppn : 81 , cycle : 65 
+ppn : 83 , cycle : 65 
+ppn : 85 , cycle : 65 
+ppn : 87 , cycle : 65 
+ppn : 89 , cycle : 65 
+ppn : 91 , cycle : 65 
+ppn : 93 , cycle : 65 
+ppn : 95 , cycle : 65 
+ppn : 97 , cycle : 65 
+ppn : 99 , cycle : 65 
+ppn : 100 , cycle : 65 
+ppn : 101 , cycle : 65 
+ppn : 103 , cycle : 65 
+ppn : 105 , cycle : 65 
+ppn : 107 , cycle : 65 
+ppn : 109 , cycle : 65 
+ppn : 111 , cycle : 65 
+ppn : 3 , cycle : 64 
+ppn : 7 , cycle : 64 
+ppn : 14 , cycle : 64 
+ppn : 18 , cycle : 64 
+ppn : 22 , cycle : 64 
+ppn : 26 , cycle : 64 
+ppn : 30 , cycle : 64 
+ppn : 34 , cycle : 64 
+ppn : 38 , cycle : 64 
+ppn : 42 , cycle : 64 
+ppn : 46 , cycle : 64 
+ppn : 50 , cycle : 64 
+ppn : 54 , cycle : 64 
+ppn : 58 , cycle : 64 
+ppn : 62 , cycle : 64 
+ppn : 66 , cycle : 64 
+ppn : 70 , cycle : 64 
+ppn : 74 , cycle : 64 
+ppn : 78 , cycle : 64 
+ppn : 82 , cycle : 64 
+ppn : 86 , cycle : 64 
+ppn : 90 , cycle : 64 
+ppn : 94 , cycle : 64 
+ppn : 98 , cycle : 64 
+ppn : 104 , cycle : 64 
+ppn : 108 , cycle : 64 
+ppn : 112 , cycle : 64 
+ppn : 1 , cycle : 63 
+ppn : 2 , cycle : 63 
+ppn : 5 , cycle : 63 
+ppn : 12 , cycle : 63 
+ppn : 16 , cycle : 63 
+ppn : 20 , cycle : 63 
+ppn : 24 , cycle : 63 
+ppn : 28 , cycle : 63 
+ppn : 32 , cycle : 63 
+ppn : 36 , cycle : 63 
+ppn : 40 , cycle : 63 
+ppn : 44 , cycle : 63 
+ppn : 48 , cycle : 63 
+ppn : 52 , cycle : 63 
+ppn : 56 , cycle : 63 
+ppn : 60 , cycle : 63 
+ppn : 64 , cycle : 63 
+ppn : 68 , cycle : 63 
+ppn : 72 , cycle : 63 
+ppn : 76 , cycle : 63 
+ppn : 80 , cycle : 63 
+ppn : 84 , cycle : 63 
+ppn : 88 , cycle : 63 
+ppn : 92 , cycle : 63 
+ppn : 96 , cycle : 63 
+ppn : 102 , cycle : 63 
+ppn : 106 , cycle : 63 
+ppn : 110 , cycle : 63 
+ppn : 9 , cycle : 45 
+ppn : 10 , cycle : 33 
+ppn : 11 , cycle : 33 
+ppn : 13 , cycle : 33 
+ppn : 15 , cycle : 33 
+ppn : 17 , cycle : 33 
+ppn : 19 , cycle : 33 
+ppn : 21 , cycle : 33 
+ppn : 23 , cycle : 33 
+ppn : 25 , cycle : 33 
+ppn : 27 , cycle : 33 
+ppn : 29 , cycle : 33 
+ppn : 31 , cycle : 33 
+---------------Erase Cycle Pool Info---------------
+
+thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109 
+
+**-------------------MultiWriteTest(120)-----------------------**

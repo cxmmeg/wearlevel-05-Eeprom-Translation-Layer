@@ -344,3 +344,52 @@ void SampleSimulation(unsigned int round) {
 	// etl->PrintPMTT();
 	printf("test done \r\n");
 }
+
+void MultiWriteTest(unsigned int round) {
+
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 1000;
+
+	char* configtable_data = "abcdefgh";
+	char* flowrate_data    = "11.222012111652";
+	char* waterlevel_data  = "10.22012111652";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	for (unsigned int r = 0; r < round; r++) {
+
+		LOG_INFO("round %u \r\n", r);
+
+		int flowrate_round = 50;
+		if (r % 2 == 0 || r % 3 == 0)
+			flowrate_round = 0;
+		for (int fround = 0; fround < flowrate_round; fround++)
+			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		if (r % 10 == 0)
+			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+	}
+
+	/* show test result */
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintEraseCyclePoolInfo();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n", etl->info_page_.thresh_hold,
+	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
+	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
+
+	// etl->PrintPMTT();
+	printf("test done \r\n");
+}
