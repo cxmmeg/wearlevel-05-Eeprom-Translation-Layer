@@ -56,6 +56,9 @@ def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_c
     plt.subplots_adjust(top=0.8)
     plt.legend(bbox_to_anchor=(0.1, 1.4), loc=2, borderaxespad=0)
 
-    plt.suptitle('after ' + str(total_write_cycles) + 'page write cycles')
+    # add main title
+    plt.suptitle('after ' + str(total_write_cycles) + ' page write cycles')
+
+    plt.style.use("ggplot")
 
     plt.show()
