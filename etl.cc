@@ -79,21 +79,14 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
 	this->dualpool_->AddPageIntoPool(start_physical_page_num, &datapage, pool_identify);
-	this->performance_statistics_.total_write_cycles++;
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
-		// printf("write logic page : %u, physical page : %u \r\n", start_logic_page_num,
-		//        start_physical_page_num);
 		memcpy(datapage.data + data_offset, src, length);
-		// printf("datapage.data : %s \r\n", datapage.data);
 
 		this->performance_statistics_.total_write_bytes += length;
 
 		this->WriteDataPage(start_physical_page_num, &datapage);
-
-		/* if triggered, exec dual-pool algorithm */
-		this->TryToExecDualPoolAlgorithm();
 
 		return true;
 	}
@@ -104,9 +97,6 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->WriteDataPage(start_physical_page_num, &datapage);
 
 	this->performance_statistics_.total_write_bytes += front_len;
-
-	/* if triggered, exec dual-pool algorithm */
-	this->TryToExecDualPoolAlgorithm();
 
 	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
@@ -176,8 +166,8 @@ void ETL::InitialPhysicalPages() {
 	assert(data);
 
 	DataPage datapage(this->info_page_.logic_page_size);
-	datapage.erase_cycle	       = 1;
-	datapage.effective_erase_cycle = 1;
+	datapage.erase_cycle	       = 0;
+	datapage.effective_erase_cycle = 0;
 	datapage.data		       = data;
 
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
