@@ -1,5 +1,8 @@
 #include "dualpool.h"
+#include "common.h"
 #include "etl.h"
+#include <cmath>
+#include <stdint.h>
 #include <stdio.h>
 
 /* public methods */
@@ -145,6 +148,40 @@ void DualPool::PrintEffectiveEraseCyclePoolInfo() {
 		printf("ppn : %u , cycle : %d \r\n", it->physical_page_num, it->cycle);
 
 	printf("----------Effective Erase Cycle Pool Info-------r\n\r\n");
+}
+
+void DualPool::PrintPoolInMatrix() {
+	int	 round = 0;
+	uint32_t page_cnt =
+		this->cold_pool_sort_by_erase_cycle_.size() + this->hot_pool_sort_by_erase_cycle_.size();
+	uint32_t matrix_len = ( uint32_t )sqrt(( float )page_cnt);
+	LOG_INFO("matrix_len : %u \r\n\r\n", matrix_len);
+
+	LOG_INFO("++++++++++++++++hot figure+++++++++++++++++++++++ \r\n\r\n");
+
+	set< PageCycle >::iterator it = this->hot_pool_sort_by_erase_cycle_.begin();
+	for (; it != this->hot_pool_sort_by_erase_cycle_.end(); it++) {
+		++round;
+		if (round % matrix_len == 1)
+			printf("[ %u, ", it->cycle);
+		else if (round % matrix_len == 0)
+			printf(" %u ],\r\n", it->cycle);
+		else
+			printf(" %u, ", it->cycle);
+	}
+
+	for (it = this->cold_pool_sort_by_erase_cycle_.begin();
+	     it != this->cold_pool_sort_by_erase_cycle_.end(); it++) {
+		++round;
+		if (round % matrix_len == 1)
+			printf("[ %u, ", it->cycle);
+		else if (round % matrix_len == 0)
+			printf(" %u ],\r\n", it->cycle);
+		else
+			printf(" %u, ", it->cycle);
+	}
+
+	LOG_INFO("-------------hot figure------------------------- \r\n\r\n");
 }
 
 /* end of public methods */

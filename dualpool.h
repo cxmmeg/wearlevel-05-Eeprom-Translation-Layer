@@ -45,6 +45,7 @@ class DualPool {
 
 	void PrintEraseCyclePoolInfo();
 	void PrintEffectiveEraseCyclePoolInfo();
+	void PrintPoolInMatrix();
 
     public:
 	int		 thresh_hold_;

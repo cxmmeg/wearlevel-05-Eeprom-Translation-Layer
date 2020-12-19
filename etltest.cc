@@ -390,6 +390,8 @@ void MultiWriteTest(unsigned int round) {
 	       etl->dualpool_->hot_pool_sort_by_erase_cycle_.size(),
 	       etl->dualpool_->cold_pool_sort_by_erase_cycle_.size());
 
+	etl->dualpool_->PrintPoolInMatrix();
+
 	// etl->PrintPMTT();
 	printf("test done \r\n");
 }
