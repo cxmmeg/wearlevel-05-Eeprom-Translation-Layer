@@ -7,9 +7,11 @@
 #include "rtc.h"
 #include "timer.h"
 #include "tool.h"
+#include <map>
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
+#include <utility>
 #include <vector>
 
 ETL* etl = NULL;
@@ -406,6 +408,29 @@ void MemoryLeakTest() {
 
 	LOG_INFO("test done , no memory leak detected\r\n\r\n");
 }
+static void
+PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(map< long long, pair< float, float > >& statics) {
+	map< long long, pair< float, float > >::iterator it = statics.begin();
+
+	LOG_INFO("relation between cycles and {overhead ratio, standard deviation} \r\n\r\n");
+
+	printf("cycles : [ ");
+	for (; it != statics.end(); it++)
+		printf("%lld, ", it->first);
+	printf(" ]\r\n");
+
+	it = statics.begin();
+	printf("overhead ratio : [ ");
+	for (; it != statics.end(); it++)
+		printf("%.2f, ", it->second.first);
+	printf(" ]\r\n");
+
+	it = statics.begin();
+	printf("standard deviation : [ ");
+	for (; it != statics.end(); it++)
+		printf("%.2f, ", it->second.second);
+	printf(" ]\r\n");
+}
 
 void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 
@@ -417,7 +442,7 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	char* flowrate_data    = "11.222012111652";
 	char* waterlevel_data  = "10.22012111652";
 
-	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )32 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
@@ -425,6 +450,8 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
 	ETLPerformance ep(etl);
 	ep.StartTimer();
+
+	map< long long, pair< float, float > > cycles_to_overheadratio_and_standarddeviation;
 
 	uint64_t cnt = span;
 	for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < cycles; r++) {
@@ -445,14 +472,24 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 
 		if (etl->performance_statistics_.total_write_cycles >= cnt) {
 			cnt += span;
-			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: %f\r\n ",
-				 etl->performance_statistics_.total_write_cycles, ep.GetOverheadRatio(),
-				 ep.GetStandardDeviation());
+			float overhead_ratio	 = ep.GetOverheadRatio();
+			float standard_deviation = ep.GetStandardDeviation();
+			cycles_to_overheadratio_and_standarddeviation[ etl->performance_statistics_
+									       .total_write_cycles ] =
+				pair< float, float >(overhead_ratio, standard_deviation);
+
+			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: "
+				 "%f\r\n ",
+				 etl->performance_statistics_.total_write_cycles, overhead_ratio,
+				 standard_deviation);
 		}
 	}
 
+	PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(
+		cycles_to_overheadratio_and_standarddeviation);
+
 	/* show test result */
-	ep.PrintInfo();
+	// ep.PrintInfo();
 
 	// etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
