@@ -339,7 +339,7 @@ void MultiWriteTest(uint64_t cycles) {
 	char* flowrate_data    = "11.222012111652";
 	char* waterlevel_data  = "10.22012111652";
 
-	const unsigned long long ROM_SIZE	 = ( unsigned long long )16 * ( unsigned long long )1024;
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )32 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 

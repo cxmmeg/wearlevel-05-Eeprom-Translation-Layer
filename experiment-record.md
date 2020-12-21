@@ -340,4 +340,18 @@ thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109
 
 **+++++++++++++++++relation btw write cycles and performance+++++++++++++++++**
 
+
+[INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
+
+ROM_SIZE	 = 32KB
+LOGIC_PAGE_SIZE = 10;
+THRESH_HOLD	 = 30;
+
+[INFO performance.cc:52] write speed        72 B/sec
+[INFO performance.cc:53] overhead ratio     1.066078
+[INFO performance.cc:54] standard deviation 530.181100
+[INFO performance.cc:55] RAM cost       2020 B
+[INFO performance.cc:56] total write cycles : 10079 
+
+[INFO performance.cc:57] ------------ performance ---------------
 **-----------------relation btw write cycles and performance-----------------**
