@@ -17,7 +17,7 @@ def autolabel(rects, ax):
                     ha='center', va='bottom')
 
 
-def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_cycles):
+def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_cycles, save):
 
     # +++++++++++++++++++++++params+++++++++++++++++++++++++++
 
@@ -36,7 +36,7 @@ def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_c
 
     # ----------------------params---------------------------
 
-    plt.figure(1, dpi=200)
+    plt.figure(1, dpi=600)
     plt.title('after 46896 page write cycles')
 
     for i in range(4):
@@ -64,12 +64,13 @@ def makeBarEdgecachedpVsOrigindp(edgecache_dp_data, orgin_dp_data, total_write_c
 
     plt.style.use("ggplot")
 
-#     plt.show()
+    if save:
+        plt.savefig('edgecacheVSorgin.png')
+    else:
+        plt.show()
 
-    plt.savefig('edgecacheVSorgin.png')
 
-
-def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, without_dp_data, total_write_cycles):
+def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, without_dp_data, total_write_cycles, save):
 
     # +++++++++++++++++++++++params+++++++++++++++++++++++++++
 
@@ -88,7 +89,7 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
 
     # ----------------------params---------------------------
 
-    plt.figure(1, dpi=200)
+    plt.figure(1, dpi=600)
     plt.title('after 46896 page write cycles')
 
     for i in range(4):
@@ -120,9 +121,10 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
 
     plt.style.use("ggplot")
 
-#     plt.show()
-
-    plt.savefig('edgecacheVSorginVSwithoutdualpool.png')
+    if save:
+        plt.savefig('edgecacheVSorginVSwithoutdualpool.png')
+    else:
+        plt.show()
 
 
 def drawHot(xlen, ylen, data, total_write_cycles, savename, save):
