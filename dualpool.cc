@@ -2,6 +2,7 @@
 #include "common.h"
 #include "etl.h"
 #include "tool.h"
+#include <cmath>
 #include <stdint.h>
 #include <stdio.h>
 #include <vector>
@@ -32,6 +33,17 @@ DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hol
 		LOG_ERROR("out of memory ! new failed \r\n\r\n");
 		Loop();
 	}
+}
+
+DualPool::~DualPool() {
+	Free(this->hot_ec_head_cache_);
+	Free(this->hot_ec_tail_cache_);
+	Free(this->cold_ec_tail_cache_);
+	Free(this->cold_eec_head_cache_);
+	Free(this->hot_eec_tail_cache_);
+
+	vector< char >().swap(this->hot_pool_);
+	vector< char >().swap(this->cold_pool_);
 }
 
 long long DualPool::GetCacheSize() {
@@ -203,6 +215,24 @@ void DualPool::PrintPoolInfo(PoolIdentify pool_identify) {
 	}
 }
 
+void DualPool::PrintPoolInMatrix() {
+	uint32_t page_cnt   = this->etl_->GetInfoPage().total_page_count;
+	uint32_t matrix_len = ( uint32_t )sqrt(( float )page_cnt);
+	LOG_INFO("matrix_len : %u \r\n\r\n", matrix_len);
+
+	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
+
+	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
+		this->etl_->ReadDataPage(ppn, &datapage_temp);
+		if (ppn % matrix_len == 1)
+			printf("[ %u, ", datapage_temp.erase_cycle);
+		else if (ppn % matrix_len == 0)
+			printf(" %u ],\r\n", datapage_temp.erase_cycle);
+		else
+			printf(" %u, ", datapage_temp.erase_cycle);
+	}
+}
+
 bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num))
@@ -317,6 +347,8 @@ void DualPool::PrintPool() {
 
 	printf("cold pool : \r\n");
 	PrintPoolInfo(COLDPOOL);
+
+	// PrintPoolInMatrix();
 
 	printf("---------------Erase Cycle Pool Info---------------\r\n\r\n");
 }

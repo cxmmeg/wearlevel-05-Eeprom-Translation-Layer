@@ -16,6 +16,7 @@ class DualPool {
     public:
 	DualPool(unsigned int thresh_hold);
 	DualPool(unsigned int thresh_hold, ETL* etl);
+        ~DualPool();
 	bool	     IsDirtySwapTriggered();
 	bool	     IsColdPoolResizeTriggered();
 	bool	     IsHotPoolResizeTriggered();
@@ -44,6 +45,7 @@ class DualPool {
 	PageCycle GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_identify, bool big,
 				  bool sort_by_erasecycle);
 	void	  PrintPoolInfo(PoolIdentify pool_identify);
+	void	  PrintPoolInMatrix();
 
 	/* 每次调用etl::Write的时候都要调用以下5个接口，即时更新 */
 	bool			TryToUpdateHotECTail(PageCycle* page_to_update);

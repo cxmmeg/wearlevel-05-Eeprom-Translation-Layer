@@ -53,6 +53,6 @@ void ETLPerformance::PrintInfo() {
 	LOG_INFO("overhead ratio\t\t%f\r\n", this->GetOverheadRatio());
 	LOG_INFO("standard deviation\t%f\r\n", this->GetStandardDeviation());
 	LOG_INFO("RAM cost\t\t%d B\r\n", this->GetRAMCost());
-	LOG_INFO("total write cycles : %lld \r\n", this->etl_->performance_statistics_.total_write_bytes);
+	LOG_INFO("total write cycles : %lld \r\n", this->etl_->performance_statistics_.total_write_cycles);
 	LOG_INFO("------------ performance ---------------\r\n\r\n");
 }

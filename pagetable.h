@@ -13,6 +13,7 @@ class ETL;
 class PageTable {
     public:
 	PageTable(ETL* etl);
+	~PageTable();
 	int	  GetPPN(int lpn);
 	void	  Set(int lpn, int ppn);
 	long long GetCacheSize();

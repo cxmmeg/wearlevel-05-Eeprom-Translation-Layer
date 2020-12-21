@@ -19,6 +19,11 @@ ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_cap
 	this->InitPerformanceStatistics();
 }
 
+ETL::~ETL() {
+	Free(this->dualpool_);
+	Free(this->pagetable_);
+}
+
 bool ETL::NeedFormat() {
 	struct InfoPage infopage = this->GetInfoPage();
 	return !(infopage.identify[ 0 ] == 'E' && infopage.identify[ 1 ] == 'T'
@@ -157,8 +162,8 @@ void ETL::InitialPhysicalPages() {
 	assert(data);
 
 	DataPage datapage(this->info_page_.logic_page_size);
-	datapage.erase_cycle	       = 1;
-	datapage.effective_erase_cycle = 1;
+	datapage.erase_cycle	       = 0;
+	datapage.effective_erase_cycle = 0;
 	datapage.data		       = data;
 
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
@@ -183,19 +188,14 @@ void ETL::InitialDualpool() {
 		Loop();
 	}
 
-	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
-	if (!datapage) {
-		LOG_ERROR("out of memory ! new failed \r\n\r\n");
-		Loop();
-	}
-
+	DataPage datapage(this->info_page_.logic_page_size);
 	for (unsigned int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
-		this->ReadDataPage(physical_page_num, datapage);
-		if (datapage->hot == 1)
-			this->dualpool_->AddPageIntoPool(physical_page_num, datapage, HOTPOOL);
+		this->ReadDataPage(physical_page_num, &datapage);
+		if (datapage.hot == 1)
+			this->dualpool_->AddPageIntoPool(physical_page_num, &datapage, HOTPOOL);
 		else
-			this->dualpool_->AddPageIntoPool(physical_page_num, datapage, COLDPOOL);
+			this->dualpool_->AddPageIntoPool(physical_page_num, &datapage, COLDPOOL);
 	}
 
 	/* should initial TryToUpdatePoolBorder here! */
@@ -234,7 +234,9 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 		( unsigned long long )datapage_size * ( unsigned long long )physical_page_num;
 
 	this->RomWriteBytes(physical_addr, buff, datapage_size);
-	Free(buff);
+
+	free(buff);
+	buff = NULL;
 
 	ClearWatchdog();
 
@@ -271,7 +273,8 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 
 	memcpy(( char* )datapage->data, buff + offest, this->info_page_.logic_page_size);
 
-	Free(buff);
+	free(buff);
+	buff = NULL;
 
 	ClearWatchdog();
 
@@ -289,12 +292,11 @@ void ETL::ClearDataPage(DataPage* datapage) {
 }
 
 void ETL::InitLpnToPpnTable() {
-	DataPage* datapage = new DataPage(this->info_page_.logic_page_size);
+	DataPage datapage(this->info_page_.logic_page_size);
 	for (unsigned int i = 0; i < this->info_page_.total_page_count; ++i) {
-		this->ReadDataPage(i, datapage);
-		this->pagetable_->Set(datapage->logic_page_num, i);
+		this->ReadDataPage(i, &datapage);
+		this->pagetable_->Set(datapage.logic_page_num, i);
 	}
-	delete datapage;
 }
 
 void ETL::PrintPMTT() {
@@ -440,7 +442,14 @@ void ETL::HotPoolResize() {
 void ETL::InitPerformanceStatistics() {
 	this->performance_statistics_.RAM_cost = 0;
 	this->performance_statistics_.RAM_cost += this->dualpool_->GetCacheSize();
+	LOG_INFO("dualpool ram cost : %d \r\n", this->dualpool_->GetCacheSize());
 	this->performance_statistics_.RAM_cost += this->pagetable_->GetCacheSize();
+	LOG_INFO("pagetable ram cost : %d \r\n", this->pagetable_->GetCacheSize());
+
+	this->performance_statistics_.actual_total_write_cycles = 0;
+	this->performance_statistics_.time_cost_in_sec		= 0;
+	this->performance_statistics_.total_write_bytes		= 0;
+	this->performance_statistics_.total_write_cycles	= 0;
 }
 
 /* end of private methods */

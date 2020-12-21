@@ -1,6 +1,7 @@
 #ifndef DATAPAGE_H
 #define DATAPAGE_H
 
+#include "common.h"
 #include <assert.h>
 #include <stdlib.h>
 
@@ -18,8 +19,8 @@ struct DataPage {
 	}
 	// DataPage() = delete;
 	~DataPage() {
-		if (this->data)
-			free(this->data);
+		free(this->data);
+		this->data = NULL;
 	}
 
 	bool operator==(const DataPage& datapage) const {

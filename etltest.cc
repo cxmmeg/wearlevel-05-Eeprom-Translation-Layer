@@ -71,6 +71,8 @@ void ETLWriteDataPage() {
 	char* read_buff = ( char* )calloc(10, sizeof(char));
 	etl->Read(0, read_buff, 7);
 	printf("read_buff : %s \r\n", read_buff);
+
+	Free(read_buff);
 }
 
 static void ETLWriteAndRead(char* write_buff, unsigned int write_len, unsigned long long addr) {
@@ -79,6 +81,7 @@ static void ETLWriteAndRead(char* write_buff, unsigned int write_len, unsigned l
 	etl->Write(addr, write_buff, write_len);
 	etl->Read(addr, read_buff, write_len);
 	printf("read_buff : %s \r\n", read_buff);
+	Free(read_buff);
 }
 
 void ETLWriteAndReadTest() {
@@ -266,6 +269,7 @@ void TestHotPageToColdPage(unsigned int write_cycle) {
 	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	// etl->PrintPMTT();
 	printf("test done \r\n");
+	Free(readbuf);
 }
 
 static int GetRandomFlowrateRound() {
@@ -325,7 +329,85 @@ void SampleSimulation(unsigned int round) {
 	printf("test done \r\n");
 }
 
-void MultiWriteTest(unsigned int round) {
+void MultiWriteTest(uint64_t cycles) {
+
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 1000;
+
+	char* configtable_data = "abcdefgh";
+	char* flowrate_data    = "11.222012111652";
+	char* waterlevel_data  = "10.22012111652";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )16 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < cycles; r++) {
+
+		LOG_INFO("curr write cycles %lld \r\n", etl->performance_statistics_.total_write_cycles);
+
+		int flowrate_round = 50;
+		if (r % 2 == 0 || r % 3 == 0)
+			flowrate_round = 0;
+		for (int fround = 0; fround < flowrate_round; fround++)
+			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		if (r % 10 == 0)
+			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+
+		// if (etl->performance_statistics_.total_write_cycles >= cnt) {
+		// 	cnt += span;
+		// 	LOG_INFO("write cycles %lld ,write speed\t\t%lld B/sec, overhead ratio : %f
+		// \r\n", 		 etl->performance_statistics_.total_write_cycles,
+		// ep.GetWriteSpeed(), 		 ep.GetOverheadRatio());
+		// }
+	}
+
+	/* show test result */
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	// etl->PrintPMTT();
+	printf("test done \r\n");
+}
+
+void MemoryLeakTest() {
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 1000;
+
+	char* configtable_data = "abcdefgh";
+	char* flowrate_data    = "11.222012111652";
+	char* waterlevel_data  = "10.22012111652";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	for (int i = 0; i < 20; i++) {
+		etl = new ETL(ROM_SIZE);
+		LOG_INFO("round %d \r\n\r\n", i);
+		etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+		Free(etl);
+	}
+
+	LOG_INFO("test done , no memory leak detected\r\n\r\n");
+}
+
+void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 
 	unsigned long long configtable_addr = 10;
 	unsigned long long flowrate_addr    = 100;
@@ -340,35 +422,43 @@ void MultiWriteTest(unsigned int round) {
 	const unsigned int	 THRESH_HOLD	 = 30;
 
 	etl = new ETL(ROM_SIZE);
-	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
 
-	ETLPerformance ep(etl);
-	ep.StartTimer();
+	for (uint64_t curr_cycles = span; curr_cycles < cycles; curr_cycles += span) {
+		etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+		ETLPerformance ep(etl);
+		ep.StartTimer();
+		for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < curr_cycles; r++) {
 
-	for (unsigned int r = 0; r < round; r++) {
+			LOG_INFO("curr write cycles %lld \r\n",
+				 etl->performance_statistics_.total_write_cycles);
 
-		LOG_INFO("round %u \r\n", r);
+			int flowrate_round = 50;
+			if (r % 2 == 0 || r % 3 == 0)
+				flowrate_round = 0;
+			for (int fround = 0; fround < flowrate_round; fround++)
+				etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
 
-		int flowrate_round = 50;
-		if (r % 2 == 0 || r % 3 == 0)
-			flowrate_round = 0;
-		for (int fround = 0; fround < flowrate_round; fround++)
-			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+			for (int wround = 0; wround < 10; wround++)
+				etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
 
-		for (int wround = 0; wround < 10; wround++)
-			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+			if (r % 10 == 0)
+				etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
 
-		if (r % 10 == 0)
-			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+			// if (etl->performance_statistics_.total_write_cycles >= cnt) {
+			// 	cnt += span;
+			// 	LOG_INFO("write cycles %lld ,write speed\t\t%lld B/sec, overhead ratio : %f
+			// \r\n", 		 etl->performance_statistics_.total_write_cycles,
+			// ep.GetWriteSpeed(), 		 ep.GetOverheadRatio());
+			// }
+		}
+
+		/* show test result */
+		ep.PrintInfo();
+
+		// etl->dualpool_->PrintPool();
+		printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+		       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+		       etl->dualpool_->GetPoolSize(COLDPOOL));
+		// etl->PrintPMTT();
 	}
-
-	/* show test result */
-	ep.PrintInfo();
-
-	etl->dualpool_->PrintPool();
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
-	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
-	       etl->dualpool_->GetPoolSize(COLDPOOL));
-	// etl->PrintPMTT();
-	printf("test done \r\n");
 }

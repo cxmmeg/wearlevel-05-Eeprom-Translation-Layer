@@ -187,11 +187,17 @@ thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109
 
 **++++++++++++++++++++++++MultiWriteTest(120)+++++++++++++++++++++++++**
 
+const unsigned long long ROM_SIZE	 = 2KB
+const unsigned char	 LOGIC_PAGE_SIZE = 10;
+const unsigned int	 THRESH_HOLD	 = 30;
+
 [INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
 [INFO performance.cc:52] write speed        110 B/sec
 [INFO performance.cc:53] overhead ratio     1.065034
 [INFO performance.cc:54] standard deviation 99.433400
 [INFO performance.cc:55] RAM cost       584 B
+[INFO etl.cc:443] dualpool ram cost : 440 
+[INFO etl.cc:445] pagetable ram cost : 132 
 [INFO performance.cc:56] total write cycles : 46896 
 [INFO performance.cc:57] ------------ performance ---------------
 
@@ -316,5 +322,22 @@ ppn : 112    erase cycle : 65    effective erase cycle : 0
 
 thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109 
 
+[ 63,  63,  64,  62,  33,  62,  64,  62,  64,  64 ],
+[ 34,  62,  64,  62,  64,  62,  64,  62,  64,  62 ],
+[ 64,  62,  64,  62,  64,  62,  64,  62,  64,  62 ],
+[ 64,  62,  64,  62,  64,  62,  64,  62,  64,  62 ],
+[ 64,  62,  64,  62,  64,  62,  64,  62,  64,  62 ],
+[ 64,  62,  64,  62,  64,  62,  64,  62,  64,  62 ],
+[ 64,  62,  64,  62,  64,  62,  64,  62,  64,  62 ],
+[ 64,  62,  64,  62,  64,  62,  60,  62,  59,  62 ],
+[ 64,  62,  64,  62,  50,  62,  48,  62,  32,  62 ],
+[ 32,  62,  32,  62,  32,  62,  32,  62,  32,  32 ],
+[ 32,  62,  32,  64,  43,  64,  62,  62,  63,  64 ],
+
 
 **----------------------MultiWriteTest(120)-------------------------**
+
+
+**+++++++++++++++++relation btw write cycles and performance+++++++++++++++++**
+
+**-----------------relation btw write cycles and performance-----------------**

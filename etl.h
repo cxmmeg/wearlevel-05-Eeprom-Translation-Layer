@@ -41,6 +41,7 @@
 class ETL {
     public:
 	ETL(unsigned long long physical_capacity);
+	~ETL();
 	bool	 NeedFormat();
 	void	 Format(unsigned char logic_page_size, unsigned int thresh_hold);
 	void	 SetInfoPage(InfoPage infopage);
