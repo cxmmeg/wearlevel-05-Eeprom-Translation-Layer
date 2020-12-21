@@ -21,8 +21,8 @@ int main(void) {
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
-	MultiWriteTest(10000);
-	// RelationBtwWritecyclsAndStandarddeviation(1000, 100);
+	// MultiWriteTest(40000);
+	RelationBtwWritecyclsAndStandarddeviation(1000, 100);
 	// MemoryLeakTest();
 	/* ----------ETL Test---------- */
 

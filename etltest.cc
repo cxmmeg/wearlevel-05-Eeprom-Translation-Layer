@@ -422,43 +422,41 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	const unsigned int	 THRESH_HOLD	 = 30;
 
 	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	ETLPerformance ep(etl);
+	ep.StartTimer();
 
-	for (uint64_t curr_cycles = span; curr_cycles < cycles; curr_cycles += span) {
-		etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
-		ETLPerformance ep(etl);
-		ep.StartTimer();
-		for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < curr_cycles; r++) {
+	uint64_t cnt = span;
+	for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < cycles; r++) {
 
-			LOG_INFO("curr write cycles %lld \r\n",
-				 etl->performance_statistics_.total_write_cycles);
+		LOG_INFO("curr write cycles %lld \r\n", etl->performance_statistics_.total_write_cycles);
 
-			int flowrate_round = 50;
-			if (r % 2 == 0 || r % 3 == 0)
-				flowrate_round = 0;
-			for (int fround = 0; fround < flowrate_round; fround++)
-				etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+		int flowrate_round = 50;
+		if (r % 2 == 0 || r % 3 == 0)
+			flowrate_round = 0;
+		for (int fround = 0; fround < flowrate_round; fround++)
+			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
 
-			for (int wround = 0; wround < 10; wround++)
-				etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+		for (int wround = 0; wround < 10; wround++)
+			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
 
-			if (r % 10 == 0)
-				etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+		if (r % 10 == 0)
+			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
 
-			// if (etl->performance_statistics_.total_write_cycles >= cnt) {
-			// 	cnt += span;
-			// 	LOG_INFO("write cycles %lld ,write speed\t\t%lld B/sec, overhead ratio : %f
-			// \r\n", 		 etl->performance_statistics_.total_write_cycles,
-			// ep.GetWriteSpeed(), 		 ep.GetOverheadRatio());
-			// }
+		if (etl->performance_statistics_.total_write_cycles >= cnt) {
+			cnt += span;
+			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: %f\r\n ",
+				 etl->performance_statistics_.total_write_cycles, ep.GetOverheadRatio(),
+				 ep.GetStandardDeviation());
 		}
-
-		/* show test result */
-		ep.PrintInfo();
-
-		// etl->dualpool_->PrintPool();
-		printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
-		       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
-		       etl->dualpool_->GetPoolSize(COLDPOOL));
-		// etl->PrintPMTT();
 	}
+
+	/* show test result */
+	ep.PrintInfo();
+
+	// etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	// etl->PrintPMTT();
 }
