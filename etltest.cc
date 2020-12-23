@@ -422,7 +422,7 @@ PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(map< long long, pair<
 	it = statics.begin();
 	printf("overhead ratio : [ ");
 	for (; it != statics.end(); it++)
-		printf("%.2f, ", it->second.first);
+		printf("%.4f, ", it->second.first);
 	printf(" ]\r\n");
 
 	it = statics.begin();
@@ -442,7 +442,7 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	char* flowrate_data    = "11.222012111652";
 	char* waterlevel_data  = "10.22012111652";
 
-	const unsigned long long ROM_SIZE	 = ( unsigned long long )32 * ( unsigned long long )1024;
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )16 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 

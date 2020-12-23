@@ -340,46 +340,29 @@ thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109
 
 **+++++++++++++++++relation btw write cycles and performance+++++++++++++++++**
 
-
-[INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
-
 ROM_SIZE	 = 32KB
 LOGIC_PAGE_SIZE = 10;
 THRESH_HOLD	 = 30;
 
-[INFO performance.cc:52] write speed        72 B/sec
-[INFO performance.cc:53] overhead ratio     1.066078
-[INFO performance.cc:54] standard deviation 530.181100
-[INFO performance.cc:55] RAM cost       2020 B
-[INFO performance.cc:56] total write cycles : 10079 
 
-[INFO performance.cc:57] ------------ performance ---------------
+cycles : [ 5010, 10079, 15069, 20018, 25007, 30017, 35086, 40075, 45025, 50014, 55003, 60093, 65082, 70031, 75021, 80010, 85100, 90089, 95038, 100028,  ]
+
+overhead ratio : [ 1.07, 1.07, 1.07, 1.07, 1.07, 1.06, 1.06, 1.06, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.04, 1.05, 1.05, 1.05, 1.05,  ]
+
+standard deviation : [ 394.60, 530.18, 610.65, 657.72, 680.27, 738.77, 820.13, 875.46, 911.38, 932.04, 935.26, 923.26, 894.09, 847.24, 779.71, 685.86, 641.51, 620.99, 573.66, 491.81,  ]
 
 
-[INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
 
-ROM_SIZE	 = 32KB
+ROM_SIZE	 = 16KB
 LOGIC_PAGE_SIZE = 10;
 THRESH_HOLD	 = 30;
 
-[INFO performance.cc:52] write speed        71 B/sec
-[INFO performance.cc:53] overhead ratio     1.066540
-[INFO performance.cc:54] standard deviation 657.724100
-[INFO performance.cc:55] RAM cost       2020 B
-[INFO performance.cc:56] total write cycles : 20018 
-[INFO performance.cc:57] ------------ performance ---------------
+cycles : [ 5010, 10079, 15069, 20018, 25007, 30017, 35086, 40075, 45025, 50014, 55003, 60093, 65082, 70031, 75021, 80010, 85100, 90089, 95038, 100028,  ]
 
-[INFO performance.cc:51] ++++++++++++ performance +++++++++++++++
+overhead ratio : [ 1.0659, 1.0661, 1.0630, 1.0557, 1.0512, 1.0483, 1.0461, 1.0445, 1.0463, 1.0482, 1.0498, 1.0512, 1.0524, 1.0534, 1.0543, 1.0551, 1.0556, 1.0562, 1.0568, 1.0572,  ]
 
-ROM_SIZE	 = 32KB
-LOGIC_PAGE_SIZE = 10;
-THRESH_HOLD	 = 30;
+standard deviation : [ 372.99, 465.47, 525.04, 619.47, 660.74, 654.74, 600.15, 483.61, 439.92, 348.80, 118.30, 372.71, 445.54, 451.59, 400.79, 235.19, 302.54, 422.92, 451.81, 432.47,  ]
 
-[INFO performance.cc:52] write speed        72 B/sec
-[INFO performance.cc:53] overhead ratio     1.063431
-[INFO performance.cc:54] standard deviation 738.766550
-[INFO performance.cc:55] RAM cost       2020 B
-[INFO performance.cc:56] total write cycles : 30017 
-[INFO performance.cc:57] ------------ performance ---------------
+
 
 **-----------------relation btw write cycles and performance-----------------**
