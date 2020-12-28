@@ -170,8 +170,9 @@ def drawPlotRelationBtwWritecyclesAndOverheadRationAndStandardDeviation(cyclesDa
     plt.show()
 
 
-def drawPlotByStandardDeviation(cycleData, StandardDeviationData0, StandardDeviationData1, StandardDeviationData2, cycles):
+def drawPlotByStandardDeviation(cycleData, StandardDeviationData0, StandardDeviationData1, StandardDeviationData2, cycles, saveName):
 
+    plt.figure(dpi=600)
     l1 = plt.plot(cycleData, StandardDeviationData0,
                   'ro-', label='thresh hold = 5')
     l2 = plt.plot(cycleData, StandardDeviationData1,
@@ -186,4 +187,34 @@ def drawPlotByStandardDeviation(cycleData, StandardDeviationData0, StandardDevia
     plt.xlabel('page write cycles')
     plt.ylabel('standard deviation')
     plt.legend()
-    plt.show()
+    plt.axis([0, 210000, 0, 2500])
+
+    if len(saveName) != 0:
+        plt.savefig(saveName)
+    else:
+        plt.show()
+
+
+def drawPlotByOverheadratio(cycleData, ratio0, ratio1, ratio2, cycles, saveName):
+
+    plt.figure(dpi=600)
+    l1 = plt.plot(cycleData, ratio0,
+                  'ro-', label='thresh hold = 5')
+    l2 = plt.plot(cycleData, ratio1,
+                  'g+-', label='thresh hold = 30')
+    l3 = plt.plot(cycleData, ratio2,
+                  'b^-', label='thresh hold = 100')
+    plt.plot(cycleData, ratio0, 'ro-',
+             cycleData, ratio1, 'g+-',
+             cycleData, ratio2, 'b^-'
+             )
+#     plt.title('after ' + str(cycles) + ' cycles page write')
+    plt.xlabel('page write cycles')
+    plt.ylabel('overhead ratio')
+    plt.legend()
+    plt.axis([0, 210000, 1, 1.5])
+
+    if len(saveName) != 0:
+        plt.savefig(saveName)
+    else:
+        plt.show()
