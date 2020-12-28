@@ -134,6 +134,10 @@ bool ETL::Read(unsigned long long addr, char* dest, int length) {
 	return this->Read(next_page_start_addr, dest + front_len, length - front_len);
 }
 
+float ETL::GetHitRate() {
+	return this->pagetable_->GetHitRate();
+}
+
 /* end of public methods */
 
 /* private methods */

@@ -17,12 +17,17 @@ class PageTable {
 	int	  GetPPN(int lpn);
 	void	  Set(int lpn, int ppn);
 	long long GetCacheSize();
+	float	  GetHitRate();
 
     private:
 	int	 cache_capacity_;
 	float	 main_cache_ratio;
 	DualLRU* cache_;
 	ETL*	 etl_;
+
+	//统计cache命中率
+	float req_cnt_;
+	float dismiss_cnt_;
 };
 
 /*++++++++++++++++Test++++++++++++++++*/

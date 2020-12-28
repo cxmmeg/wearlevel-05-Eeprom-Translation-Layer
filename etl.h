@@ -51,6 +51,7 @@ class ETL {
 	bool	 WriteDataPage(int physical_page_num, DataPage* datapage);
 	bool	 ReadDataPage(int physical_page_num, DataPage* datapage);
 	void	 PrintPMTT();
+	float	 GetHitRate();
 
     public:
 	static const int      MAX_CACHE_SIZE = 1024;

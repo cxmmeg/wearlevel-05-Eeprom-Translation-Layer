@@ -6,7 +6,7 @@
  * cache_capacity : page_cnt * 0.1
  * main_cache_ratio : 0.7
  */
-PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7) {
+PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7), req_cnt_(0), dismiss_cnt_(0) {
 
 	this->cache_capacity_ = this->etl_->GetInfoPage().total_page_count * 0.1;
 	if (this->cache_capacity_ * PAGETABLE_ITEMSIZE > ETL::MAX_CACHE_SIZE) {
@@ -26,10 +26,13 @@ long long PageTable::GetCacheSize() {
 }
 
 int PageTable::GetPPN(int lpn) {
+	this->req_cnt_++;
+
 	int ppn = this->cache_->Get(lpn);
 	if (ppn != -1)
 		return ppn;
 
+	this->dismiss_cnt_++;
 	DataPage datapage(this->etl_->GetInfoPage().logic_page_size);
 	for (ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
 		this->etl_->ReadDataPage(ppn, &datapage);
@@ -48,6 +51,10 @@ int PageTable::GetPPN(int lpn) {
 
 void PageTable::Set(int lpn, int ppn) {
 	this->cache_->PutIntoMainCache(lpn, ppn);
+}
+
+float PageTable::GetHitRate() {
+	return (this->req_cnt_ - this->dismiss_cnt_) / this->req_cnt_;
 }
 
 /*++++++++++++++++Test++++++++++++++++*/
