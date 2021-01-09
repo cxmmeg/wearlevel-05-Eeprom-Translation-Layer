@@ -275,7 +275,7 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 
 bool DualPool::TryToUpdateHotECHead(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num)
-	    || page_to_update->cycle <= this->hot_ec_head_cache_->GetTop().cycle)
+	    || page_to_update->cycle <= this->hot_ec_head_cache_->GetBottom().cycle)
 		return false;
 
 	this->hot_ec_head_cache_->TryToPushItem(*page_to_update);
@@ -284,7 +284,7 @@ bool DualPool::TryToUpdateHotECHead(PageCycle* page_to_update) {
 
 bool DualPool::TryToUpdateColdEECHead(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->cold_pool_, page_to_update->physical_page_num)
-	    || page_to_update->cycle <= this->cold_eec_head_cache_->GetTop().cycle)
+	    || page_to_update->cycle <= this->cold_eec_head_cache_->GetBottom().cycle)
 		return false;
 
 	this->cold_eec_head_cache_->TryToPushItem(*page_to_update);

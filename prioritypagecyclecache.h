@@ -38,6 +38,7 @@ class PriorityPageCycleCache {
 	bool	  TryToPushItem(PageCycle pc);
 	PageCycle PopTop();
 	PageCycle GetTop();
+	PageCycle GetBottom();
 	PageCycle GetSecondTop();
 	void	  PopItem(PageCycle pc);
 	bool	  IsEmpty();

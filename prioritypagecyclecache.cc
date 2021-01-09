@@ -74,6 +74,10 @@ PageCycle PriorityPageCycleCache::GetTop() {
 	return *(this->cache_.data.begin());
 }
 
+PageCycle PriorityPageCycleCache::GetBottom() {
+	return *(this->cache_.data.rbegin());
+}
+
 PageCycle PriorityPageCycleCache::GetSecondTop() {
 	list< PageCycle >::iterator it = this->cache_.data.begin();
 	it++;
@@ -81,8 +85,8 @@ PageCycle PriorityPageCycleCache::GetSecondTop() {
 }
 void PriorityPageCycleCache::PopItem(PageCycle pc) {
 	size_t i = 0;
-	for (list< PageCycle >::iterator it = this->cache_.data.begin() ;
-	     i < this->cache_.data.size(); it++,i++) {
+	for (list< PageCycle >::iterator it = this->cache_.data.begin(); i < this->cache_.data.size();
+	     it++, i++) {
 		if (it->physical_page_num == pc.physical_page_num) {
 			this->cache_.data.erase(it);
 			return;

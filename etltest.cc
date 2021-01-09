@@ -160,7 +160,7 @@ void ETLFullWriteAndReadFullTest() {
 }
 
 void TestSingleHotPage(unsigned int write_cycle) {
-	etl = new ETL(1024 * 5);
+	etl = new ETL(512);
 	etl->Format(8, 20);
 	etl->dualpool_->PrintPool();
 
