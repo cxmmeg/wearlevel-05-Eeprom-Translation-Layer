@@ -99,7 +99,7 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
         rects2 = plt.bar(x + width/2, {orgin_dp_data[i]},
                          width=width, label='origin dualpool', color='#FF9900')
         rects3 = plt.bar(x + width*3/2, {without_dp_data[i]},
-                         width=width, label='without dualpool', color='#C0C0C0')
+                         width=width, label='without wear leveling', color='#C0C0C0')
         autolabel(rects1, ax)
         autolabel(rects2, ax)
         autolabel(rects3, ax)
@@ -216,5 +216,47 @@ def drawPlotByOverheadratio(cycleData, ratio0, ratio1, ratio2, cycles, saveName)
 
     if len(saveName) != 0:
         plt.savefig(saveName)
+    else:
+        plt.show()
+
+
+def makeBarRAMCost(ram_cost, save):
+
+    # +++++++++++++++++++++++params+++++++++++++++++++++++++++
+
+    x = np.arange(1)  # the label locations
+    width = 0.4  # the width of the bars
+
+    subplots_padding = 0.4
+
+    # ----------------------params---------------------------
+
+    plt.figure(1, dpi=600)
+    plt.title('Write Speed')
+
+    ax = plt.subplot(1, 1, 1)
+    rects1 = plt.bar(x - width/2, {ram_cost[0]},
+                     width=width, label='thresh hold = 5', color='#0099FF')
+    rects2 = plt.bar(x + width/2, {ram_cost[1]},
+                     width=width, label='thresh hold = 30', color='#FF9900')
+    rects3 = plt.bar(x + width*3/2, {ram_cost[2]},
+                     width=width, label='thresh hold = 100', color='#C0C0C0')
+    autolabel(rects1, ax)
+    autolabel(rects2, ax)
+    autolabel(rects3, ax)
+    plt.xlim(-0.7, 1.1)
+    plt.ylim(
+        top=max(ram_cost[0], ram_cost[1], ram_cost[2])*1.5)
+    ax.set_xticks([])
+#     ax.set_xticklabels([titles[i]])
+    plt.subplots_adjust(wspace=subplots_padding, hspace=subplots_padding)
+    ax.set_ylabel('Byte/sec', labelpad=1.5)
+
+    plt.legend()
+
+    plt.style.use("ggplot")
+
+    if save:
+        plt.savefig('writespeed.png')
     else:
         plt.show()

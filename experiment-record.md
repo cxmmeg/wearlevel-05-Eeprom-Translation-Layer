@@ -340,9 +340,12 @@ thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109
 
 **+++++++++++++++++relation btw write cycles and performance+++++++++++++++++**
 
+RAM: 1000B(dualpool) + 1020B(pagetable)
+
 ROM_SIZE	 = 16KB
 LOGIC_PAGE_SIZE = 10;
 THRESH_HOLD	 = 5;
+write speed = 18B/sec
 
 cycles : [ 5010, 10079, 15069, 20018, 25007, 30017, 35086, 40075, 45025, 50014, 55003, 60093, 65082, 70031, 75021, 80010, 85100, 90089, 95038, 100028, 105017, 110106, 115096, 120045, 125034, 130004, 135113, 140103, 145052, 150041, 155011, 160000, 165109, 170059, 175048, 180017, 185007, 190116, 195065, 200055 ]
 
@@ -354,6 +357,7 @@ thresh_hold : 5 ,hotpool size : 5 , coldpool size : 904
 ROM_SIZE	 = 16KB
 LOGIC_PAGE_SIZE = 10;
 THRESH_HOLD	 = 30;
+write speed = 51B/sec
 
 cycles : [ 5010, 10079, 15069, 20018, 25007, 30017, 35086, 40075, 45025, 50014, 55003, 60093, 65082, 70031, 75021, 80010, 85100, 90089, 95038, 100028, 105017, 110106, 115096, 120045, 125034, 130004, 135113, 140103, 145052, 150041, 155011, 160000, 165109, 170059, 175048, 180017, 185007, 190116, 195065, 200055 ]
 
@@ -365,6 +369,7 @@ standard deviation : [372.99, 465.47, 525.04, 619.47, 660.74, 654.74, 600.15, 48
 ROM_SIZE	 = 16KB
 LOGIC_PAGE_SIZE = 10;
 THRESH_HOLD	 = 100;
+write_speed : 106B/sec
 
 cycles : [ 5010, 10079, 15069, 20018, 25007, 30017, 35086, 40075, 45025, 50014, 55003, 60093, 65082, 70031, 75021, 80010, 85100, 90089, 95038, 100028, 105017, 110106, 115096, 120045, 125034, 130004, 135113, 140103, 145052, 150041, 155011, 160000, 165109, 170059, 175048, 180017, 185007, 190116, 195065, 200055,  ]
 
@@ -380,8 +385,61 @@ thresh_hold : 100 ,hotpool size : 4 , coldpool size : 905
 **+++++++++++++++++dual cache : main_cache ratio with hit ratio++++++++++++++++++**
 ROM_SIZE	 = 2KB
 LOGIC_PAGE_SIZE = 10;
-THRESH_HOLD	 = 30;
+THRESH_HOLD	 = 100;
 total write cycles : 10079 
-dualcache hit rate 0.998016 
+dualcache hit rate 0.914700  
 main cache rate : 0.7
+
+
+ROM_SIZE	 = 2KB
+LOGIC_PAGE_SIZE = 10;
+THRESH_HOLD	 = 100;
+total write cycles : 10079 
+main cache rate : 0.6
+dualcache hit rate 0.914700 
+
+ROM_SIZE	 = 2KB
+LOGIC_PAGE_SIZE = 10;
+THRESH_HOLD	 = 100;
+total write cycles : 10079 
+main cache rate : 0.5
+dualcache hit rate 0.914700 
+ 
+ROM_SIZE	 = 2KB
+LOGIC_PAGE_SIZE = 10;
+THRESH_HOLD	 = 100;
+total write cycles : 10079 
+main cache rate : 0.1
+dualcache hit rate 0.914700 
 **----------------dual cache : main_cache ratio with hit ratio---------------------**
+
+
+**+++++++++++++++++dual cache : dualcache size with hit ratio++++++++++++++++++**
+
+ROM_SIZE	 = 2KB
+LOGIC_PAGE_SIZE = 10;
+cycle = 10000;
+
+cache capacity ratio : 0.03
+dualcache hit rate     0.667565
+pagetable ram cost : 36B 
+
+cache capacity ratio : 0.05
+dualcache hit rate     0.667565
+pagetable ram cost : 60B 
+
+cache capacity ratio : 0.1
+dualcache hit rate     0.667565
+pagetable ram cost : 123B 
+
+cache capacity ratio : 0.15
+dualcache hit rate    0.66  
+pagetable ram cost : 192B 
+
+cache capacity ratio : 0.2
+dualcache hit rate    0.980392  
+pagetable ram cost : 264B 
+
+ 
+
+**----------------dual cache : dualcache size with hit ratio---------------------**

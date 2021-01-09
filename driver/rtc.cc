@@ -1532,7 +1532,7 @@ long long Timer::GetInterval() {
 /*++++++++++++++++Test++++++++++++++++++++++ */
 void TestTimer() {
 	Time t1(20, 12, 12, 7, 5, 15);
-	Time t2(20, 12, 12, 10, 1, 50);
+	Time t2(20, 12, 13, 10, 1, 50);
 	LOG_DEBUG("interval : %lld \r\n", t2 - t1);
 }
 /*----------------Test---------------------- */

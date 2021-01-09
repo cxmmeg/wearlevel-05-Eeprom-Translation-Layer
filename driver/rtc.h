@@ -409,9 +409,10 @@ struct Time {
 	void	  GetRtcTime();
 	void	  Show();
 	long long operator-(const Time& t) const {
-		long sec_head = this->sec + ( long )this->min * 60 + ( long )this->hour * 60 * 60;
-		long sec_tail = t.sec + ( long )t.min * 60 + ( long )t.hour * 60 * 60;
-		return sec_head - sec_tail;
+		long sec_head  = this->sec + ( long )this->min * 60 + ( long )this->hour * 60 * 60;
+		long sec_tail  = t.sec + ( long )t.min * 60 + ( long )t.hour * 60 * 60;
+		long day_delta = ( long )(this->date - t.date) * 24 * 60 * 60;
+		return sec_head - sec_tail + day_delta;
 	}
 	unsigned long long GetTimestamp();
 };
