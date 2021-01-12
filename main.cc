@@ -18,13 +18,13 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(3000);
+	// TestSingleHotPage(3000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
 	// MultiWriteTest(10000);
 	// RelationBtwWritecyclsAndStandarddeviation(200000, 5000);
-	// GetSpeed(200000, 5000);
+	GetSpeed(200000, 5000);
 	// MemoryLeakTest();
 	// TestDualCacheHitRate(1000);
 	/* ----------ETL Test---------- */

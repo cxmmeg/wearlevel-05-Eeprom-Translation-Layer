@@ -543,7 +543,7 @@ void GetSpeed(uint64_t cycles, uint64_t span) {
 
 	const unsigned long long ROM_SIZE	 = ( unsigned long long )16 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
-	const unsigned int	 THRESH_HOLD	 = 5;
+	const unsigned int	 THRESH_HOLD	 = 30;
 
 	etl = new ETL(ROM_SIZE);
 	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
