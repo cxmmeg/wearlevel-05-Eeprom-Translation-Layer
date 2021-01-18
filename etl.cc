@@ -30,7 +30,7 @@ bool ETL::NeedFormat() {
 		 && infopage.identify[ 2 ] == 'L' && infopage.identify[ 3 ] == '\0');
 }
 
-void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
+void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold, int pagetable_size) {
 	LOG_INFO("FORMATING EEPROM! \r\n\r\n");
 
 	/* initial info page */
@@ -52,6 +52,12 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold) {
 	/* initial dual pool */
 	InitialDualpool();
 	LOG_INFO("initialed dual pool \r\n\r\n");
+
+	/* init pagetable */
+	if (pagetable_size != 0) {
+		delete this->pagetable_;
+		this->pagetable_ = new PageTable(this, pagetable_size);
+	}
 
 	this->InitPerformanceStatistics();
 

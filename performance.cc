@@ -47,6 +47,10 @@ void ETLPerformance::StartTimer() {
 	this->timer_.Start();
 }
 
+float ETLPerformance::GetPageTableHitRatio() {
+	return this->etl_->GetHitRate();
+}
+
 void ETLPerformance::PrintInfo() {
 	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
 	LOG_INFO("write speed\t\t%lld B/sec\r\n", this->GetWriteSpeed());

@@ -14,7 +14,8 @@ void SampleSimulation(unsigned int round);
 void MultiWriteTest(uint64_t cycles);
 void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span);
 void MemoryLeakTest();
-void TestDualCacheHitRate(int cycles);
+float TestDualCacheHitRate(int cycles);
 void GetSpeed(uint64_t cycles, uint64_t span);
+void TestMultiPagetableHitrate();
 
 #endif

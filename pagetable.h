@@ -13,11 +13,13 @@ class ETL;
 class PageTable {
     public:
 	PageTable(ETL* etl);
+	PageTable(ETL* etl, int capacity);
 	~PageTable();
 	int	  GetPPN(int lpn);
 	void	  Set(int lpn, int ppn);
 	long long GetCacheSize();
 	float	  GetHitRate();
+	void	  SetCapacity(int capacity);
 
     private:
 	int	 cache_capacity_;

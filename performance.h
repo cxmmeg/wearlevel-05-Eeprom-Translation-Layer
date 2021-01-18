@@ -32,6 +32,7 @@ class ETLPerformance {
 	long long GetWriteSpeed();
 	void	  StartTimer();
 	void	  PrintInfo();
+	float	  GetPageTableHitRatio();
 
     private:
 	ETL*  etl_;

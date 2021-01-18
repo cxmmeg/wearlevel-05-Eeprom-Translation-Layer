@@ -250,13 +250,13 @@ def makeBarRAMCost(ram_cost, save):
     ax.set_xticks([])
 #     ax.set_xticklabels([titles[i]])
     plt.subplots_adjust(wspace=subplots_padding, hspace=subplots_padding)
-    ax.set_ylabel('Byte/sec', labelpad=1.5)
+    ax.set_ylabel('Bytes/s', labelpad=1.5)
 
     plt.legend()
 
     plt.style.use("ggplot")
 
     if save:
-        plt.savefig('writespeed.png')
+        plt.savefig('speed.png')
     else:
         plt.show()

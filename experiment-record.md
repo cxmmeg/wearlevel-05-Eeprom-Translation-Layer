@@ -340,7 +340,7 @@ thresh_hold : 30 ,hotpool size : 4 , coldpool size : 109
 
 **+++++++++++++++++relation btw write cycles and performance+++++++++++++++++**
 
-RAM: 1000B(dualpool) + 1020B(pagetable)
+RAM: 863(dualpool) + 1020B(pagetable)
 
 ROM_SIZE	 = 16KB
 LOGIC_PAGE_SIZE = 10;
