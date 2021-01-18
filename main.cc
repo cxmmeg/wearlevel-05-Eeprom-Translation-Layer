@@ -1,6 +1,7 @@
 #include "boardinit.h"
 #include "common.h"
 #include "etltest.h"
+#include "rom.h"
 #include "tool.h"
 #include <stdlib.h>
 
@@ -10,6 +11,7 @@ int main(void) {
 	/* +++++++++++++++Tool Test++++++++++++++ */
 	// GetRandomNumTest();
 	// TestTimer();
+	rom_unit_test();
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */
@@ -18,7 +20,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(3000);
+	// TestSingleHotPage(3000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);

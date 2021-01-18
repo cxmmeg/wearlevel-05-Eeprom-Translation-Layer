@@ -13,9 +13,17 @@
 // #include "hydrologycommand.h"
 #include "msp430common.h"
 #include "rtc.h"
+#include <stdint.h>
 #include <stdlib.h>
 
 //   ROM  中级函数
+
+static void IICDelay() {
+	// uint8_t i;
+	// for (i = 0; i < 30; i++)
+	// 	_NOP();
+	System_Delayms(4);
+}
 
 void ROM_WP_OFF()  //关闭写保护
 {
@@ -286,15 +294,6 @@ int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
 int ROM_WriteBytes_Page(unsigned long long addr, const char* src, int length) {
 	for (int i = 0; i < 5; i++) {
 		if (ROM_WriteBytes_Page_(addr, src, length) == 0) {
-			char read[ 256 ] = { 0 };
-			ROM_ReadBytes_Page(addr, read, length);
-			if (!IsSame_(src, read, length)) {
-				printf("write error\r\n%s", read);
-				continue;
-				// while (1)
-				// 	;
-			}
-
 			return 0;
 		}
 	}
@@ -543,7 +542,8 @@ void I2C_STOP(void) {
 	for (i = 5; i > 0; i--)
 		;
 	I2C_Set_sck_low();
-	System_Delayms(10);  //延迟一点时间
+	IICDelay();
+	// System_Delayms(10);  //延迟一点时间
 	return;
 }
 void I2C_TxByte(char nValue) {
@@ -598,17 +598,10 @@ char I2C_RxByte(void)  //修改函数使它和V3.0板的管脚相匹配
 int ROM_WriteBytes(unsigned long long addr, const char* src, int length) {
 	unsigned long long	 end	   = addr + length;
 	const unsigned long long CHIP_SIZE = ( unsigned long long )128 * ( unsigned long long )1024;
-	// const unsigned long long PAGE_SIZE = ( unsigned long long )256;
 
 	if ((addr / CHIP_SIZE) == (end / CHIP_SIZE)) {
-		// printf("in one chip, startaddridx:%lld , endaddridx:%lld
-		// \r\n", addr / CHIP_SIZE, end / CHIP_SIZE);
 		return ROM_WriteBytes_Page(addr, src, length);
 	}
-	// for (int i = 0; i < length; i++) {
-	// 	ROM_WriteBytes_Page(addr + i, src + i, 1);
-	// 	// ROM_WriteByte(addr+i, *(src+i));
-	// }
 	unsigned long long mid	     = (addr / CHIP_SIZE + 1) * CHIP_SIZE;
 	int		   front_len = mid - addr;
 	ROM_WriteBytes_Page(addr, src, front_len);
@@ -619,15 +612,10 @@ int ROM_WriteBytes(unsigned long long addr, const char* src, int length) {
 int ROM_ReadBytes(unsigned long long addr, char* dest, int length) {
 	unsigned long long	 end	   = addr + length;
 	const unsigned long long CHIP_SIZE = ( unsigned long long )128 * ( unsigned long long )1024;
-	// const unsigned long long PAGE_SIZE = ( unsigned long long )256;
 
 	if (addr / CHIP_SIZE == end / CHIP_SIZE) {
 		return ROM_ReadBytes_Page(addr, dest, length);
 	}
-	// for (int i = 0; i < length; i++) {
-	// 	ROM_ReadBytes_Page(addr + i, dest + i, 1);
-	// 	// ROM_ReadByte(addr + i, dest + i);
-	// }
 	unsigned long long mid = (addr / (CHIP_SIZE) + 1) * CHIP_SIZE;
 	ROM_ReadBytes_Page(addr, dest, mid - addr);
 	ROM_ReadBytes(mid, dest + mid - addr, length - mid + addr);
@@ -645,18 +633,15 @@ void rom_unit_test() {
 	unsigned long long endaddr =
 		(( unsigned long long )128 * ( unsigned long long )1024 * 4 - TEST_DATA_LEN - 32);
 
-	unsigned long long startadd = 5048;
+	unsigned long long startadd = 0;
 	for (; startadd < endaddr; startadd += TEST_DATA_LEN) {
-		// while (1) {
 
-		// if(ROM_WriteBytes(128*1024-20,test_data,TEST_DATA_LEN)){
 		if (ROM_WriteBytes(startadd, test_data, TEST_DATA_LEN) != 0) {
 			printf("WRITE ERROR\r\n");
 		}
 		printf("start addr :%ld\r\n", startadd);
-		// startadd += TEST_DATA_LEN;
 	}
-	for (startadd = 5048; startadd < endaddr; startadd += TEST_DATA_LEN) {
+	for (startadd = 0; startadd < endaddr; startadd += TEST_DATA_LEN) {
 		char data[ TEST_DATA_LEN + 1 ] = { 0 };
 		if (ROM_ReadBytes(startadd, data, TEST_DATA_LEN) != 0) {
 			printf("READ ERROR\r\n");
@@ -673,6 +658,57 @@ void rom_unit_test() {
 			}
 	}
 	printf("test done\r\n");
+	LOG_INFO("write speed : %llu, read speed : %llu", GetWriteSpeed(), GetReadSpeed());
 	while (1)
 		;
+}
+unsigned long long GetWriteSpeed() {
+
+	Timer timer;
+
+	char test_data[ TEST_DATA_LEN + 1 ] = { 0 };
+	for (int i = 0; i < TEST_DATA_LEN; ++i)
+		test_data[ i ] = 'a' + rand() % 26;
+	ROM_Init();
+	ROM_WP_OFF();
+	printf("start rom test\r\n");
+	unsigned long long endaddr =
+		(( unsigned long long )4 * ( unsigned long long )1024 * 4 - TEST_DATA_LEN - 32);
+
+	unsigned long long writebytes = 0;
+	timer.Start();
+	unsigned long long startadd = 0;
+	for (; startadd < endaddr; startadd += TEST_DATA_LEN) {
+		if (ROM_WriteBytes(startadd, test_data, TEST_DATA_LEN) != 0) {
+			printf("WRITE ERROR\r\n");
+		}
+		writebytes += TEST_DATA_LEN;
+	}
+	unsigned long long write_interval = timer.GetInterval();
+	return writebytes / write_interval;
+}
+
+unsigned long long GetReadSpeed() {
+	Timer timer;
+
+	char test_data[ TEST_DATA_LEN + 1 ] = { 0 };
+	for (int i = 0; i < TEST_DATA_LEN; ++i)
+		test_data[ i ] = 'a' + rand() % 26;
+	ROM_Init();
+	ROM_WP_OFF();
+	printf("start rom test\r\n");
+	unsigned long long endaddr =
+		(( unsigned long long )4 * ( unsigned long long )1024 * 4 - TEST_DATA_LEN - 32);
+
+	unsigned long long writebytes = 0;
+	timer.Start();
+	unsigned long long startadd = 0;
+	for (; startadd < endaddr; startadd += TEST_DATA_LEN) {
+		if (ROM_ReadBytes(startadd, test_data, TEST_DATA_LEN) != 0) {
+			printf("Read ERROR\r\n");
+		}
+		writebytes += TEST_DATA_LEN;
+	}
+	unsigned long long write_interval = timer.GetInterval();
+	return writebytes / write_interval;
 }
