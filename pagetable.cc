@@ -1,12 +1,14 @@
 #include "pagetable.h"
 #include "common.h"
 #include "etl.h"
+#include "rom.h"
 
 /*
  * cache_capacity : page_cnt * 0.1
  * main_cache_ratio : 0.7
  */
-PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7), req_cnt_(0), dismiss_cnt_(0) {
+PageTable::PageTable(ETL* etl, int preload, bool preload_en)
+	: etl_(etl), main_cache_ratio(0.7), preload_(preload), req_cnt_(0), dismiss_cnt_(0) {
 
 	this->cache_capacity_ = this->etl_->GetInfoPage().total_page_count * 0.1;
 
@@ -17,10 +19,12 @@ PageTable::PageTable(ETL* etl) : etl_(etl), main_cache_ratio(0.7), req_cnt_(0), 
 
 	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
 	LOG_INFO("cache_size : %d\r\n", this->cache_capacity_);
+
+	InitGPT();
 }
 
-PageTable::PageTable(ETL* etl, int capacity)
-	: etl_(etl), main_cache_ratio(0.7), req_cnt_(0), dismiss_cnt_(0) {
+PageTable::PageTable(ETL* etl, int capacity, int preload)
+	: etl_(etl), main_cache_ratio(0.7), preload_(preload), req_cnt_(0), dismiss_cnt_(0) {
 
 	this->cache_capacity_ = capacity;
 
@@ -31,10 +35,30 @@ PageTable::PageTable(ETL* etl, int capacity)
 
 	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
 	LOG_INFO("cache_size : %d\r\n", this->cache_capacity_);
+
+	/* init gloabal page table */
+	InitGPT();
 }
 
 PageTable::~PageTable() {
 	Free(this->cache_);
+}
+
+void PageTable::InitGPT() {
+	InfoPage infopage;
+	size_t	 infopage_size = sizeof(InfoPage);
+	int	 pagecnt       = this->etl_->info_page_.total_page_count;
+	this->gpt_base_	       = this->etl_->physical_capacity_ - infopage_size - sizeof(int) * (pagecnt + 3);
+}
+
+int PageTable::GPTGet(int lpn) {
+	int ppn;
+	ROM_ReadBytes(this->gpt_base_ + lpn * sizeof(int), ( char* )&ppn, sizeof(int));
+	return ppn;
+}
+
+void PageTable::GPTSet(int lpn, int ppn) {
+	ROM_WriteBytes(this->gpt_base_ + lpn * sizeof(int), ( char* )&ppn, sizeof(int));
 }
 
 void PageTable::SetCapacity(int capacity) {
@@ -59,24 +83,20 @@ int PageTable::GetPPN(int lpn) {
 		return ppn;
 
 	this->dismiss_cnt_++;
-	DataPage datapage(this->etl_->GetInfoPage().logic_page_size);
-	for (ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		this->etl_->ReadDataPage(ppn, &datapage);
-		if (datapage.logic_page_num == lpn) {
-			this->cache_->PutIntoMainCache(lpn, ppn);
-			return ppn;
-		}
-		else if (datapage.logic_page_num == lpn + 1)
-			this->cache_->PutIntoSubCache(lpn + 1, ppn);
-		else if (datapage.logic_page_num == lpn + 2)
-			this->cache_->PutIntoSubCache(lpn + 2, ppn);
+
+	ppn = this->GPTGet(lpn);
+	this->cache_->PutIntoMainCache(lpn, ppn);
+	int pagecnt = this->etl_->info_page_.total_page_count;
+	for (int i = 1; i <= this->preload_ && (lpn + i < pagecnt); i++) {
+		this->cache_->PutIntoSubCache(lpn + i, this->GPTGet(lpn + i));
 	}
 
-	return -1;
+	return ppn;
 }
 
 void PageTable::Set(int lpn, int ppn) {
 	this->cache_->PutIntoMainCache(lpn, ppn);
+	this->GPTSet(lpn, ppn);
 }
 
 float PageTable::GetHitRate() {

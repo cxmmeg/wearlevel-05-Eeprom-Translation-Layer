@@ -242,15 +242,20 @@ bool IsSame(const void* data1, const void* data2, size_t len) {
 }
 
 void TestMultiHotPage() {
-	etl = new ETL(512);
-	etl->Format(8, 20);
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+
 	etl->PrintPMTT();
 	DataPage datapage(etl->GetInfoPage().logic_page_size);
 	// etl->ReadDataPage(0, &datapage);
 	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
 	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (int i = 0; i < 1000; ++i) {
+	for (int i = 0; i < 3; ++i) {
 		char* write_buff = "11112222333";
 		etl->Write(0, write_buff, strlen(write_buff));
 		etl->Read(0, readbuf, strlen(write_buff));

@@ -42,6 +42,9 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold, int pa
 	infopage.logic_page_size  = logic_page_size;
 	infopage.thresh_hold	  = thresh_hold;
 	infopage.total_page_count = (this->physical_capacity_ - sizeof(InfoPage)) / (8 + logic_page_size);
+	infopage.total_page_count =
+		(this->physical_capacity_ - sizeof(InfoPage) - (infopage.total_page_count + 3) * sizeof(int))
+		/ (8 + logic_page_size);
 	this->SetInfoPage(infopage);
 	LOG_INFO("set info page done\r\n\r\n");
 
@@ -54,10 +57,15 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold, int pa
 	LOG_INFO("initialed dual pool \r\n\r\n");
 
 	/* init pagetable */
+	if (this->pagetable_ != NULL) {
+		delete this->pagetable_;
+		this->pagetable_ = new PageTable(this, 2, true);
+	}
 	if (pagetable_size != 0) {
 		delete this->pagetable_;
-		this->pagetable_ = new PageTable(this, pagetable_size);
+		this->pagetable_ = new PageTable(this, pagetable_size, 2);
 	}
+	InitLpnToPpnTable();
 
 	this->InitPerformanceStatistics();
 
@@ -179,7 +187,7 @@ void ETL::InitialPhysicalPages() {
 	for (int physical_page_num = 0; physical_page_num < this->info_page_.total_page_count;
 	     ++physical_page_num) {
 		datapage.logic_page_num = physical_page_num;
-		this->pagetable_->Set(datapage.logic_page_num, physical_page_num);
+		// this->pagetable_->Set(datapage.logic_page_num, physical_page_num);
 		datapage.hot	   = physical_page_num % 2 == 0 ? 1 : 0;
 		datapage.check_sum = 0;
 		this->WriteDataPage(physical_page_num, &datapage);

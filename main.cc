@@ -8,6 +8,7 @@
 int main(void) {
 	BoardInit();
 
+
 	/* +++++++++++++++Tool Test++++++++++++++ */
 	// GetRandomNumTest();
 	// TestTimer();
@@ -20,8 +21,8 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestSingleHotPage(10000);
-	TestRandomWrite(10000);
+	TestSingleHotPage(10000);
+	// TestRandomWrite(10000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);

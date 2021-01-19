@@ -9,6 +9,14 @@
 #include <map>
 
 /*
+ * EEPROM Address Allocation:
+ *
+ * data area
+ * pagetable area
+ * info page area
+ */
+
+/*
  * physical data page structure :
  * --------------------
  * Erase Cycle          [2B]
@@ -59,7 +67,7 @@ class ETL {
 	PerformanceStatistics performance_statistics_;
 
 	/* make public for debug, private for release */
-    private:
+    public:
 	unsigned long long physical_capacity_;
 	InfoPage	   info_page_;
 	PageTable*	   pagetable_;
