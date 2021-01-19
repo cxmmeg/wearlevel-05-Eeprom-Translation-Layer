@@ -88,6 +88,9 @@ InfoPage ETL::GetInfoPage() {
 }
 
 bool ETL::Write(unsigned long long addr, const char* src, int length) {
+	if (length == 0)
+		return false;
+
 	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
 	unsigned long long end_addr		   = addr + length;
 	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
@@ -127,6 +130,9 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 }
 
 bool ETL::Read(unsigned long long addr, char* dest, int length) {
+	if (length == 0)
+		return false;
+
 	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
 	unsigned long long end_addr		   = addr + length;
 	unsigned int	   start_logic_page_num	   = addr / logic_page_size;

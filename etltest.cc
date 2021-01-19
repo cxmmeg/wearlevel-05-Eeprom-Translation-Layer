@@ -209,7 +209,7 @@ void TestRandomWrite(unsigned int write_cycle) {
 
 	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "01234567890123456789";
-		etl->Write(rand() % 500, write_buff, strlen(write_buff));
+		etl->Write(Tool::GetRandomNum(500), write_buff, strlen(write_buff));
 		LOG_INFO("round %d \r\n", i);
 	}
 
