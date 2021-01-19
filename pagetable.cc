@@ -152,14 +152,15 @@ void TestPageTable() {
 }
 
 vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio, float maincache_ratio,
-				       int preload_cnt, const int* test_cases, int test_case_len) {
+				       int preload_cnt, const int* test_cases, int test_case_len,
+				       bool scanmode) {
 
 	const unsigned long long ROM_SIZE	 = ( unsigned long long )16 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
 	ETL* etl = new ETL(ROM_SIZE);
-	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	// etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
 	PageTable* pagetable =
 		new PageTable(etl, cache_capacity, preload_cnt, hotcache_ratio, maincache_ratio);
 
@@ -168,6 +169,15 @@ vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio,
 	Timer timer;
 	timer.Start();
 	for (int i = 0; i < test_case_len; i++) {
+		if (scanmode == true && (i % 50 == 0)) {
+			const int* scandata = GetZipfScanData();
+			for (int j = 0; j < GetZipfScanDataLen(); j++) {
+				pagetable->GetPPN(scandata[ j ]);
+			}
+			i += GetZipfScanDataLen();
+			continue;
+		}
+
 		pagetable->GetPPN(test_cases[ i ]);
 	}
 	result[ 1 ] = timer.GetInterval();
@@ -176,12 +186,9 @@ vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio,
 	return result;
 }
 
-extern const int zipf_data[];
-extern const int zipf_data_len;
-
 void TestHotcacheratio(float hotcache_ratio) {
 	vector< float > result =
-		TestHitRateAndTimecost(30, hotcache_ratio, 0.25, 2, GetZipfData(), GetZipfDataLen());
+		TestHitRateAndTimecost(30, hotcache_ratio, 0.25, 2, GetZipfData(), GetZipfDataLen(), false);
 	LOG_INFO("hitrate\ttime\thotcacheratio\r\n");
 	LOG_INFO("%.2f\t%.2f\t%.2f\r\n", result[ 0 ], result[ 1 ], hotcache_ratio);
 }

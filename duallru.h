@@ -23,8 +23,13 @@ class DualLRU : public LRUCache {
 	Cache::iterator GetMainCacheHead();
 
     private:
-	float hotcache_ratio_;
-	float maincache_ratio_;
+	void Pop();
+
+    private:
+	float		hotcache_ratio_;
+	float		maincache_ratio_;
+	Cache::iterator subcachehead_;
+	Cache::iterator maincachehead_;
 };
 
 /*++++++++++++++++Test++++++++++++++++*/

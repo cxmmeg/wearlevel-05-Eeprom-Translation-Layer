@@ -538,10 +538,23 @@ const int zipf_data[] = {
 
 const int zipf_data_len = sizeof(zipf_data) / sizeof(zipf_data[ 0 ]);
 
+const int zipf_scandata[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
+			      16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 };
+
+const int zipf_scandata_len = sizeof(zipf_scandata) / sizeof(zipf_scandata[ 0 ]);
+
 const int* GetZipfData() {
 	return zipf_data;
 }
 
 int GetZipfDataLen() {
 	return zipf_data_len;
+}
+
+const int* GetZipfScanData() {
+	return zipf_scandata;
+}
+
+int GetZipfScanDataLen() {
+	return zipf_scandata_len;
 }

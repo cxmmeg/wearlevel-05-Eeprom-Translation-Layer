@@ -43,7 +43,8 @@ class PageTable {
 /*++++++++++++++++Test++++++++++++++++*/
 void		TestPageTable();
 vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio, float maincache_ratio,
-				       int preload_cnt, const int* test_cases, int test_case_len);
+				       int preload_cnt, const int* test_cases, int test_case_len,
+				       bool scanmode = false);
 void		TestHotcacheratio(float hotcache_ratio);
 /*----------------Test----------------*/
 

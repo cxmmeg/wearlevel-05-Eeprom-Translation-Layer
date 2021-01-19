@@ -6,4 +6,7 @@
 const int* GetZipfData();
 int	   GetZipfDataLen();
 
+const int* GetZipfScanData();
+int	   GetZipfScanDataLen();
+
 #endif

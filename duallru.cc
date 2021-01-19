@@ -5,24 +5,43 @@
 
 DualLRU::DualLRU(int capacity, float maincache_ratio, float hotcache_ratio)
 	: LRUCache(capacity), maincache_ratio_(maincache_ratio), hotcache_ratio_(hotcache_ratio) {
+
+	this->cache.push_front(pair< int, int >(-2, -2));
+	this->subcachehead_ = this->cache.begin();
+	this->cache.push_front(pair< int, int >(-1, -1));
+	this->maincachehead_ = this->cache.begin();
 }
 
 Cache::iterator DualLRU::GetSubCacheHead() {
-	int		pos    = MathTool::Upper(this->cache.size() * this->hotcache_ratio_
-					 + this->cache.size() * this->maincache_ratio_);
-	Cache::iterator pos_it = this->cache.begin();
-	for (int i = 0; i < pos; i++)
-		pos_it++;
-	return pos_it;
+	Cache::iterator it = this->subcachehead_;
+	return ++it;
+
+	// int		pos    = MathTool::Upper(this->cache.size() * this->hotcache_ratio_
+	// 				 + this->cache.size() * this->maincache_ratio_);
+	// Cache::iterator pos_it = this->cache.begin();
+	// for (int i = 0; i < pos; i++)
+	// 	pos_it++;
+	// return pos_it;
+}
+
+void DualLRU::Pop() {
+	Cache::iterator it = this->cache.end();
+	--it;
+	while (it != this->cache.begin() && it->first < 0)
+		it--;
+	dict.erase(it->first);
+	this->cache.erase(it);
 }
 
 Cache::iterator DualLRU::GetMainCacheHead() {
+	Cache::iterator it = this->maincachehead_;
+	return ++it;
 
-	int		pos    = MathTool::Upper(this->cache.size() * this->hotcache_ratio_);
-	Cache::iterator pos_it = this->cache.begin();
-	for (int i = 0; i < pos; i++)
-		pos_it++;
-	return pos_it;
+	// int		pos    = MathTool::Upper(this->cache.size() * this->hotcache_ratio_);
+	// Cache::iterator pos_it = this->cache.begin();
+	// for (int i = 0; i < pos; i++)
+	// 	pos_it++;
+	// return pos_it;
 }
 
 void DualLRU::PutIntoSubCache(int key, int value) {
@@ -32,9 +51,10 @@ void DualLRU::PutIntoSubCache(int key, int value) {
 		Get(key);
 	}
 	else {
-		if (cache.size() == max_size) {
-			dict.erase(cache.back().first);
-			cache.pop_back();
+		if (cache.size() == max_size + 2) {
+			this->Pop();
+			// dict.erase(cache.back().first);
+			// cache.pop_back();
 		}
 
 		Cache::iterator insert_pos = GetSubCacheHead();
@@ -53,9 +73,10 @@ void DualLRU::PutIntoMainCache(int key, int value) {
 		Get(key);
 	}
 	else {
-		if (cache.size() == max_size) {
-			dict.erase(cache.back().first);
-			cache.pop_back();
+		if (cache.size() == max_size + 2) {
+			this->Pop();
+			// dict.erase(cache.back().first);
+			// cache.pop_back();
 		}
 
 		Cache::iterator insert_pos = GetMainCacheHead();
@@ -72,27 +93,19 @@ void DualLRU::PutIntoMainCache(int key, int value) {
  */
 
 void TestDualLRU() {
-	DualLRU* duallru = new DualLRU(10, 0.5, 0.25);
-	duallru->Put(2, 2);
+	DualLRU* duallru = new DualLRU(5, 0.5, 0.25);
+	duallru->PutIntoMainCache(2, 2);
 	duallru->PutIntoSubCache(1, 1);
 	duallru->PutIntoSubCache(3, 3);
-	duallru->Put(5, 5);
+	duallru->PutIntoMainCache(5, 5);
 	duallru->PutIntoSubCache(4, 4);
 	duallru->PutIntoSubCache(6, 6);
-	duallru->Put(8, 8);
-	duallru->PutIntoSubCache(7, 7);
-	duallru->PutIntoSubCache(9, 9);
-	duallru->Put(11, 11);
-	duallru->PutIntoSubCache(10, 10);
-	duallru->PutIntoSubCache(12, 12);
-	duallru->Put(13, 13);
-	duallru->PutIntoSubCache(15, 15);
-	duallru->PutIntoSubCache(14, 14);
 	duallru->Get(7);
+	duallru->Get(5);
+	duallru->PutIntoMainCache(7, 7);
 
 	duallru->Print();
 }
-
 
 // void TestHitrateWitCachecapacity(int pagetable_size) {
 
