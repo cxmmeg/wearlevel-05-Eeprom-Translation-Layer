@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+from matplotlib.pyplot import MultipleLocator
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -260,3 +262,15 @@ def makeBarRAMCost(ram_cost, save):
         plt.savefig('speed.png')
     else:
         plt.show()
+
+
+def makeBarPageEC(pageECList):
+
+    plt.figure(1, dpi=600)
+    ax = plt.subplot(1, 1, 1)
+    rects = plt.bar(range(len(pageECList)), pageECList, color='#0099FF')
+    ax.set_ylabel('write cycles')
+    ax.set_xlabel('physical page num')
+
+#     plt.show()
+    plt.savefig('4.6_figure_1.png')

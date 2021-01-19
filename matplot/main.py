@@ -1,4 +1,5 @@
 import makefigure as mf
+import data
 
 
 def main():
@@ -62,7 +63,8 @@ def main():
     #     )
 
     #     mf.makeBarRAMCost([863, 863, 863], True)
-    mf.makeBarRAMCost([22, 66, 115], True)
+#     mf.makeBarRAMCost([22, 66, 115], True)
+    mf.makeBarPageEC(data.page_cnt)
 
 
 if __name__ == "__main__":

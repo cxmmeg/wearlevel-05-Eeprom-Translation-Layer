@@ -160,21 +160,71 @@ void ETLFullWriteAndReadFullTest() {
 }
 
 void TestSingleHotPage(unsigned int write_cycle) {
-	etl = new ETL(512);
-	etl->Format(8, 20);
-	etl->dualpool_->PrintPool();
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
 
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
 	for (unsigned int i = 0; i < write_cycle; ++i) {
-		char* write_buff = "111122";
+		char* write_buff = "01234567890123456789";
 		etl->Write(0, write_buff, strlen(write_buff));
+		LOG_INFO("round %d \r\n", i);
 	}
 
 	ep.PrintInfo();
 
-	etl->dualpool_->PrintPool();
+	DataPage datapage_temp(etl->GetInfoPage().logic_page_size);
+
+	printf("{ ");
+	for (unsigned ppn = 0; ppn < etl->GetInfoPage().total_page_count; ppn++) {
+		etl->ReadDataPage(ppn, &datapage_temp);
+		printf("%u, ", datapage_temp.erase_cycle);
+	}
+	printf("}\n");
+
+	// etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	printf("test done \r\n");
+}
+
+void TestRandomWrite(unsigned int write_cycle) {
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	for (unsigned int i = 0; i < write_cycle; ++i) {
+		char* write_buff = "01234567890123456789";
+		etl->Write(rand() % 500, write_buff, strlen(write_buff));
+		LOG_INFO("round %d \r\n", i);
+	}
+
+	ep.PrintInfo();
+
+	DataPage datapage_temp(etl->GetInfoPage().logic_page_size);
+
+	printf("{ ");
+	for (unsigned ppn = 0; ppn < etl->GetInfoPage().total_page_count; ppn++) {
+		etl->ReadDataPage(ppn, &datapage_temp);
+		printf("%u, ", datapage_temp.erase_cycle);
+	}
+	printf("}\n");
+
+	// etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
 	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
 	       etl->dualpool_->GetPoolSize(COLDPOOL));

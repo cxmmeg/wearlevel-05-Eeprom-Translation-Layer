@@ -15,7 +15,7 @@
 //缓冲区行数
 #define UART0_MAXIndex 3
 //每行长度
-#define UART0_MAXBUFFLEN 215
+#define UART0_MAXBUFFLEN 3
  
 #define UART0_GSM_TYPE    1
 #define UART0_DTU_TYPE    2

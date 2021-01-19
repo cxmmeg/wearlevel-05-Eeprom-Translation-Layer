@@ -21,7 +21,7 @@ extern int s_uart1_type;
 //缓冲区行数
 #define UART1_MAXIndex 2
 //每行长度
-#define UART1_MAXBUFFLEN 400
+#define UART1_MAXBUFFLEN 3
 
 
 int  UART1_SendtoInt(int num);
