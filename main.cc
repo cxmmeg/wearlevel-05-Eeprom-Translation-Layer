@@ -1,13 +1,13 @@
 #include "boardinit.h"
 #include "common.h"
 #include "etltest.h"
+#include "pagetable.h"
 #include "rom.h"
 #include "tool.h"
 #include <stdlib.h>
 
 int main(void) {
 	BoardInit();
-
 
 	/* +++++++++++++++Tool Test++++++++++++++ */
 	// GetRandomNumTest();
@@ -21,8 +21,8 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestSingleHotPage(10000);
-	TestRandomWrite(10000);
+	// TestSingleHotPage(1000);
+	// TestRandomWrite(10000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
@@ -33,6 +33,11 @@ int main(void) {
 	// TestDualCacheHitRate(1000);
 	// TestMultiPagetableHitrate();
 	/* ----------ETL Test---------- */
+
+	/*++++++++++pagetable cache test+++++++++++++++*/
+	TestHotcacheratio(0.5);
+	LOG_INFO("pagetable cache test finish\r\n");
+	/*----------pagetable cache test---------------*/
 
 	while (1) {
 		// LOG_INFO("alive \r\n\r\n");

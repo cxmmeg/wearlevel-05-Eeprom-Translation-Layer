@@ -273,4 +273,4 @@ def makeBarPageEC(pageECList):
     ax.set_xlabel('physical page num')
 
 #     plt.show()
-    plt.savefig('4.6_figure_1.png')
+    plt.savefig('4.6_figure_2.png')

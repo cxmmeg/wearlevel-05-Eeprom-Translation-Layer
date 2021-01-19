@@ -14,6 +14,7 @@ class PageTable {
     public:
 	PageTable(ETL* etl, int preload = 2, bool preload_en = true);
 	PageTable(ETL* etl, int capacity, int preload = 2);
+	PageTable(ETL* etl, int capacity, int preload, float hotcache_ratio, float maincache_ratio);
 	~PageTable();
 	int  GetPPN(int lpn);
 	void Set(int lpn, int ppn);
@@ -40,7 +41,10 @@ class PageTable {
 };
 
 /*++++++++++++++++Test++++++++++++++++*/
-void TestPageTable();
+void		TestPageTable();
+vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio, float maincache_ratio,
+				       int preload_cnt, const int* test_cases, int test_case_len);
+void		TestHotcacheratio(float hotcache_ratio);
 /*----------------Test----------------*/
 
 #endif

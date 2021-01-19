@@ -97,6 +97,9 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
 	unsigned int	   start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
+	if (start_logic_page_num >= this->info_page_.total_page_count)
+		return false;
+
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
 	datapage.erase_cycle++;
@@ -138,6 +141,9 @@ bool ETL::Read(unsigned long long addr, char* dest, int length) {
 	unsigned int	   start_logic_page_num	   = addr / logic_page_size;
 	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
 	unsigned int	   start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
+
+	if (start_logic_page_num >= this->info_page_.total_page_count)
+		return false;
 
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
