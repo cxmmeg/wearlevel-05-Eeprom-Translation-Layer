@@ -7,7 +7,8 @@
 #include <string.h>
 /* public methods */
 
-ETL::ETL(unsigned long long physical_capacity) : physical_capacity_(physical_capacity) {
+ETL::ETL(unsigned long long physical_capacity, unsigned long page_indurance)
+	: physical_capacity_(physical_capacity), page_indurance_(page_indurance) {
 	if (this->NeedFormat())
 		this->Format(8, 10);
 	this->pagetable_ = new PageTable(this);
@@ -107,6 +108,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
 	this->performance_statistics_.total_write_cycles++;
+	this->UpdateThreshhold();
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -401,6 +403,13 @@ void ETL::PrintDataPage(DataPage* datapage) {
 	printf("check_sum : %u\r\n", datapage->check_sum);
 	printf("data : %s\r\n", datapage->data);
 	printf("--------------------------------------\r\n");
+}
+
+void ETL::UpdateThreshhold() {
+	unsigned int avrg_page_write_cycles =
+		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
+	this->dualpool_->SetThreshhold(this->page_indurance_
+				       - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2));
 }
 
 void ETL::DirtySwap() {

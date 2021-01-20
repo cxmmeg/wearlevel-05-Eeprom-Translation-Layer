@@ -50,6 +50,14 @@ long long DualPool::GetCacheSize() {
 	return this->cache_size_ * PRIORITYPAGECYCLECACHE_ITEMSIZE * 5;
 }
 
+unsigned long DualPool::GetThreshhold() {
+	return this->thresh_hold_;
+}
+
+void DualPool::SetThreshhold(unsigned int thresh_hold) {
+	this->thresh_hold_ = thresh_hold;
+}
+
 bool DualPool::IsDirtySwapTriggered() {
 	return this->hot_ec_head_cache_->GetTop().cycle - this->cold_ec_tail_cache_->GetTop().cycle
 	       > this->thresh_hold_;

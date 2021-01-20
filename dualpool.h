@@ -16,23 +16,25 @@ class DualPool {
     public:
 	DualPool(unsigned int thresh_hold);
 	DualPool(unsigned int thresh_hold, ETL* etl);
-        ~DualPool();
-	bool	     IsDirtySwapTriggered();
-	bool	     IsColdPoolResizeTriggered();
-	bool	     IsHotPoolResizeTriggered();
-	void	     AddPageIntoPool(unsigned int physical_page_num, DataPage* datapage,
-				     enum PoolIdentify pool_identify);
-	void	     PopPageFromPool(unsigned int physical_page_num, DataPage* datapage,
-				     enum PoolIdentify pool_identify);
-	unsigned int PopFrontHotPoolByEraseCycle();
-	unsigned int PopBackHotPoolByEraseCycle();
-	unsigned int PopBackColdPoolByEraseCycle();
-	unsigned int PopFrontColdPoolByEffectiveEraseCycle();
-	void	     SetHotECHead(const PageCycle& p);
-	void	     SetHotECTail(const PageCycle& p);
-	void	     SetColdECTail(const PageCycle& p);
-	void	     SetColdEECHead(const PageCycle& p);
-	void	     SetHotEECTail(const PageCycle& p);
+	~DualPool();
+	void	      SetThreshhold(unsigned int thresh_hold);
+	unsigned long GetThreshhold();
+	bool	      IsDirtySwapTriggered();
+	bool	      IsColdPoolResizeTriggered();
+	bool	      IsHotPoolResizeTriggered();
+	void	      AddPageIntoPool(unsigned int physical_page_num, DataPage* datapage,
+				      enum PoolIdentify pool_identify);
+	void	      PopPageFromPool(unsigned int physical_page_num, DataPage* datapage,
+				      enum PoolIdentify pool_identify);
+	unsigned int  PopFrontHotPoolByEraseCycle();
+	unsigned int  PopBackHotPoolByEraseCycle();
+	unsigned int  PopBackColdPoolByEraseCycle();
+	unsigned int  PopFrontColdPoolByEffectiveEraseCycle();
+	void	      SetHotECHead(const PageCycle& p);
+	void	      SetHotECTail(const PageCycle& p);
+	void	      SetColdECTail(const PageCycle& p);
+	void	      SetColdEECHead(const PageCycle& p);
+	void	      SetHotEECTail(const PageCycle& p);
 
 	void InitialPoolBorder();
 	void TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effective_erase_cnt);

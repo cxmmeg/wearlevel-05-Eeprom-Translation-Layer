@@ -22,7 +22,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestSingleHotPage(1000);
+	TestSingleHotPage(15000);
 	// TestRandomWrite(10000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
@@ -36,8 +36,8 @@ int main(void) {
 	/* ----------ETL Test---------- */
 
 	/*++++++++++pagetable cache test+++++++++++++++*/
-	TestPreload();
-	LOG_INFO("pagetable cache test finish\r\n");
+	// TestPreload();
+	// LOG_INFO("pagetable cache test finish\r\n");
 	/*----------pagetable cache test---------------*/
 
 	while (1) {

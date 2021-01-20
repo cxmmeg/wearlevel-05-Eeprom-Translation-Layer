@@ -175,6 +175,7 @@ void TestSingleHotPage(unsigned int write_cycle) {
 		char* write_buff = "01234567890123456789";
 		etl->Write(0, write_buff, strlen(write_buff));
 		LOG_INFO("round %d \r\n", i);
+		LOG_INFO("thresh hold : %lu \r\n", etl->dualpool_->GetThreshhold());
 	}
 
 	ep.PrintInfo();
@@ -188,9 +189,9 @@ void TestSingleHotPage(unsigned int write_cycle) {
 	}
 	printf("}\n");
 
-	// etl->dualpool_->PrintPool();
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
-	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	etl->dualpool_->PrintPool();
+	printf("thresh_hold : %lu ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->dualpool_->GetThreshhold(), etl->dualpool_->GetPoolSize(HOTPOOL),
 	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	printf("test done \r\n");
 }
