@@ -12,9 +12,7 @@ class ETL;
  */
 class PageTable {
     public:
-	PageTable(ETL* etl, int preload = 2, bool preload_en = true);
-	PageTable(ETL* etl, int capacity, int preload = 2);
-	PageTable(ETL* etl, int capacity, int preload, float hotcache_ratio, float maincache_ratio);
+	PageTable(ETL* etl, int capacity = 10);
 	~PageTable();
 	int  GetPPN(int lpn);
 	void Set(int lpn, int ppn);
@@ -36,7 +34,6 @@ class PageTable {
 	DualLRU*	   cache_;
 	ETL*		   etl_;
 	unsigned long long gpt_base_;
-	int		   preload_;
 
 	//统计cache命中率
 	float req_cnt_;
@@ -45,10 +42,9 @@ class PageTable {
 
 /*++++++++++++++++Test++++++++++++++++*/
 void		TestPageTable();
-vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio, float maincache_ratio,
-				       int preload_cnt, const int* test_cases, int test_case_len,
-				       bool scanmode = false);
-void		TestPreload();
+vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio, int test_case_len,
+				       int scanlen = 0);
+void		TestPagetableSize();
 /*----------------Test----------------*/
 
 #endif

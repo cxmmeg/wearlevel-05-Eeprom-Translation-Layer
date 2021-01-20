@@ -16,7 +16,7 @@
 
 class DualLRU : public LRUCache {
     public:
-	DualLRU(int capacity, float maincache_ratio, float hotcache_ratio = 0.25);
+	DualLRU(int capacity, float maincache_ratio = 0.5, float hotcache_ratio = 0.25);
 	void		PutIntoSubCache(int key, int value);
 	void		PutIntoMainCache(int key, int value);
 	Cache::iterator GetSubCacheHead();
