@@ -48,7 +48,7 @@
 
 class ETL {
     public:
-	ETL(unsigned long long physical_capacity);
+	ETL(unsigned long long physical_capacity, unsigned long page_indurance = 0);
 	~ETL();
 	bool	 NeedFormat();
 	void	 Format(unsigned char logic_page_size, unsigned int thresh_hold, int pagetable_size = 0,
@@ -66,6 +66,7 @@ class ETL {
 	static const int      MAX_CACHE_SIZE = 1024;
 	DualPool*	      dualpool_;
 	PerformanceStatistics performance_statistics_;
+	unsigned long	      page_indurance_;
 
 	/* make public for debug, private for release */
     public:
@@ -88,6 +89,7 @@ class ETL {
 	static void  PrintDataPage(DataPage* datapage);
 
 	/* dual-pool algorithm */
+	void UpdateThreshhold();
 	void DirtySwap();
 	void ColdPoolResize();
 	void HotPoolResize();
