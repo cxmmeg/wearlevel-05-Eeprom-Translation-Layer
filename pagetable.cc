@@ -3,6 +3,7 @@
 #include "etl.h"
 #include "rom.h"
 #include "testcase.h"
+#include "tool.h"
 
 /*
  * cache_capacity : page_cnt * 0.1
@@ -52,7 +53,7 @@ PageTable::PageTable(ETL* etl, int capacity, int preload, float hotcache_ratio, 
 	}
 
 	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio, hotcache_ratio);
-	LOG_INFO("cache_size : %d\r\n", this->cache_capacity_);
+	// LOG_INFO("cache_size : %d\r\n", this->cache_capacity_);
 
 	/* init gloabal page table */
 	InitGPT();
@@ -93,6 +94,25 @@ long long PageTable::GetCacheSize() {
 	return this->cache_capacity_ * PAGETABLE_ITEMSIZE;
 }
 
+// 从全局页表中连续读多个页表项
+vector< int > PageTable::GPTMultiGet(int start_lpn, int cnt) {
+	if (cnt == 0)
+		return vector< int >();
+
+	int* ppns = ( int* )calloc(cnt, sizeof(int));
+	if (!ppns) {
+		LOG_ERROR("calloc failed, abort \r\n");
+		Loop();
+	}
+
+	ROM_ReadBytes(this->gpt_base_ + start_lpn * sizeof(int), ( char* )ppns, cnt * sizeof(int));
+	vector< int > result(ppns, ppns + cnt);
+	free(ppns);
+	ppns = NULL;
+
+	return result;
+}
+
 int PageTable::GetPPN(int lpn) {
 	this->req_cnt_++;
 
@@ -107,9 +127,12 @@ int PageTable::GetPPN(int lpn) {
 
 	ppn = this->GPTGet(lpn);
 	this->cache_->PutIntoMainCache(lpn, ppn);
-	int pagecnt = this->etl_->info_page_.total_page_count;
-	for (int i = 1; i <= this->preload_ && (lpn + i < pagecnt); i++) {
-		this->cache_->PutIntoSubCache(lpn + i, this->GPTGet(lpn + i));
+	int	      pagecnt	  = this->etl_->info_page_.total_page_count;
+	int	      preload_cnt = lpn + this->preload_ < pagecnt ? this->preload_ : pagecnt - 1 - lpn;
+	vector< int > ppns	  = this->GPTMultiGet(lpn + 1, preload_cnt);
+
+	for (int i = 0; i < ppns.size(); i++) {
+		this->cache_->PutIntoSubCache(lpn + 1 + i, ppns[ i ]);
 	}
 
 	return ppn;
@@ -159,12 +182,11 @@ vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio,
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
-	ETL* etl = new ETL(ROM_SIZE);
-	// etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
-	PageTable* pagetable =
-		new PageTable(etl, cache_capacity, preload_cnt, hotcache_ratio, maincache_ratio);
+	static ETL* etl = new ETL(ROM_SIZE);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD, cache_capacity, preload_cnt);
 
 	vector< float > result(2, 0);
+	string		readbuff(32, '\0');
 
 	Timer timer;
 	timer.Start();
@@ -172,24 +194,26 @@ vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio,
 		if (scanmode == true && (i % 50 == 0)) {
 			const int* scandata = GetZipfScanData();
 			for (int j = 0; j < GetZipfScanDataLen(); j++) {
-				pagetable->GetPPN(scandata[ j ]);
+				etl->Read(scandata[ i ], ( char* )readbuff.data(), Tool::GetRandomNum(30));
 			}
 			i += GetZipfScanDataLen();
 			continue;
 		}
 
-		pagetable->GetPPN(test_cases[ i ]);
+		etl->Read(test_cases[ i ], ( char* )readbuff.data(), Tool::GetRandomNum(30));
 	}
 	result[ 1 ] = timer.GetInterval();
-	result[ 0 ] = pagetable->GetHitRate();
+	result[ 0 ] = etl->pagetable_->GetHitRate();
 
 	return result;
 }
 
-void TestHotcacheratio(float hotcache_ratio) {
-	vector< float > result =
-		TestHitRateAndTimecost(30, hotcache_ratio, 0.25, 2, GetZipfData(), GetZipfDataLen(), false);
-	LOG_INFO("hitrate\ttime\thotcacheratio\r\n");
-	LOG_INFO("%.2f\t%.2f\t%.2f\r\n", result[ 0 ], result[ 1 ], hotcache_ratio);
+void TestPreload() {
+	LOG_INFO("hitrate\ttime\tpreload\r\n");
+	vector< float > result;
+	for (int i = 0; i < 5; i++) {
+		result = TestHitRateAndTimecost(10, 0.5, 0.25, i, GetZipfData(), GetZipfDataLen(), false);
+		LOG_INFO("%.2f\t%.2f\t%d\r\n", result[ 0 ], result[ 1 ], i);
+	}
 }
 /*----------------Test----------------*/

@@ -251,14 +251,12 @@ void TestMultiHotPage() {
 
 	etl->PrintPMTT();
 	DataPage datapage(etl->GetInfoPage().logic_page_size);
-	// etl->ReadDataPage(0, &datapage);
-	// etl->PrintDataPage(&datapage);
 	etl->dualpool_->PrintPool();
 	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 900; ++i) {
 		char* write_buff = "11112222333";
-		etl->Write(0, write_buff, strlen(write_buff));
-		etl->Read(0, readbuf, strlen(write_buff));
+		etl->Write(i, write_buff, strlen(write_buff));
+		etl->Read(i, readbuf, strlen(write_buff));
 
 		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
 			printf("oh no, writebuf != readbuf \r\n\r\n");

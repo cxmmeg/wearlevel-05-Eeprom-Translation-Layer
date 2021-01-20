@@ -469,7 +469,7 @@ overhead ratio         1.035804
 standard deviation     126.261630
 RAM cost               520 B
 dualcache hit rate     0.969135        
-total write cycles : 28544 
+total write cycles : 28544 486
 
 缓存映射表测试: 
 
@@ -479,5 +479,19 @@ total write cycles : 28544
 | T2       | 10,000 | 1,000    | 随机访问+顺序扫描 |
 
 性能指标:  命中率  运行时间
+
+**T1,2Q+preload**
+hitrate time    preload
+0.40    377.00  0     
+0.48    479.00  1
+0.35    487.00  2
+
+0.73    359.00  0
+0.73    363.00  1
+0.72    388.00  2
+0.71    399.00  3
+
+
+
 
 **--------------------4.6---------------**

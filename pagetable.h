@@ -28,6 +28,9 @@ class PageTable {
 	void	  SetCapacity(int capacity);
 
     private:
+	vector< int > GPTMultiGet(int start_lpn, int cnt);
+
+    private:
 	int		   cache_capacity_;
 	float		   main_cache_ratio;
 	DualLRU*	   cache_;
@@ -45,7 +48,7 @@ void		TestPageTable();
 vector< float > TestHitRateAndTimecost(int cache_capacity, float hotcache_ratio, float maincache_ratio,
 				       int preload_cnt, const int* test_cases, int test_case_len,
 				       bool scanmode = false);
-void		TestHotcacheratio(float hotcache_ratio);
+void		TestPreload();
 /*----------------Test----------------*/
 
 #endif

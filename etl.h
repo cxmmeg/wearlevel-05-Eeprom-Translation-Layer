@@ -51,7 +51,8 @@ class ETL {
 	ETL(unsigned long long physical_capacity);
 	~ETL();
 	bool	 NeedFormat();
-	void	 Format(unsigned char logic_page_size, unsigned int thresh_hold, int pagetable_size = 0);
+	void	 Format(unsigned char logic_page_size, unsigned int thresh_hold, int pagetable_size = 0,
+			int preload = 2);
 	void	 SetInfoPage(InfoPage infopage);
 	InfoPage GetInfoPage();
 	bool	 Write(unsigned long long addr, const char* src, int length);

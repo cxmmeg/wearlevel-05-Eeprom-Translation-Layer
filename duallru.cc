@@ -47,8 +47,10 @@ Cache::iterator DualLRU::GetMainCacheHead() {
 void DualLRU::PutIntoSubCache(int key, int value) {
 
 	if (dict.count(key) > 0) {
-		dict[ key ]->second = value;
-		Get(key);
+		// if preload item is existed in subcache already, nothing to do
+		return;
+		// dict[ key ]->second = value;
+		// Get(key);
 	}
 	else {
 		if (cache.size() == max_size + 2) {

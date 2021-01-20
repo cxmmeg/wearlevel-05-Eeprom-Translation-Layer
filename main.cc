@@ -13,7 +13,7 @@ int main(void) {
 	// GetRandomNumTest();
 	// TestTimer();
 	// rom_unit_test();
-	TestDualLRU();
+	// TestDualLRU();
 	/* ---------------Tool Test-------------- */
 
 	/* +++++++++++ETL Test++++++++++ */
@@ -36,8 +36,8 @@ int main(void) {
 	/* ----------ETL Test---------- */
 
 	/*++++++++++pagetable cache test+++++++++++++++*/
-	// TestHotcacheratio(0.5);
-	// LOG_INFO("pagetable cache test finish\r\n");
+	TestPreload();
+	LOG_INFO("pagetable cache test finish\r\n");
 	/*----------pagetable cache test---------------*/
 
 	while (1) {
