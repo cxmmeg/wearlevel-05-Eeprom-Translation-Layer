@@ -493,6 +493,11 @@ hitrate time    cachesize
 0.62    37.00   120
 0.69    32.00   160
 
+**T1,no cache**
+-       68      - 
+
+**T2,no cache**
+-       68      - 
 
 **T2,2Q**
 0.25    58.00   40

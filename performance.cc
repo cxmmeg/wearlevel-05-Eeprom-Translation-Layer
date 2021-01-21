@@ -37,6 +37,10 @@ long long ETLPerformance::GetRAMCost() {
 	return this->etl_->performance_statistics_.RAM_cost;
 }
 
+long long ETLPerformance::GetSpendTime() {
+	return this->timer_.GetInterval();
+}
+
 long long ETLPerformance::GetWriteSpeed() {
 	this->etl_->performance_statistics_.time_cost_in_sec = this->timer_.GetInterval();
 	return this->etl_->performance_statistics_.total_write_bytes
@@ -54,6 +58,7 @@ float ETLPerformance::GetPageTableHitRatio() {
 void ETLPerformance::PrintInfo() {
 	LOG_INFO("++++++++++++ performance +++++++++++++++\r\n\r\n");
 	LOG_INFO("write speed\t\t%lld B/sec\r\n", this->GetWriteSpeed());
+	LOG_INFO("spend time\t\t%lld sec\r\n", this->GetSpendTime());
 	LOG_INFO("overhead ratio\t\t%f\r\n", this->GetOverheadRatio());
 	LOG_INFO("standard deviation\t%f\r\n", this->GetStandardDeviation());
 	LOG_INFO("RAM cost\t\t%d B\r\n", this->GetRAMCost());

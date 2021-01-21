@@ -22,9 +22,9 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	// TestSingleHotPage(1000);
+	TestSingleHotPage(10000);
 	// TestRandomWrite(10000);
-	TestMultiHotPage();
+	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
 	// MultiWriteTest(10000);

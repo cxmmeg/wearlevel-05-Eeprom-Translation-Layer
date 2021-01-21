@@ -26,6 +26,8 @@ class ETLPerformance {
     public:
 	ETLPerformance(ETL* etl) : etl_(etl) {
 	}
+
+	long long GetSpendTime();
 	float	  GetStandardDeviation();
 	float	  GetOverheadRatio();
 	long long GetRAMCost();

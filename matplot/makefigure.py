@@ -267,10 +267,11 @@ def makeBarRAMCost(ram_cost, save):
 def makeBarPageEC(pageECList):
 
     plt.figure(1, dpi=600)
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     ax = plt.subplot(1, 1, 1)
     rects = plt.bar(range(len(pageECList)), pageECList, color='#0099FF')
-    ax.set_ylabel('write cycles')
-    ax.set_xlabel('physical page num')
+    ax.set_ylabel('擦写周期数')
+    ax.set_xlabel('物理页号')
 
 #     plt.show()
     plt.savefig('4.6_figure_2.png')
