@@ -530,4 +530,12 @@ DP:
 [INFO performance.cc:56] total write cycles : 20018 
 
 
+PWL:
+[INFO performance.cc:60] write speed            269 B/sec
+[INFO performance.cc:61] spend time             559 sec
+[INFO performance.cc:62] overhead ratio         1.007577
+[INFO performance.cc:63] standard deviation     1241.338900
+[INFO performance.cc:64] RAM cost               920 B
+[INFO performance.cc:65] dualcache hit rate     0.999885        
+[INFO performance.cc:66] total write cycles : 20060 
 **---------------PWL与DP初步对比-------------**

@@ -4,19 +4,25 @@
                         "name": "Mac",
                         "includePath": [
                                 "${workspaceFolder}/**",
-                                "${workspaceFolder}/driver/",
-                                "/usr/include/c++/4.2.1/**",
-                                "/Users/zhuhouwang/work/msp430inc/**"
+                                "/usr/local/Cellar/gcc/10.2.0/include/c++/10.2.0/**"
                         ],
                         "defines": [],
                         "macFrameworkPath": [
                                 "/System/Library/Frameworks",
                                 "/Library/Frameworks"
                         ],
-                        "compilerPath": "",
-                        "configurationProvider": "pluyckx.iar-vsc",
+                        "compilerPath": "/usr/bin/gcc"
+                },
+                {
+                        "name": "IAR",
+                        "defines": [],
+                        "includePath": [],
+                        "forcedInclude": [],
                         "cStandard": "c11",
-                        "cppStandard": "c++14"
+                        "cppStandard": "c++14",
+                        "compilerPath": "",
+                        "intelliSenseMode": "msvc-x64",
+                        "configurationProvider": "iar-vsc"
                 }
         ],
         "version": 4
