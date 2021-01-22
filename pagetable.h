@@ -5,7 +5,8 @@
 
 class ETL;
 
-#define PAGETABLE_ITEMSIZE (4 + 4 + 2 + 2)
+// 2B(LPN) + 2B(PPN) + 2B(Ptr)
+#define PAGETABLE_ITEMSIZE (2 + 2 + 2)
 
 /*
  * logic page num -> physical page num

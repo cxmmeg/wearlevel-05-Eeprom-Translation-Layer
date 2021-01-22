@@ -401,15 +401,17 @@ void MultiWriteTest(uint64_t cycles) {
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
-	etl = new ETL(ROM_SIZE);
-	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	etl = new ETL(ROM_SIZE, 500);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD,10);
 
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
 	for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < cycles; r++) {
 
-		LOG_INFO("curr write cycles %lld \r\n", etl->performance_statistics_.total_write_cycles);
+		if (r % 100 == 0)
+			LOG_INFO("curr write cycles %lld \r\n",
+				 etl->performance_statistics_.total_write_cycles);
 
 		int flowrate_round = 50;
 		if (r % 2 == 0 || r % 3 == 0)

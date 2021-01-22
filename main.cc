@@ -22,12 +22,12 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(20000);
+	// TestSingleHotPage(20000);
 	// TestRandomWrite(10000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
-	// MultiWriteTest(10000);
+	MultiWriteTest(20000);
 	// RelationBtwWritecyclsAndStandarddeviation(200000, 5000);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();

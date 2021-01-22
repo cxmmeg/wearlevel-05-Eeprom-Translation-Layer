@@ -517,3 +517,17 @@ hitrate time    cachesize
 
 
 **--------------------4.6---------------**
+
+
+**+++++++++++++++PWL与DP初步对比+++++++++++++**
+TestCase: MultiWriteTest(20000)
+
+DP:
+[INFO performance.cc:52] write speed            227 B/sec
+[INFO performance.cc:53] overhead ratio         1.064292
+[INFO performance.cc:54] standard deviation     102.366990
+[INFO performance.cc:55] RAM cost               1356 B
+[INFO performance.cc:56] total write cycles : 20018 
+
+
+**---------------PWL与DP初步对比-------------**

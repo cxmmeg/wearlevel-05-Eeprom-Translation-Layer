@@ -15,10 +15,10 @@ struct PageCycle {
 enum PriorityCacheType { BIG, SMALL };
 
 /*
- * 每个PriorityCache item占用的内存大小为： 2+2+2+2 = 8B
+ * 每个PriorityCache item占用的内存大小为： 2B(PPN) + 4B(EC)
  */
 
-#define PRIORITYPAGECYCLECACHE_ITEMSIZE (2 + 2 + 2 + 2)
+#define PRIORITYPAGECYCLECACHE_ITEMSIZE (2 + 4)
 
 struct PriorityCache {
 	PriorityCache(size_t capacity) : max_size_(capacity) {
