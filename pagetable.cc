@@ -8,12 +8,15 @@
 PageTable::PageTable(ETL* etl, int capacity)
 	: etl_(etl), main_cache_ratio(0.7), req_cnt_(0), dismiss_cnt_(0) {
 
-	this->cache_capacity_ = capacity;
+	if (capacity == 0)
+		this->cache_capacity_ = this->etl_->info_page_.total_page_count * 0.1;
+	else
+		this->cache_capacity_ = capacity;
 
-	// if (this->cache_capacity_ * PAGETABLE_ITEMSIZE > ETL::MAX_CACHE_SIZE) {
-	// 	LOG_INFO("pagetable's cache size out of boundary \r\n\r\n");
-	// 	this->cache_capacity_ = ETL::MAX_CACHE_SIZE / PAGETABLE_ITEMSIZE;
-	// }
+	if (this->cache_capacity_ * PAGETABLE_ITEMSIZE > ETL::MAX_CACHE_SIZE) {
+		LOG_INFO("pagetable's cache size out of boundary \r\n\r\n");
+		this->cache_capacity_ = ETL::MAX_CACHE_SIZE / PAGETABLE_ITEMSIZE;
+	}
 
 	cache_ = new DualLRU(this->cache_capacity_, this->main_cache_ratio);
 	// LOG_INFO("cache_size : %d\r\n", this->cache_capacity_);

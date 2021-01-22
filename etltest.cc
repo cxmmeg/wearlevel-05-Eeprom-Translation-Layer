@@ -166,7 +166,7 @@ void TestSingleHotPage(unsigned int write_cycle) {
 	const unsigned int	 THRESH_HOLD	 = 30;
 
 	etl = new ETL(ROM_SIZE);
-	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD, 40);
 
 	ETLPerformance ep(etl);
 	ep.StartTimer();

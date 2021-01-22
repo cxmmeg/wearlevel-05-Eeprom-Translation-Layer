@@ -12,7 +12,7 @@ int main(void) {
 	/* +++++++++++++++Tool Test++++++++++++++ */
 	// GetRandomNumTest();
 	// TestTimer();
-	// rom_unit_test();
+	rom_unit_test();
 	// TestDualLRU();
 	/* ---------------Tool Test-------------- */
 
@@ -22,7 +22,7 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(10000);
+	// TestSingleHotPage(10000);
 	// TestRandomWrite(10000);
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);

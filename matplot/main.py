@@ -63,8 +63,10 @@ def main():
     #     )
 
     #     mf.makeBarRAMCost([863, 863, 863], True)
-#     mf.makeBarRAMCost([22, 66, 115], True)
-    mf.makeBarPageEC(data.page_cnt)
+    #     mf.makeBarRAMCost([22, 66, 115], True)
+    #     mf.makeBarPageEC(data.page_cnt)
+    mf.WithoutCacheVsLRUVs2Q([0.05, 0.10, 0.15, 0.20], [[
+                             0.37, 0.52, 0.62, 0.69], [51, 42, 37, 32]], [[0.33, 0.45, 0.58, 0.66], [53, 47, 39, 34]], [[0.23, 0.31, 0.36, 0.43], [60, 57, 54, 50]], [[0.25, 0.36, 0.46, 0.51], [58, 52, 48, 43]], [68, 68, 68, 68], [68, 68, 68, 68])
 
 
 if __name__ == "__main__":

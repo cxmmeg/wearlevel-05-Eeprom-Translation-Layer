@@ -12,7 +12,7 @@ class ETL;
  */
 class PageTable {
     public:
-	PageTable(ETL* etl, int capacity = 10);
+	PageTable(ETL* etl, int capacity = 0);
 	~PageTable();
 	int  GetPPN(int lpn);
 	void Set(int lpn, int ppn);

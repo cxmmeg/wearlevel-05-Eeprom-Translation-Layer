@@ -275,3 +275,35 @@ def makeBarPageEC(pageECList):
 
 #     plt.show()
     plt.savefig('4.6_figure_2.png')
+
+
+def WithoutCacheVsLRUVs2Q(cacheratio,  t1_lru, t1_2q, t2_lru, t2_2q, t1_NOCMT, t2_NOCMT):
+
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    plt.figure(2, dpi=600)
+
+    ax = plt.subplot(2, 1, 1)
+    plt.plot(cacheratio, t1_lru[0], 'o--', label='T1 LRU-CMT')
+    plt.plot(cacheratio, t1_2q[0], '^--', label='T1 2Q-CMT')
+    plt.plot(cacheratio, t2_lru[0], 'o--', label='T2 LRU-CMT')
+    plt.plot(cacheratio, t2_2q[0], '^--', label='T2 2Q-CMT')
+    plt.xlabel('缓存映射表容量占全局页表大小的比例')
+    plt.ylabel('缓存映射表命中率')
+    ax.xaxis.set_major_locator(MultipleLocator(0.05))
+
+    ax = plt.subplot(2, 1, 2)
+    plt.plot(cacheratio, t1_lru[1], 'o--', label='T1 LRU-CMT')
+    plt.plot(cacheratio, t1_2q[1], '^--', label='T1 2Q-CMT')
+    plt.plot(cacheratio, t2_lru[1], 'o--', label='T2 LRU-CMT')
+    plt.plot(cacheratio, t2_2q[1], '^--', label='T2 2Q-CMT')
+    plt.plot(cacheratio, t1_NOCMT, '+--', label='T1/T2 without CMT')
+    plt.xlabel('缓存映射表容量占全局页表大小的比例')
+    plt.ylabel('运行时间 sec')
+    ax.xaxis.set_major_locator(MultipleLocator(0.05))
+
+#     plt.subplot(2, 1, 1)
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.75)
+    plt.legend(bbox_to_anchor=(0, 3.25), loc=2)
+    plt.savefig('CMT-performance.png')
+#     plt.show()
