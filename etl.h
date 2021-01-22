@@ -50,16 +50,17 @@ class ETL {
     public:
 	ETL(unsigned long long physical_capacity, unsigned long page_indurance = 0);
 	~ETL();
-	bool	 NeedFormat();
-	void	 Format(unsigned char logic_page_size, unsigned int thresh_hold, int pagetable_size = 0);
-	void	 SetInfoPage(InfoPage infopage);
-	InfoPage GetInfoPage();
-	bool	 Write(unsigned long long addr, const char* src, int length);
-	bool	 Read(unsigned long long addr, char* dest, int length);
-	bool	 WriteDataPage(int physical_page_num, DataPage* datapage);
-	bool	 ReadDataPage(int physical_page_num, DataPage* datapage);
-	void	 PrintPMTT();
-	float	 GetHitRate();
+	bool NeedFormat();
+	void Format(unsigned char logic_page_size, unsigned int thresh_hold, int pagetable_size = 0);
+	void SetInfoPage(InfoPage infopage);
+	const InfoPage& GetInfoPage();
+
+	bool  Write(unsigned long long addr, const char* src, int length);
+	bool  Read(unsigned long long addr, char* dest, int length);
+	bool  WriteDataPage(int physical_page_num, DataPage* datapage);
+	bool  ReadDataPage(int physical_page_num, DataPage* datapage);
+	void  PrintPMTT();
+	float GetHitRate();
 
     public:
 	static const int      MAX_CACHE_SIZE = 1024;

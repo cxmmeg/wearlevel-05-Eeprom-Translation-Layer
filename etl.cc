@@ -74,7 +74,7 @@ void ETL::SetInfoPage(InfoPage infopage) {
 	this->info_page_ = infopage;
 }
 
-InfoPage ETL::GetInfoPage() {
+const InfoPage& ETL::GetInfoPage() {
 	InfoPage infopage;
 	size_t	 infopage_size = sizeof(InfoPage);
 	this->RomReadBytes(this->physical_capacity_ - infopage_size, ( char* )&infopage, infopage_size);

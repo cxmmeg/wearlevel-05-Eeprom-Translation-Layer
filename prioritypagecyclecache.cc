@@ -15,26 +15,12 @@ bool OrderByDesc(const PageCycle& pc1, const PageCycle& pc2) {
 }
 
 /* +++++++++++++++++PriorityCache ++++++++++++++++++++++++++++ */
-list< PageCycle >::iterator PriorityCache::FindItem(unsigned int ppn) {
-
-	for (list< PageCycle >::iterator it = this->data.begin(); it != this->data.end(); it++) {
-		if (it->physical_page_num == ppn)
-			return it;
-	}
-
-	return this->data.end();
-}
 
 void PriorityCache::Sort(enum PriorityCacheType type) {
 	if (type == SMALL)
 		this->data.sort(OrderByInc);
 	else
 		this->data.sort(OrderByDesc);
-}
-
-list< PageCycle > PriorityCache::GetData(enum PriorityCacheType type) {
-	this->Sort(type);
-	return this->data;
 }
 
 /* ------------------PriorityCache --------------------------------- */
@@ -70,15 +56,15 @@ PageCycle PriorityPageCycleCache::PopTop() {
 	return top_item;
 }
 
-PageCycle PriorityPageCycleCache::GetTop() {
+const PageCycle& PriorityPageCycleCache::GetTop() {
 	return *(this->cache_.data.begin());
 }
 
-PageCycle PriorityPageCycleCache::GetBottom() {
+const PageCycle& PriorityPageCycleCache::GetBottom() {
 	return *(this->cache_.data.rbegin());
 }
 
-PageCycle PriorityPageCycleCache::GetSecondTop() {
+const PageCycle& PriorityPageCycleCache::GetSecondTop() {
 	list< PageCycle >::iterator it = this->cache_.data.begin();
 	it++;
 	return *it;

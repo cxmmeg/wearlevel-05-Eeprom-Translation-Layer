@@ -165,7 +165,7 @@ void TestSingleHotPage(unsigned int write_cycle) {
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
-	etl = new ETL(ROM_SIZE);
+	etl = new ETL(ROM_SIZE, 500);
 	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD, 40);
 
 	ETLPerformance ep(etl);

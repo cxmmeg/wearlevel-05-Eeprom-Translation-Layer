@@ -24,27 +24,25 @@ struct PriorityCache {
 	PriorityCache(size_t capacity) : max_size_(capacity) {
 	}
 
-	size_t			    max_size_;
-	list< PageCycle >	    data;
-	list< PageCycle >::iterator FindItem(unsigned int ppn);
-	list< PageCycle >	    GetData(enum PriorityCacheType type);
-	void			    Sort(enum PriorityCacheType type);
+	size_t		  max_size_;
+	list< PageCycle > data;
+	void		  Sort(enum PriorityCacheType type);
 };
 
 class PriorityPageCycleCache {
     public:
 	PriorityPageCycleCache(enum PriorityCacheType type, size_t capacity);
 
-	bool	  TryToPushItem(PageCycle pc);
-	PageCycle PopTop();
-	PageCycle GetTop();
-	PageCycle GetBottom();
-	PageCycle GetSecondTop();
-	void	  PopItem(PageCycle pc);
-	bool	  IsEmpty();
-	bool	  IsFull();
-	size_t	  GetSize();
-	void	  Print();
+	bool		 TryToPushItem(PageCycle pc);
+	PageCycle	 PopTop();
+	const PageCycle& GetTop();
+	const PageCycle& GetBottom();
+	const PageCycle& GetSecondTop();
+	void		 PopItem(PageCycle pc);
+	bool		 IsEmpty();
+	bool		 IsFull();
+	size_t		 GetSize();
+	void		 Print();
 
     private:
 	PriorityCache	       cache_;
