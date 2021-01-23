@@ -12,7 +12,7 @@ void TestRandomWrite(unsigned int write_cycle);
 void TestMultiHotPage();
 void TestHotPageToColdPage(unsigned int write_cycle);
 void SampleSimulation(unsigned int round);
-void MultiWriteTest(uint64_t cycles);
+void MultiWriteSimulateTest(uint64_t cycles);
 void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span);
 void MemoryLeakTest();
 // float TestDualCacheHitRate(int cycles);

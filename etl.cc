@@ -104,6 +104,8 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->ReadDataPage(start_physical_page_num, &datapage);
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
+	this->SetDataPageECAndEEC(start_physical_page_num, datapage.erase_cycle,
+				  datapage.effective_erase_cycle);
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
 	this->performance_statistics_.total_write_cycles++;
@@ -111,10 +113,11 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
-		memcpy(datapage.data + data_offset, src, length);
+		// memcpy(datapage.data + data_offset, src, length);
 		this->performance_statistics_.total_write_bytes += length;
 
-		this->WriteDataPage(start_physical_page_num, &datapage, length);
+		// this->WriteDataPage(start_physical_page_num, &datapage, length);
+		this->SetDataPageData(start_physical_page_num, data_offset, src, length);
 
 		/* if triggered, exec dual-pool algorithm */
 		this->TryToExecDualPoolAlgorithm();
@@ -123,8 +126,9 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	}
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
-	memcpy(datapage.data + data_offset, src, front_len);
-	this->WriteDataPage(start_physical_page_num, &datapage, front_len);
+	// memcpy(datapage.data + data_offset, src, front_len);
+	// this->WriteDataPage(start_physical_page_num, &datapage, front_len);
+	this->SetDataPageData(start_physical_page_num, data_offset, src, front_len);
 	this->performance_statistics_.total_write_bytes += front_len;
 
 	/* if triggered, exec dual-pool algorithm */
@@ -237,6 +241,18 @@ void ETL::InitialDualpool() {
 		 this->dualpool_->GetPoolSize(COLDPOOL));
 }
 
+bool ETL::SetDataPageECAndEEC(int physical_page_num, int ec, int eec) {
+	char buff[ 5 ];
+	memcpy(buff, ( char* )&(ec), 2);
+	memcpy(buff + 2, ( char* )&(eec), 2);
+
+	unsigned int	   datapage_size = this->GetDataPageSize();
+	unsigned long long physical_addr =
+		( unsigned long long )datapage_size * ( unsigned long long )physical_page_num;
+
+	return this->RomWriteBytes(physical_addr, buff, 4);
+}
+
 bool ETL::SetDataPageHot(int physical_page_num, char hot) {
 
 	unsigned int	   datapage_size = this->GetDataPageSize();
@@ -246,12 +262,21 @@ bool ETL::SetDataPageHot(int physical_page_num, char hot) {
 	unsigned int offset = sizeof(DataPage::erase_cycle) + sizeof(DataPage::effective_erase_cycle)
 			      + sizeof(DataPage::logic_page_num);
 
-	this->RomWriteBytes(physical_addr + offset, &hot, sizeof(DataPage::hot));
+	return this->RomWriteBytes(physical_addr + offset, &hot, sizeof(DataPage::hot));
 }
 
-bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage, int datalen) {
-	if (datalen == -1)
-		datalen = this->info_page_.logic_page_size;
+bool ETL::SetDataPageData(int physical_page_num, int offset, const char* data, int datalen) {
+	unsigned int	   datapage_size = this->GetDataPageSize();
+	unsigned long long physical_addr =
+		( unsigned long long )datapage_size * ( unsigned long long )physical_page_num;
+
+	unsigned int offset_to_pa = sizeof(DataPage::erase_cycle) + sizeof(DataPage::effective_erase_cycle)
+				    + sizeof(DataPage::logic_page_num) + sizeof(DataPage::hot);
+
+	return this->RomWriteBytes(physical_addr + offset_to_pa + offset, data, datalen);
+}
+
+bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 
 	unsigned int datapage_size = this->GetDataPageSize();
 	char*	     buff	   = ( char* )calloc(datapage_size, sizeof(char));
@@ -274,13 +299,12 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage, int datalen) 
 	// memcpy(buff + offest, ( char* )&datapage->check_sum, sizeof(datapage->check_sum));
 	// offest += sizeof(datapage->check_sum);
 
-	memcpy(buff + offest, datapage->data, datalen /*this->info_page_.logic_page_size*/);
+	memcpy(buff + offest, datapage->data, this->info_page_.logic_page_size);
 
 	unsigned long long physical_addr =
 		( unsigned long long )datapage_size * ( unsigned long long )physical_page_num;
 
-	this->RomWriteBytes(physical_addr, buff,
-			    datapage_size - (this->info_page_.logic_page_size - datalen));
+	this->RomWriteBytes(physical_addr, buff, datapage_size);
 
 	free(buff);
 	buff = NULL;

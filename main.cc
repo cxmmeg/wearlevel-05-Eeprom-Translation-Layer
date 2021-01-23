@@ -24,10 +24,10 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(10000);
 	// TestRandomWrite(10000);
-	TestMultiHotPage();
+	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
-	// MultiWriteTest(20000);
+	MultiWriteSimulateTest(20000);
 	// RelationBtwWritecyclsAndStandarddeviation(200000, 5000);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();

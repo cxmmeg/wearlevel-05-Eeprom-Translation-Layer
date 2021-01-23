@@ -11,7 +11,7 @@ struct DataPage {
 	unsigned int  logic_page_num;
 	unsigned char hot;
 	// unsigned char check_sum;
-	char*	      data;
+	char* data;
 
 	DataPage(int data_size) {
 		this->data = ( char* )calloc(data_size, sizeof(char));

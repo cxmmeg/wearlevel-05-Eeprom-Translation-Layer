@@ -623,7 +623,7 @@ int ROM_ReadBytes(unsigned long long addr, char* dest, int length) {
 }
 
 void rom_unit_test() {
-#define TEST_DATA_LEN 62
+#define TEST_DATA_LEN 17
 	char test_data[ TEST_DATA_LEN + 1 ] = { 0 };
 	for (int i = 0; i < TEST_DATA_LEN; ++i)
 		test_data[ i ] = 'a' + rand() % 26;
