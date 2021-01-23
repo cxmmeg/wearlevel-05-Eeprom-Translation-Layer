@@ -520,14 +520,25 @@ hitrate time    cachesize
 
 
 **+++++++++++++++PWL与DP初步对比+++++++++++++**
-TestCase: MultiWriteTest(20000)
+TestCase: MultiWriteSimulateTest(20000)
+
+NOWL:
+[INFO performance.cc:60] write speed            335 B/sec
+[INFO performance.cc:61] spend time             596 sec
+[INFO performance.cc:62] overhead ratio         1.000000
+[INFO performance.cc:63] standard deviation     14392.594000
+[INFO performance.cc:64] RAM cost               900 B
+[INFO performance.cc:65] dualcache hit rate     0.999900        
+[INFO performance.cc:66] total write cycles : 20005
 
 DP:
-[INFO performance.cc:52] write speed            227 B/sec
-[INFO performance.cc:53] overhead ratio         1.064292
-[INFO performance.cc:54] standard deviation     102.366990
-[INFO performance.cc:55] RAM cost               1356 B
-[INFO performance.cc:56] total write cycles : 20018 
+[INFO performance.cc:60] write speed            329 B/sec
+[INFO performance.cc:61] spend time             607 sec
+[INFO performance.cc:62] overhead ratio         1.007498
+[INFO performance.cc:63] standard deviation     1305.738900
+[INFO performance.cc:64] RAM cost               900 B
+[INFO performance.cc:65] dualcache hit rate     0.999900        
+[INFO performance.cc:66] total write cycles : 20005 
 
 
 PWL:
