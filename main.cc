@@ -27,7 +27,7 @@ int main(void) {
 	// TestMultiHotPage();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
-	MultiWriteSimulateTest(20000);
+	MultiWriteSimulateTest(30000);
 	// RelationBtwWritecyclsAndStandarddeviation(200000, 5000);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();

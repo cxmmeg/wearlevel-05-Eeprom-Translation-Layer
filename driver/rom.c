@@ -153,6 +153,9 @@ int ROM_WriteByte(unsigned long long addr,
 	UpInt();
 	return (nTemp & SDA);
 }
+
+
+
 //最终使用的写入多字节函数,该函数不考虑边界
 static int _ROM_WriteBytes(unsigned long long addr, const char* src,
 			   int length)	//修改了addr的数据类型以满足addr长度要求

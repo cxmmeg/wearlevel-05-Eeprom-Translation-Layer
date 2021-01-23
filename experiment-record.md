@@ -531,22 +531,20 @@ NOWL:
 [INFO performance.cc:65] dualcache hit rate     0.999900        
 [INFO performance.cc:66] total write cycles : 20005
 
-DP:
-[INFO performance.cc:60] write speed            329 B/sec
-[INFO performance.cc:61] spend time             607 sec
-[INFO performance.cc:62] overhead ratio         1.007498
-[INFO performance.cc:63] standard deviation     1305.738900
-[INFO performance.cc:64] RAM cost               900 B
-[INFO performance.cc:65] dualcache hit rate     0.999900        
-[INFO performance.cc:66] total write cycles : 20005 
-
-
 PWL:
-[INFO performance.cc:60] write speed            269 B/sec
-[INFO performance.cc:61] spend time             559 sec
-[INFO performance.cc:62] overhead ratio         1.007577
-[INFO performance.cc:63] standard deviation     1241.338900
-[INFO performance.cc:64] RAM cost               920 B
-[INFO performance.cc:65] dualcache hit rate     0.999885        
-[INFO performance.cc:66] total write cycles : 20060 
+[INFO performance.cc:60] write speed            330 B/sec
+[INFO performance.cc:61] spend time             759 sec
+[INFO performance.cc:62] overhead ratio         1.007424
+[INFO performance.cc:63] standard deviation     997.321400
+[INFO performance.cc:64] RAM cost               900 B
+[INFO performance.cc:65] dualcache hit rate     0.999920        
+[INFO performance.cc:66] total write cycles : 25054 
+
+DP: TH=60
+[INFO performance.cc:52] write speed            290 B/sec
+[INFO performance.cc:53] overhead ratio         1.032689
+[INFO performance.cc:54] standard deviation     327.771240
+[INFO performance.cc:55] RAM cost               1428 B
+[INFO performance.cc:56] total write cycles : 25054 
+
 **---------------PWL与DP初步对比-------------**
