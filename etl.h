@@ -57,7 +57,8 @@ class ETL {
 
 	bool  Write(unsigned long long addr, const char* src, int length);
 	bool  Read(unsigned long long addr, char* dest, int length);
-	bool  WriteDataPage(int physical_page_num, DataPage* datapage);
+	bool  SetDataPageHot(int physical_page_num, char hot);
+	bool  WriteDataPage(int physical_page_num, DataPage* datapage, int datalen = -1);
 	bool  ReadDataPage(int physical_page_num, DataPage* datapage);
 	void  PrintPMTT();
 	float GetHitRate();

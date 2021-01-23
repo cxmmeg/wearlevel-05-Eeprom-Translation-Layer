@@ -10,7 +10,7 @@ struct DataPage {
 	int	      effective_erase_cycle;
 	unsigned int  logic_page_num;
 	unsigned char hot;
-	unsigned char check_sum;
+	// unsigned char check_sum;
 	char*	      data;
 
 	DataPage(int data_size) {
