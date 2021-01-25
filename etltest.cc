@@ -468,6 +468,7 @@ void MemoryLeakTest() {
 
 	LOG_INFO("test done , no memory leak detected\r\n\r\n");
 }
+
 static void
 PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(map< long long, pair< float, float > >& statics) {
 	map< long long, pair< float, float > >::iterator it = statics.begin();
@@ -496,27 +497,29 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 
 	unsigned long long configtable_addr = 10;
 	unsigned long long flowrate_addr    = 100;
-	unsigned long long waterlevel_addr  = 1000;
+	unsigned long long waterlevel_addr  = 500;
 
-	char* configtable_data = "abcdefgh";
-	char* flowrate_data    = "11.222012111652";
-	char* waterlevel_data  = "10.22012111652";
+	char* configtable_data = "0123456789";
+	char* flowrate_data    = "0123456789";
+	char* waterlevel_data  = "0123456789";
 
-	const unsigned long long ROM_SIZE	 = ( unsigned long long )16 * ( unsigned long long )1024;
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
-	const unsigned int	 THRESH_HOLD	 = 100;
+	const unsigned int	 THRESH_HOLD	 = 30;
 
-	etl = new ETL(ROM_SIZE);
+	etl = new ETL(ROM_SIZE, 500);
 	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
 	map< long long, pair< float, float > > cycles_to_overheadratio_and_standarddeviation;
 
-	uint64_t cnt = span;
-	for (uint64_t r = 0; etl->performance_statistics_.total_write_cycles < cycles; r++) {
+	uint64_t  cnt		= span;
+	long long actual_ec_sum = 0;
+	for (uint64_t r = 0; actual_ec_sum < cycles; r++) {
 
-		LOG_INFO("curr write cycles %lld \r\n", etl->performance_statistics_.total_write_cycles);
+		LOG_INFO("curr write cycles %lld,TH = %d \r\n", actual_ec_sum,
+			 etl->dualpool_->GetThreshhold());
 
 		int flowrate_round = 50;
 		if (r % 2 == 0 || r % 3 == 0)
@@ -530,7 +533,10 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 		if (r % 10 == 0)
 			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
 
-		if (etl->performance_statistics_.total_write_cycles >= cnt) {
+		actual_ec_sum = etl->performance_statistics_.total_write_cycles
+				+ etl->performance_statistics_.extra_write_cycles;
+
+		if (actual_ec_sum >= cnt) {
 			cnt += span;
 			float overhead_ratio	 = ep.GetOverheadRatio();
 			float standard_deviation = ep.GetStandardDeviation();
@@ -540,8 +546,79 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 
 			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: "
 				 "%f\r\n ",
-				 etl->performance_statistics_.total_write_cycles, overhead_ratio,
-				 standard_deviation);
+				 actual_ec_sum, overhead_ratio, standard_deviation);
+		}
+	}
+
+	PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(
+		cycles_to_overheadratio_and_standarddeviation);
+
+	/* show test result */
+	// ep.PrintInfo();
+
+	// etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	// etl->PrintPMTT();
+}
+
+void RelationBtwWritecyclsAndWriteSpeed(uint64_t cycles, uint64_t span) {
+
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 500;
+
+	char* configtable_data = "0123456789";
+	char* flowrate_data    = "0123456789";
+	char* waterlevel_data  = "0123456789";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE, 500);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	map< long long, pair< float, float > > cycles_to_overheadratio_and_standarddeviation;
+	map< long long, int >		       cycles_to_speed;
+
+	uint64_t  cnt		= span;
+	long long actual_ec_sum = 0;
+	for (uint64_t r = 0; actual_ec_sum < cycles; r++) {
+
+		LOG_INFO("curr write cycles %lld,TH = %d \r\n", actual_ec_sum,
+			 etl->dualpool_->GetThreshhold());
+
+		int flowrate_round = 50;
+		if (r % 2 == 0 || r % 3 == 0)
+			flowrate_round = 0;
+		for (int fround = 0; fround < flowrate_round; fround++)
+			etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		if (r % 10 == 0)
+			etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+
+		actual_ec_sum = etl->performance_statistics_.total_write_cycles
+				+ etl->performance_statistics_.extra_write_cycles;
+
+		if (actual_ec_sum >= cnt) {
+			cnt += span;
+			float overhead_ratio	 = ep.GetOverheadRatio();
+			float standard_deviation = ep.GetStandardDeviation();
+
+			cycles_to_overheadratio_and_standarddeviation[ etl->performance_statistics_
+									       .total_write_cycles ] =
+				pair< float, float >(overhead_ratio, standard_deviation);
+
+			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: "
+				 "%f\r\n ",
+				 actual_ec_sum, overhead_ratio, standard_deviation);
 		}
 	}
 
@@ -759,18 +836,18 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 // 213, 321, 		436, 212, 207, 205, 644, 227, 199, 325, 261, 289, 655, 475, 592, 813, 434, 321, 480,
 // 221, 457, 		199, 97,  158, 334, 220, 742, 25,  769, 446, 307, 649, 401, 321, 477, 41,  433, 221,
 // 331, 97, 		448, 360, 331, 221, 331, 396, 221, 331, 97,  410, 433, 147, 324, 564, 509, 402, 659,
-// 321, 482, 		769, 17,  307, 651, 445, 321, 412, 765, 321, 430, 200, 307, 194, 309, 745, 618, 319, 809, 345,
-// 		299, 321, 410, 509, 227, 532, 307, 475, 218, 337, 199, 659, 73,	 440, 211, 349, 221, 457, 73,
-// 		206, 341, 307, 450, 442, 227, 439, 656, 97,  654, 620, 434, 455, 493, 417, 321, 699, 353, 440,
-// 		219, 321, 466, 450, 421, 411, 433, 349, 211, 337, 439, 463, 508, 399, 320, 577, 277, 813, 420,
-// 		388, 321, 410, 440, 211, 349, 221, 468, 205, 532, 521, 194, 442, 429, 406, 388, 307, 16,  321,
-// 		412, 307, 430, 406, 681, 307, 435, 337, 615, 213, 364, 289, 410, 475, 471, 66,	534, 321, 455,
-// 		344, 213, 230, 423, 97,	 752, 226, 442, 763, 321, 543, 307, 563, 321, 564, 410, 574, 307, 205,
-// 		147, 744, 219, 321, 422, 307, 756, 374, 307, 413, 189, 331, 337, 432, 627, 442, 437, 552, 213,
-// 		469, 307, 639, 656, 444, 540, 669, 598, 410, 640, 324, 420, 444, 540, 570, 345, 540, 420, 450,
-// 		324, 401, 307, 642, 318, 583, 225, 442, 445, 97,  416, 307, 412, 362, 307, 434, 205, 756, 442,
-// 		776, 299, 321, 410, 445, 221, 313, 215, 425, 483, 450, 434, 442, 435, 338, 549, 205, 613, 402,
-// 		532, 210, 573, 66
+// 321, 482, 		769, 17,  307, 651, 445, 321, 412, 765, 321, 430, 200, 307, 194, 309, 745, 618, 319,
+// 809, 345, 		299, 321, 410, 509, 227, 532, 307, 475, 218, 337, 199, 659, 73,	 440, 211, 349, 221,
+// 457, 73, 		206, 341, 307, 450, 442, 227, 439, 656, 97,  654, 620, 434, 455, 493, 417, 321, 699,
+// 353, 440, 		219, 321, 466, 450, 421, 411, 433, 349, 211, 337, 439, 463, 508, 399, 320, 577, 277,
+// 813, 420, 		388, 321, 410, 440, 211, 349, 221, 468, 205, 532, 521, 194, 442, 429, 406, 388, 307,
+// 16,  321, 		412, 307, 430, 406, 681, 307, 435, 337, 615, 213, 364, 289, 410, 475, 471, 66,	534,
+// 321, 455, 		344, 213, 230, 423, 97,	 752, 226, 442, 763, 321, 543, 307, 563, 321, 564, 410, 574,
+// 307, 205, 		147, 744, 219, 321, 422, 307, 756, 374, 307, 413, 189, 331, 337, 432, 627, 442, 437,
+// 552, 213, 		469, 307, 639, 656, 444, 540, 669, 598, 410, 640, 324, 420, 444, 540, 570, 345, 540,
+// 420, 450, 		324, 401, 307, 642, 318, 583, 225, 442, 445, 97,  416, 307, 412, 362, 307, 434, 205,
+// 756, 442, 		776, 299, 321, 410, 445, 221, 313, 215, 425, 483, 450, 434, 442, 435, 338, 549, 205,
+// 613, 402, 		532, 210, 573, 66
 // 	};
 // 	long write_addr_base_len = sizeof(write_addr_base) / sizeof(write_addr_base[ 0 ]);
 
