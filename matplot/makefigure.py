@@ -79,7 +79,7 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
     titles = ['standard deviation',
               'overhead ratio', 'write speed', 'ram cost']
 
-    yaxes_lables = ['', '', 'byte/s', 'byte']
+    yaxes_lables = ['标准差', '负载比', '平均写速度(byte/s)', 'RAM资源开销(byte)']
 
 #     edgecache_dp_data = [156.8, 1.06, 101, 584]
 #     orgin_dp_data = [129.62, 1.06, 136, 1356]
@@ -92,16 +92,17 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
     # ----------------------params---------------------------
 
     plt.figure(1, dpi=600)
-    plt.title('after 46896 page write cycles')
+#     plt.title('after 46896 page write cycles')
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
 
     for i in range(4):
         ax = plt.subplot(2, 2, i+1)
         rects1 = plt.bar(x - width/2, {edgecache_dp_data[i]},
-                         width=width, label='edge-cache dualpool', color='#0099FF')
+                         width=width, label='渐进式双池算法', color='#0099FF')
         rects2 = plt.bar(x + width/2, {orgin_dp_data[i]},
-                         width=width, label='origin dualpool', color='#FF9900')
+                         width=width, label='双池算法', color='#FF9900')
         rects3 = plt.bar(x + width*3/2, {without_dp_data[i]},
-                         width=width, label='without wear leveling', color='#C0C0C0')
+                         width=width, label='无磨损均衡介入', color='#C0C0C0')
         autolabel(rects1, ax)
         autolabel(rects2, ax)
         autolabel(rects3, ax)
@@ -109,22 +110,23 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
         plt.ylim(
             top=max(edgecache_dp_data[i], orgin_dp_data[i], without_dp_data[i])*1.5)
         ax.set_xticks(x)
-        ax.set_xticklabels([titles[i]])
+        ax.set_xticklabels('')
         plt.subplots_adjust(wspace=subplots_padding, hspace=subplots_padding)
         ax.set_ylabel(yaxes_lables[i], labelpad=1.5)
 
     # add legend
     plt.subplot(2, 2, 2)
     plt.subplots_adjust(top=0.8)
-    plt.legend(bbox_to_anchor=(0.1, 1.5), loc=2, borderaxespad=0)
+    plt.ylim(1.0, 1.1)
+    plt.legend(bbox_to_anchor=(0.2, 1.5), loc=2, borderaxespad=0)
 
     # add main title
-    plt.suptitle('after ' + str(total_write_cycles) + ' page write cycles')
+#     plt.suptitle('after ' + str(total_write_cycles) + ' page write cycles')
 
     plt.style.use("ggplot")
 
     if save:
-        plt.savefig('edgecacheVSorginVSwithoutdualpool.png')
+        plt.savefig('PDPVsDPVsNOWL.png')
     else:
         plt.show()
 
@@ -264,6 +266,29 @@ def makeBarRAMCost(ram_cost, save):
         plt.show()
 
 
+def make3BarFigurePageEC(pageECListNOWL, pageECListDP, pageECListPDP):
+
+    #     plt.figure(1, dpi=600)
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+
+    ax = plt.subplot(1, 2, 1)
+    rects = plt.bar(range(len(pageECListDP)),
+                    pageECListDP,  color='#0099FF')
+    ax.set_ylabel('擦写周期数')
+    ax.set_xlabel('物理页号')
+    plt.title('双池算法')
+    ax = plt.subplot(1, 2, 2)
+    rects = plt.bar(range(len(pageECListPDP)),
+                    pageECListPDP,  color='#0099FF')
+    ax.set_ylabel('擦写周期数')
+    ax.set_xlabel('物理页号')
+    plt.title('渐进式双池算法')
+
+    plt.tight_layout()
+#     plt.show()
+    plt.savefig('DPVsPDP_页面磨损分布.png')
+
+
 def makeBarPageEC(pageECList):
 
     plt.figure(1, dpi=600)
@@ -272,9 +297,10 @@ def makeBarPageEC(pageECList):
     rects = plt.bar(range(len(pageECList)), pageECList, color='#0099FF')
     ax.set_ylabel('擦写周期数')
     ax.set_xlabel('物理页号')
+    plt.title('无磨损均衡介入')
 
 #     plt.show()
-    plt.savefig('4.6_figure_2.png')
+    plt.savefig('无磨损均衡页面分布.png')
 
 
 def WithoutCacheVsLRUVs2Q(cacheratio,  t1_lru, t1_2q, t2_lru, t2_2q, t1_NOCMT, t2_NOCMT):

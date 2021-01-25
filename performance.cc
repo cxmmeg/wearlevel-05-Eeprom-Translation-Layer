@@ -4,7 +4,8 @@
 #include <cmath>
 
 float ETLPerformance::GetStandardDeviation() {
-	long long avrg_write_cycle = this->etl_->performance_statistics_.actual_total_write_cycles
+	long long avrg_write_cycle = (this->etl_->performance_statistics_.extra_write_cycles
+				      + this->etl_->performance_statistics_.total_write_cycles)
 				     / this->etl_->GetInfoPage().total_page_count;
 
 	float	 square_sum = 0;
@@ -20,16 +21,20 @@ float ETLPerformance::GetStandardDeviation() {
 }
 
 float ETLPerformance::GetOverheadRatio() {
-	this->etl_->performance_statistics_.actual_total_write_cycles = 0;
+	// this->etl_->performance_statistics_.extra_write_cycles = 0;
 
-	int	 page_cnt = this->etl_->GetInfoPage().total_page_count;
-	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
-	for (int ppn = 0; ppn < page_cnt; ppn++) {
-		etl_->ReadDataPage(ppn, &datapage_temp);
-		this->etl_->performance_statistics_.actual_total_write_cycles += datapage_temp.erase_cycle;
-	}
+	// int	 page_cnt = this->etl_->GetInfoPage().total_page_count;
+	// DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
+	// for (int ppn = 0; ppn < page_cnt; ppn++) {
+	// 	etl_->ReadDataPage(ppn, &datapage_temp);
+	// 	this->etl_->performance_statistics_.extra_write_cycles += datapage_temp.erase_cycle;
+	// }
 
-	return ( float )this->etl_->performance_statistics_.actual_total_write_cycles
+	// return ( float )this->etl_->performance_statistics_.extra_write_cycles
+	//        / this->etl_->performance_statistics_.total_write_cycles;
+
+	return ( float )(this->etl_->performance_statistics_.extra_write_cycles
+			 + this->etl_->performance_statistics_.total_write_cycles)
 	       / this->etl_->performance_statistics_.total_write_cycles;
 }
 
@@ -64,5 +69,6 @@ void ETLPerformance::PrintInfo() {
 	LOG_INFO("RAM cost\t\t%d B\r\n", this->GetRAMCost());
 	LOG_INFO("dualcache hit rate\t%f\t\r\n", this->etl_->GetHitRate());
 	LOG_INFO("total write cycles : %lld \r\n", this->etl_->performance_statistics_.total_write_cycles);
+	LOG_INFO("extra write cycles : %lld \r\n", this->etl_->performance_statistics_.extra_write_cycles);
 	LOG_INFO("------------ performance ---------------\r\n\r\n");
 }

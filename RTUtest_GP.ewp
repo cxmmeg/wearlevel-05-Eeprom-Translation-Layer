@@ -2609,6 +2609,12 @@
         <name>$PROJ_DIR$\etltest.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\hardiic.cc</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\hardiic.h</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\infopage.cc</name>
     </file>
     <file>

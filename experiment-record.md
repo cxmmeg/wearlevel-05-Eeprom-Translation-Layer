@@ -523,28 +523,52 @@ hitrate time    cachesize
 TestCase: MultiWriteSimulateTest(20000)
 
 NOWL:
-[INFO performance.cc:60] write speed            335 B/sec
-[INFO performance.cc:61] spend time             596 sec
-[INFO performance.cc:62] overhead ratio         1.000000
-[INFO performance.cc:63] standard deviation     14392.594000
-[INFO performance.cc:64] RAM cost               900 B
-[INFO performance.cc:65] dualcache hit rate     0.999900        
-[INFO performance.cc:66] total write cycles : 20005
+[INFO performance.cc:65] write speed            335 B/sec
+[INFO performance.cc:66] spend time             896 sec
+[INFO performance.cc:67] overhead ratio         1.000000
+[INFO performance.cc:68] standard deviation     21610.196000
+[INFO performance.cc:69] RAM cost               900 B
+[INFO performance.cc:70] dualcache hit rate     0.999900        
+[INFO performance.cc:71] total write cycles : 30033 
+[INFO performance.cc:72] extra write cycles : 0 
+{ 0, 113, 0, 0, 0, 0, 0, 0, 0, 0, 18700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 11220, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0 }
 
-PWL:
-[INFO performance.cc:60] write speed            330 B/sec
-[INFO performance.cc:61] spend time             759 sec
-[INFO performance.cc:62] overhead ratio         1.007424
-[INFO performance.cc:63] standard deviation     997.321400
-[INFO performance.cc:64] RAM cost               900 B
-[INFO performance.cc:65] dualcache hit rate     0.999920        
-[INFO performance.cc:66] total write cycles : 25054 
+
+PDP:
+[INFO performance.cc:65] write speed            327 B/sec
+[INFO performance.cc:66] spend time             918 sec
+[INFO performance.cc:67] overhead ratio         1.009922
+[INFO performance.cc:68] standard deviation     492.037600
+[INFO performance.cc:69] RAM cost               420 B
+[INFO performance.cc:70] dualcache hit rate     0.999900        
+[INFO performance.cc:71] total write cycles : 30033 
+[INFO performance.cc:72] extra write cycles : 298 
+page ec:{ 377, 
+387, 381, 249, 375, 246, 368, 247, 370, 245, 251, 243, 365, 243, 359, 241, 359, 240, 351, 239, 353, 
+237, 347, 238, 341, 236, 343, 234, 337, 234, 333, 231, 333, 232, 325, 231, 327, 228, 323, 229, 317, 
+227, 317, 225, 313, 225, 309, 224, 309, 223, 249, 222, 301, 220, 303, 220, 299, 219, 293, 249, 295, 
+217, 291, 327, 287, 227, 285, 326, 279, 324, 281, 325, 277, 325, 273, 324, 273, 324, 269, 321, 267, 
+322, 265, 316, 259, 323, 261, 317, 257, 322, 253, 319, 253, 319, 249, 318, 247, 319, 245, 317, 324, 
+387, 243, 310, 325}
 
 DP: TH=60
-[INFO performance.cc:52] write speed            290 B/sec
-[INFO performance.cc:53] overhead ratio         1.032689
-[INFO performance.cc:54] standard deviation     327.771240
-[INFO performance.cc:55] RAM cost               1428 B
-[INFO performance.cc:56] total write cycles : 25054 
+[INFO performance.cc:54] write speed            290 B/sec
+[INFO performance.cc:55] overhead ratio         1.030866
+[INFO performance.cc:56] standard deviation     266.634580
+[INFO performance.cc:57] RAM cost               1260 B
+[INFO performance.cc:58] total write cycles : 30033 
+[INFO performance.cc:59] extra write cycles : 927 
+page ec:{ 310, 
+309, 300, 311, 310, 249, 249, 311, 310, 249, 309, 249, 310, 249, 310, 249, 310, 249, 310, 249, 310, 
+249, 309, 249, 310, 249, 309, 249, 310, 249, 310, 249, 309, 249, 310, 249, 310, 249, 309, 249, 310, 
+249, 309, 249, 309, 249, 310, 249, 309, 249, 249, 250, 310, 292, 310, 311, 309, 311, 310, 311, 309, 
+311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 
+311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 311, 310, 
+311, 310, 311, 310, }
 
 **---------------PWL与DP初步对比-------------**

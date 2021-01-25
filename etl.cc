@@ -97,8 +97,10 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned int	   end_logic_page_num	   = end_addr / logic_page_size;
 	unsigned int	   start_physical_page_num = this->pagetable_->GetPPN(start_logic_page_num);
 
-	if (start_logic_page_num >= this->info_page_.total_page_count)
+	if (start_logic_page_num >= this->info_page_.total_page_count) {
+		LOG_ERROR("logic addr %llu out of bound\r\n", addr);
 		return false;
+	}
 
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
@@ -166,6 +168,19 @@ bool ETL::Read(unsigned long long addr, char* dest, int length) {
 
 float ETL::GetHitRate() {
 	return this->pagetable_->GetHitRate();
+}
+
+void ETL::PrintPageEC() {
+
+	LOG_INFO("page ec:{ ");
+	DataPage datapage_temp(this->GetInfoPage().logic_page_size);
+	for (unsigned ppn = 0; ppn < this->GetInfoPage().total_page_count; ppn++) {
+		this->ReadDataPage(ppn, &datapage_temp);
+		printf("%u, ", datapage_temp.erase_cycle);
+		if (ppn % 20 == 0)
+			printf("\r\n");
+	}
+	printf("}\n");
 }
 
 /* end of public methods */
@@ -487,6 +502,7 @@ void ETL::DirtySwap() {
 		this->dualpool_->SetHotECHead(PageCycle(coldest_ppn, coldest_datapage->erase_cycle));
 	if (this->dualpool_->GetPoolSize(COLDPOOL) == 1)
 		this->dualpool_->SetColdECTail(PageCycle(hotest_ppn, hotest_datapage->erase_cycle));
+	this->performance_statistics_.extra_write_cycles += 2;
 
 	delete coldest_datapage;
 	delete hotest_datapage;
@@ -508,6 +524,7 @@ void ETL::ColdPoolResize() {
 	// delete cold_to_hot_datapage;
 
 	SetDataPageHot(cold_to_hot_ppn, 1);
+	this->performance_statistics_.extra_write_cycles++;
 }
 
 void ETL::HotPoolResize() {
@@ -523,6 +540,7 @@ void ETL::HotPoolResize() {
 	// this->WriteDataPage(hot_to_cold_ppn, &hot_to_cold_datapage);
 
 	SetDataPageHot(hot_to_cold_ppn, 0);
+	this->performance_statistics_.extra_write_cycles++;
 }
 
 void ETL::InitPerformanceStatistics() {
@@ -532,10 +550,10 @@ void ETL::InitPerformanceStatistics() {
 	this->performance_statistics_.RAM_cost += this->pagetable_->GetCacheSize();
 	LOG_INFO("pagetable ram cost : %d \r\n", this->pagetable_->GetCacheSize());
 
-	this->performance_statistics_.actual_total_write_cycles = 0;
-	this->performance_statistics_.time_cost_in_sec		= 0;
-	this->performance_statistics_.total_write_bytes		= 0;
-	this->performance_statistics_.total_write_cycles	= 0;
+	this->performance_statistics_.extra_write_cycles = 0;
+	this->performance_statistics_.time_cost_in_sec	 = 0;
+	this->performance_statistics_.total_write_bytes	 = 0;
+	this->performance_statistics_.total_write_cycles = 0;
 }
 
 /* end of private methods */

@@ -8,7 +8,7 @@ class ETL;
 
 struct PerformanceStatistics {
 	long long total_write_cycles;
-	long long actual_total_write_cycles;
+	long long extra_write_cycles;
 	long long time_cost_in_sec;
 	long long RAM_cost;
 	long long total_write_bytes;
@@ -17,7 +17,7 @@ struct PerformanceStatistics {
 		this->total_write_cycles	= 0;
 		this->time_cost_in_sec		= 0;
 		this->RAM_cost			= 0;
-		this->actual_total_write_cycles = 0;
+		this->extra_write_cycles = 0;
 		this->total_write_bytes		= 0;
 	}
 };

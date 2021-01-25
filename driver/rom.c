@@ -11,6 +11,7 @@
 #include "rom.h"
 #include "common.h"
 // #include "hydrologycommand.h"
+#include "hardiic.h"
 #include "msp430common.h"
 #include "rtc.h"
 #include <stdint.h>
@@ -154,8 +155,6 @@ int ROM_WriteByte(unsigned long long addr,
 	return (nTemp & SDA);
 }
 
-
-
 //最终使用的写入多字节函数,该函数不考虑边界
 static int _ROM_WriteBytes(unsigned long long addr, const char* src,
 			   int length)	//修改了addr的数据类型以满足addr长度要求
@@ -225,8 +224,9 @@ int IsSame_(const char* data1, const char* data2, size_t len) {
 }
 
 int ROM_WriteBytes_Page_(unsigned long long addr, const char* src,
-			 int length)		       //修改了addr的数据类型以满足addr长度要求
-{						       //修改了数据的长度要求
+			 int length)  //修改了addr的数据类型以满足addr长度要求
+{				      //修改了数据的长度要求
+
 	DownInt();				       //修改为at24c1024b的时序
 	if (addr > ( unsigned long long )524287 - 32)  //地址空间 0x0000  -- 0x0007ffe0
 	{

@@ -8,8 +8,6 @@ def main():
     #         [50.55, 1.05, 100, 312], [57.63, 1.06, 138, 1356], 10000, True)
 
     # ['standard deviation', 'overhead ratio', 'write speed', 'ram cost']
-    #     mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([50.55, 1.05, 100, 312], [
-    #         57.63, 1.06, 138, 1356], [5100.50, 1.0, 147, 0], 10000, True)
 
     #     hotdata = [
     #         [96,  96,  96,  94,  94,  94,  96,  94,  96,  96],
@@ -65,8 +63,14 @@ def main():
     #     mf.makeBarRAMCost([863, 863, 863], True)
     #     mf.makeBarRAMCost([22, 66, 115], True)
     #     mf.makeBarPageEC(data.page_cnt)
-    mf.WithoutCacheVsLRUVs2Q([0.05, 0.10, 0.15, 0.20], [[
-                             0.37, 0.52, 0.62, 0.69], [51, 42, 37, 32]], [[0.33, 0.45, 0.58, 0.66], [53, 47, 39, 34]], [[0.23, 0.31, 0.36, 0.43], [60, 57, 54, 50]], [[0.25, 0.36, 0.46, 0.51], [58, 52, 48, 43]], [68, 68, 68, 68], [68, 68, 68, 68])
+    #     mf.WithoutCacheVsLRUVs2Q([0.05, 0.10, 0.15, 0.20], [[
+    #                              0.37, 0.52, 0.62, 0.69], [51, 42, 37, 32]], [[0.33, 0.45, 0.58, 0.66], [53, 47, 39, 34]], [[0.23, 0.31, 0.36, 0.43], [60, 57, 54, 50]], [[0.25, 0.36, 0.46, 0.51], [58, 52, 48, 43]], [68, 68, 68, 68], [68, 68, 68, 68])
+
+    #     mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([492.03, 1.0099, 327, 313], [
+    #         266.63, 1.0308, 290, 2100], [21610.19, 1.0, 335, 0], 30000, True)
+    #     mf.makeBarPageEC(data.page_cnt_nowl)
+    mf.make3BarFigurePageEC(
+        data.page_cnt_nowl, data.page_cnt_dp, data.page_cnt_pdp)
 
 
 if __name__ == "__main__":

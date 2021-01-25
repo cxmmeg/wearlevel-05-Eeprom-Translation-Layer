@@ -183,7 +183,6 @@ void TestSingleHotPage(unsigned int write_cycle) {
 	ep.PrintInfo();
 
 	DataPage datapage_temp(etl->GetInfoPage().logic_page_size);
-
 	printf("{ ");
 	for (unsigned ppn = 0; ppn < etl->GetInfoPage().total_page_count; ppn++) {
 		etl->ReadDataPage(ppn, &datapage_temp);
@@ -391,7 +390,7 @@ void MultiWriteSimulateTest(uint64_t cycles) {
 
 	unsigned long long configtable_addr = 10;
 	unsigned long long flowrate_addr    = 100;
-	unsigned long long waterlevel_addr  = 1000;
+	unsigned long long waterlevel_addr  = 500;
 
 	char* configtable_data = "0123456789";
 	char* flowrate_data    = "0123456789";
@@ -438,10 +437,11 @@ void MultiWriteSimulateTest(uint64_t cycles) {
 	/* show test result */
 	ep.PrintInfo();
 
-	etl->dualpool_->PrintPool();
-	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
-	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
-	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	etl->PrintPageEC();
+	// etl->dualpool_->PrintPool();
+	// printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	//        etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	//        etl->dualpool_->GetPoolSize(COLDPOOL));
 	// etl->PrintPMTT();
 	printf("test done \r\n");
 }
@@ -754,12 +754,12 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 // 539, 307, 		541, 421, 466, 226, 50, 331, 221, 83,	183, 321, 792, 434, 321, 266, 463, 321, 655,
 // 475, 265, 		238, 307, 433, 321, 519, 307, 431, 442, 328, 552, 321, 680, 307, 321, 655, 445, 319,
 // 244, 307, 		412, 533, 344, 213, 97,	 523, 471, 307, 321, 346, 545, 37,  212, 442, 328, 307, 500,
-// 275, 534, 		219, 430, 326, 97,  412, 450, 321, 590, 307, 618, 430, 450, 97,	 530, 328, 97,	545, 430, 444,
-// 		336, 402, 620, 727, 336, 598, 290, 792, 212, 442, 435, 452, 770, 367, 91,  758, 735, 213, 321,
-// 		436, 212, 207, 205, 644, 227, 199, 325, 261, 289, 655, 475, 592, 813, 434, 321, 480, 221, 457,
-// 		199, 97,  158, 334, 220, 742, 25,  769, 446, 307, 649, 401, 321, 477, 41,  433, 221, 331, 97,
-// 		448, 360, 331, 221, 331, 396, 221, 331, 97,  410, 433, 147, 324, 564, 509, 402, 659, 321, 482,
-// 		769, 17,  307, 651, 445, 321, 412, 765, 321, 430, 200, 307, 194, 309, 745, 618, 319, 809, 345,
+// 275, 534, 		219, 430, 326, 97,  412, 450, 321, 590, 307, 618, 430, 450, 97,	 530, 328, 97, 545,
+// 430, 444, 		336, 402, 620, 727, 336, 598, 290, 792, 212, 442, 435, 452, 770, 367, 91,  758, 735,
+// 213, 321, 		436, 212, 207, 205, 644, 227, 199, 325, 261, 289, 655, 475, 592, 813, 434, 321, 480,
+// 221, 457, 		199, 97,  158, 334, 220, 742, 25,  769, 446, 307, 649, 401, 321, 477, 41,  433, 221,
+// 331, 97, 		448, 360, 331, 221, 331, 396, 221, 331, 97,  410, 433, 147, 324, 564, 509, 402, 659,
+// 321, 482, 		769, 17,  307, 651, 445, 321, 412, 765, 321, 430, 200, 307, 194, 309, 745, 618, 319, 809, 345,
 // 		299, 321, 410, 509, 227, 532, 307, 475, 218, 337, 199, 659, 73,	 440, 211, 349, 221, 457, 73,
 // 		206, 341, 307, 450, 442, 227, 439, 656, 97,  654, 620, 434, 455, 493, 417, 321, 699, 353, 440,
 // 		219, 321, 466, 450, 421, 411, 433, 349, 211, 337, 439, 463, 508, 399, 320, 577, 277, 813, 420,
