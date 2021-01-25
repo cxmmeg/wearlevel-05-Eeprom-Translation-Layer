@@ -518,9 +518,6 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	long long actual_ec_sum = 0;
 	for (uint64_t r = 0; actual_ec_sum < cycles; r++) {
 
-		LOG_INFO("curr write cycles %lld,TH = %d \r\n", actual_ec_sum,
-			 etl->dualpool_->GetThreshhold());
-
 		int flowrate_round = 50;
 		if (r % 2 == 0 || r % 3 == 0)
 			flowrate_round = 0;
@@ -545,8 +542,9 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 				pair< float, float >(overhead_ratio, standard_deviation);
 
 			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: "
-				 "%f\r\n ",
-				 actual_ec_sum, overhead_ratio, standard_deviation);
+				 "%f, TH = %d \r\n ",
+				 actual_ec_sum, overhead_ratio, standard_deviation,
+				 etl->dualpool_->GetThreshhold());
 		}
 	}
 
@@ -561,6 +559,24 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
 	       etl->dualpool_->GetPoolSize(COLDPOOL));
 	// etl->PrintPMTT();
+}
+
+static void PrintRelationBtwCyclesAndWriteSpeed(map< long long, long long >& statics) {
+
+	map< long long, long long >::iterator it = statics.begin();
+
+	LOG_INFO("relation between cycles and write speed");
+
+	printf("cycles : [ ");
+	for (; it != statics.end(); it++)
+		printf("%lld, ", it->first);
+	printf(" ]\r\n");
+
+	it = statics.begin();
+	printf("write speed : [ ");
+	for (; it != statics.end(); it++)
+		printf("%lld, ", it->second);
+	printf(" ]\r\n");
 }
 
 void RelationBtwWritecyclsAndWriteSpeed(uint64_t cycles, uint64_t span) {
@@ -582,15 +598,11 @@ void RelationBtwWritecyclsAndWriteSpeed(uint64_t cycles, uint64_t span) {
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
-	map< long long, pair< float, float > > cycles_to_overheadratio_and_standarddeviation;
-	map< long long, int >		       cycles_to_speed;
+	map< long long, long long > cycles_to_speed;
 
 	uint64_t  cnt		= span;
 	long long actual_ec_sum = 0;
 	for (uint64_t r = 0; actual_ec_sum < cycles; r++) {
-
-		LOG_INFO("curr write cycles %lld,TH = %d \r\n", actual_ec_sum,
-			 etl->dualpool_->GetThreshhold());
 
 		int flowrate_round = 50;
 		if (r % 2 == 0 || r % 3 == 0)
@@ -609,21 +621,16 @@ void RelationBtwWritecyclsAndWriteSpeed(uint64_t cycles, uint64_t span) {
 
 		if (actual_ec_sum >= cnt) {
 			cnt += span;
-			float overhead_ratio	 = ep.GetOverheadRatio();
-			float standard_deviation = ep.GetStandardDeviation();
 
-			cycles_to_overheadratio_and_standarddeviation[ etl->performance_statistics_
-									       .total_write_cycles ] =
-				pair< float, float >(overhead_ratio, standard_deviation);
+			long long writespeed = ep.GetWriteSpeed();
+			cycles_to_speed[ etl->performance_statistics_.total_write_cycles ] = writespeed;
 
-			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: "
-				 "%f\r\n ",
-				 actual_ec_sum, overhead_ratio, standard_deviation);
+			LOG_INFO("write cycles %lld , write speed: %lld, TH = %d \r\n ", actual_ec_sum,
+				 writespeed, etl->dualpool_->GetThreshhold());
 		}
 	}
 
-	PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(
-		cycles_to_overheadratio_and_standarddeviation);
+	PrintRelationBtwCyclesAndWriteSpeed(cycles_to_speed);
 
 	/* show test result */
 	// ep.PrintInfo();
