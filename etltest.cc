@@ -552,7 +552,7 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 		cycles_to_overheadratio_and_standarddeviation);
 
 	/* show test result */
-	// ep.PrintInfo();
+	ep.PrintInfo();
 
 	// etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",

@@ -174,24 +174,29 @@ def drawPlotRelationBtwWritecyclesAndOverheadRationAndStandardDeviation(cyclesDa
     plt.show()
 
 
-def drawPlotByStandardDeviation(cycleData, StandardDeviationData0, StandardDeviationData1, StandardDeviationData2, cycles, saveName):
+def drawPlotByStandardDeviation(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
+                                cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, saveName):
 
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     plt.figure(dpi=600)
-    l1 = plt.plot(cycleData, StandardDeviationData0,
-                  'ro-', label='thresh hold = 5')
-    l2 = plt.plot(cycleData, StandardDeviationData1,
-                  'g+-', label='thresh hold = 30')
-    l3 = plt.plot(cycleData, StandardDeviationData2,
-                  'b^-', label='thresh hold = 100')
-    plt.plot(cycleData, StandardDeviationData0, 'ro-',
-             cycleData, StandardDeviationData1, 'g+-',
-             cycleData, StandardDeviationData2, 'b^-'
-             )
-#     plt.title('after ' + str(cycles) + ' cycles page write')
-    plt.xlabel('page write cycles')
-    plt.ylabel('standard deviation')
+    l1 = plt.plot(cycleData0, StandardDeviationData0,
+                  'o-', label='PDP')
+    l2 = plt.plot(cycleData1, StandardDeviationData1,
+                  '+-', label='DP TH=20')
+    l3 = plt.plot(cycleData2, StandardDeviationData2,
+                  '^-', label='DP TH=50')
+    l3 = plt.plot(cycleData3, StandardDeviationData3,
+                  '*-', label='DP TH=80')
+    l3 = plt.plot(cycleData4, StandardDeviationData4,
+                  'd-', label='DP TH=110')
+#     plt.plot(cycleData, StandardDeviationData0, 'ro-',
+#              cycleData, StandardDeviationData1, 'g+-',
+#              cycleData, StandardDeviationData2, 'b^-'
+#              )
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('标准差')
     plt.legend()
-    plt.axis([0, 210000, 0, 2500])
+    plt.axis([0, 51000, 0, 1500])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -199,24 +204,29 @@ def drawPlotByStandardDeviation(cycleData, StandardDeviationData0, StandardDevia
         plt.show()
 
 
-def drawPlotByOverheadratio(cycleData, ratio0, ratio1, ratio2, cycles, saveName):
+def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
+                            cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, saveName):
 
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     plt.figure(dpi=600)
-    l1 = plt.plot(cycleData, ratio0,
-                  'ro-', label='thresh hold = 5')
-    l2 = plt.plot(cycleData, ratio1,
-                  'g+-', label='thresh hold = 30')
-    l3 = plt.plot(cycleData, ratio2,
-                  'b^-', label='thresh hold = 100')
-    plt.plot(cycleData, ratio0, 'ro-',
-             cycleData, ratio1, 'g+-',
-             cycleData, ratio2, 'b^-'
-             )
-#     plt.title('after ' + str(cycles) + ' cycles page write')
-    plt.xlabel('page write cycles')
-    plt.ylabel('overhead ratio')
+    l1 = plt.plot(cycleData0, StandardDeviationData0,
+                  'o-', label='PDP')
+    l2 = plt.plot(cycleData1, StandardDeviationData1,
+                  '+-', label='DP TH=20')
+    l3 = plt.plot(cycleData2, StandardDeviationData2,
+                  '^-', label='DP TH=50')
+    l3 = plt.plot(cycleData3, StandardDeviationData3,
+                  '*-', label='DP TH=80')
+    l3 = plt.plot(cycleData4, StandardDeviationData4,
+                  'd-', label='DP TH=110')
+#     plt.plot(cycleData, StandardDeviationData0, 'ro-',
+#              cycleData, StandardDeviationData1, 'g+-',
+#              cycleData, StandardDeviationData2, 'b^-'
+#              )
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('负载比')
     plt.legend()
-    plt.axis([0, 210000, 1, 1.5])
+    plt.axis([0, 51000, 1.0, 1.15])
 
     if len(saveName) != 0:
         plt.savefig(saveName)

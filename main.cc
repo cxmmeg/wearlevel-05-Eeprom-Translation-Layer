@@ -29,7 +29,7 @@ int main(void) {
 	// SampleSimulation(200);
 	// MultiWriteSimulateTest(30000);
 	RelationBtwWritecyclsAndStandarddeviation(51000, 500);
-	RelationBtwWritecyclsAndWriteSpeed(51000, 500);
+	// RelationBtwWritecyclsAndWriteSpeed(51000, 500);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();
 	// TestDualCacheHitRate(1000);
