@@ -66,21 +66,24 @@ def main():
     #     mf.WithoutCacheVsLRUVs2Q([0.05, 0.10, 0.15, 0.20], [[
     #                              0.37, 0.52, 0.62, 0.69], [51, 42, 37, 32]], [[0.33, 0.45, 0.58, 0.66], [53, 47, 39, 34]], [[0.23, 0.31, 0.36, 0.43], [60, 57, 54, 50]], [[0.25, 0.36, 0.46, 0.51], [58, 52, 48, 43]], [68, 68, 68, 68], [68, 68, 68, 68])
 
-    #     mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([492.03, 1.0099, 327, 313], [
-    #         266.63, 1.0308, 290, 2100], [21610.19, 1.0, 335, 0], 30000, True)
+    # mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([492.03, 1.0099, 327, 313], [
+    #     266.63, 1.0308, 290, 2100], [21610.19, 1.0, 836, 0], 30000, True)
 
-    #     mf.makeBarPageEC(data.page_cnt_nowl)
+        mf.makeBarPageEC(data.page_cnt)
 
     #     mf.make3BarFigurePageEC(
     #         data.page_cnt_nowl, data.page_cnt_dp, data.page_cnt_pdp)
 
-    mf.drawPlotByStandardDeviation(
-        data.PDP500_cycles, data.PDP500_standard_deviation, data.TH20_cycles, data.TH20_standard_deviation,
-        data.TH50_cycles, data.TH50_standard_deviation, data.TH80_cycles, data.TH80_standard_deviation,
-        data.TH110_cycles, data.TH110_standard_deviation,  "PDPVsDPByStandarddeviation")
-#     mf.drawPlotByOverheadratio(data.PDP500_cycles, data.PDP500_overhead_ratio, data.TH20_cycles, data.TH20_overhead_ratio,
-#                                data.TH50_cycles, data.TH50_overhead_ratio, data.TH80_cycles, data.TH80_overhead_ratio,
-#                                data.TH110_cycles, data.TH110_overhead_ratio,  "PDPVsDPByOverheadratio")
+    #     mf.drawPlotByStandardDeviation(
+    #         data.PDP500_cycles, data.PDP500_standard_deviation, data.TH20_cycles, data.TH20_standard_deviation,
+    #         data.TH50_cycles, data.TH50_standard_deviation, data.TH80_cycles, data.TH80_standard_deviation,
+    #         data.TH110_cycles, data.TH110_standard_deviation,  "PDPVsDPByStandarddeviation")
+    #     mf.drawPlotByOverheadratio(data.PDP500_cycles, data.PDP500_overhead_ratio, data.TH20_cycles, data.TH20_overhead_ratio,
+    #                                data.TH50_cycles, data.TH50_overhead_ratio, data.TH80_cycles, data.TH80_overhead_ratio,
+    #                                data.TH110_cycles, data.TH110_overhead_ratio,  "PDPVsDPByOverheadratio")
+    # mf.drawPlotByWritespeed(data.PDP500_cycles, data.PDP500_write_speed, data.TH20_cycles, data.TH20_write_speed,
+    #                         data.TH50_cycles, data.TH50_write_speed, data.TH80_cycles, data.TH80_write_speed,
+    #                         data.TH110_cycles, data.TH110_write_speed,  "PDPVsDPByWritespeed")
 
 
 if __name__ == "__main__":

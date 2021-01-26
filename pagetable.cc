@@ -80,6 +80,9 @@ vector< int > PageTable::GPTMultiGet(int start_lpn, int cnt) {
 }
 
 int PageTable::GetPPN(int lpn) {
+	// disable CMT
+	// return this->GPTGet(lpn);
+
 	this->req_cnt_++;
 
 	if (this->etl_ && lpn >= this->etl_->info_page_.total_page_count)
@@ -98,6 +101,8 @@ int PageTable::GetPPN(int lpn) {
 }
 
 void PageTable::Set(int lpn, int ppn) {
+	// disable CMT
+	// this->GPTSet(lpn, ppn);
 
 	if (this->etl_ && lpn >= this->etl_->info_page_.total_page_count)
 		return;

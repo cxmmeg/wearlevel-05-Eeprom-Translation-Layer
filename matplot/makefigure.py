@@ -179,16 +179,17 @@ def drawPlotByStandardDeviation(cycleData0, StandardDeviationData0, cycleData1, 
 
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     plt.figure(dpi=600)
+    marksize = 3
     l1 = plt.plot(cycleData0, StandardDeviationData0,
-                  'o-', label='PDP')
+                  'o-', label='PDP', markersize=marksize)
     l2 = plt.plot(cycleData1, StandardDeviationData1,
-                  '+-', label='DP TH=20')
+                  '+-', label='DP TH=20', markersize=marksize)
     l3 = plt.plot(cycleData2, StandardDeviationData2,
-                  '^-', label='DP TH=50')
+                  '^-', label='DP TH=50', markersize=marksize)
     l3 = plt.plot(cycleData3, StandardDeviationData3,
-                  '*-', label='DP TH=80')
+                  '*-', label='DP TH=80', markersize=marksize)
     l3 = plt.plot(cycleData4, StandardDeviationData4,
-                  'd-', label='DP TH=110')
+                  'd-', label='DP TH=110', markersize=marksize)
 #     plt.plot(cycleData, StandardDeviationData0, 'ro-',
 #              cycleData, StandardDeviationData1, 'g+-',
 #              cycleData, StandardDeviationData2, 'b^-'
@@ -209,16 +210,17 @@ def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, Stan
 
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     plt.figure(dpi=600)
-    l1 = plt.plot(cycleData0, StandardDeviationData0,
-                  'o-', label='PDP')
-    l2 = plt.plot(cycleData1, StandardDeviationData1,
-                  '+-', label='DP TH=20')
-    l3 = plt.plot(cycleData2, StandardDeviationData2,
-                  '^-', label='DP TH=50')
-    l3 = plt.plot(cycleData3, StandardDeviationData3,
-                  '*-', label='DP TH=80')
-    l3 = plt.plot(cycleData4, StandardDeviationData4,
-                  'd-', label='DP TH=110')
+    marksize = 2
+    plt.plot(cycleData0, StandardDeviationData0,
+             'o-', label='PDP', markersize=marksize)
+    plt.plot(cycleData1, StandardDeviationData1,
+             '+-', label='DP TH=20', markersize=marksize)
+    plt.plot(cycleData2, StandardDeviationData2,
+             '^-', label='DP TH=50', markersize=marksize)
+    plt.plot(cycleData3, StandardDeviationData3,
+             '*-', label='DP TH=80', markersize=marksize)
+    plt.plot(cycleData4, StandardDeviationData4,
+             'd-', label='DP TH=110', markersize=marksize)
 #     plt.plot(cycleData, StandardDeviationData0, 'ro-',
 #              cycleData, StandardDeviationData1, 'g+-',
 #              cycleData, StandardDeviationData2, 'b^-'
@@ -227,6 +229,37 @@ def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, Stan
     plt.ylabel('负载比')
     plt.legend()
     plt.axis([0, 51000, 1.0, 1.15])
+
+    if len(saveName) != 0:
+        plt.savefig(saveName)
+    else:
+        plt.show()
+
+
+def drawPlotByWritespeed(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
+                         cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, saveName):
+
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    plt.figure(dpi=600)
+    marksize = 2
+    plt.plot(cycleData0, StandardDeviationData0,
+             'o-', label='PDP', markersize=marksize)
+    plt.plot(cycleData1, StandardDeviationData1,
+             '+-', label='DP TH=20', markersize=marksize)
+    plt.plot(cycleData2, StandardDeviationData2,
+             '^-', label='DP TH=50', markersize=marksize)
+    plt.plot(cycleData3, StandardDeviationData3,
+             '*-', label='DP TH=80', markersize=marksize)
+    plt.plot(cycleData4, StandardDeviationData4,
+             'd-', label='DP TH=110', markersize=marksize)
+#     plt.plot(cycleData, StandardDeviationData0, 'ro-',
+#              cycleData, StandardDeviationData1, 'g+-',
+#              cycleData, StandardDeviationData2, 'b^-'
+#              )
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('平均写速度(Byte/s)')
+    plt.legend()
+    plt.axis([0, 51000, 250, 370])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -307,10 +340,10 @@ def makeBarPageEC(pageECList):
     rects = plt.bar(range(len(pageECList)), pageECList, color='#0099FF')
     ax.set_ylabel('擦写周期数')
     ax.set_xlabel('物理页号')
-    plt.title('无磨损均衡介入')
+#     plt.title('无磨损均衡介入')
 
 #     plt.show()
-    plt.savefig('无磨损均衡页面分布.png')
+    plt.savefig('磨损均衡介入下的T2测试用例结果.png')
 
 
 def WithoutCacheVsLRUVs2Q(cacheratio,  t1_lru, t1_2q, t2_lru, t2_2q, t1_NOCMT, t2_NOCMT):

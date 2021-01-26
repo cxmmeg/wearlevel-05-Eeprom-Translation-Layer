@@ -102,6 +102,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		return false;
 	}
 
+	// 如果要禁止磨损均衡，以下代码块需要注释
 	DataPage datapage(logic_page_size);
 	this->ReadDataPage(start_physical_page_num, &datapage);
 	datapage.erase_cycle++;
@@ -110,8 +111,8 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 				  datapage.effective_erase_cycle);
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
-	this->performance_statistics_.total_write_cycles++;
 	this->UpdateThreshhold();
+	this->performance_statistics_.total_write_cycles++;
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -121,7 +122,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		this->SetDataPageData(start_physical_page_num, data_offset, src, length);
 
 		/* if triggered, exec dual-pool algorithm */
-		this->TryToExecDualPoolAlgorithm();
+		// this->TryToExecDualPoolAlgorithm();
 
 		return true;
 	}
@@ -133,7 +134,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->performance_statistics_.total_write_bytes += front_len;
 
 	/* if triggered, exec dual-pool algorithm */
-	this->TryToExecDualPoolAlgorithm();
+	// this->TryToExecDualPoolAlgorithm();
 
 	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
@@ -526,7 +527,7 @@ void ETL::ColdPoolResize() {
 
 	SetDataPageHot(cold_to_hot_ppn, 1);
 	SetDataPageECAndEEC(cold_to_hot_ppn, cold_to_hot_datapage.erase_cycle,
-			    cold_to_hot_datapage.effective_erase_cyclef);
+			    cold_to_hot_datapage.effective_erase_cycle);
 	this->performance_statistics_.extra_write_cycles++;
 }
 
@@ -545,7 +546,7 @@ void ETL::HotPoolResize() {
 
 	SetDataPageHot(hot_to_cold_ppn, 0);
 	SetDataPageECAndEEC(hot_to_cold_ppn, hot_to_cold_datapage.erase_cycle,
-			    hot_to_cold_datapage.effective_erase_cyclef);
+			    hot_to_cold_datapage.effective_erase_cycle);
 	this->performance_statistics_.extra_write_cycles++;
 }
 
