@@ -464,11 +464,11 @@ void ETL::UpdateThreshhold() {
 	if (this->page_indurance_ == 0)
 		return;
 
-	unsigned int avrg_page_write_cycles =
+	int avrg_page_write_cycles =
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
 
-	unsigned int th = this->page_indurance_ - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2);
-	th		= th < 10 ? 10 : th;
+	int th = this->page_indurance_ - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2);
+	th     = th < 10 ? 10 : th;
 	this->dualpool_->SetThreshhold(th);
 }
 
