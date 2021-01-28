@@ -122,7 +122,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		this->SetDataPageData(start_physical_page_num, data_offset, src, length);
 
 		/* if triggered, exec dual-pool algorithm */
-		// this->TryToExecDualPoolAlgorithm();
+		this->TryToExecDualPoolAlgorithm();
 
 		return true;
 	}
@@ -134,7 +134,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->performance_statistics_.total_write_bytes += front_len;
 
 	/* if triggered, exec dual-pool algorithm */
-	// this->TryToExecDualPoolAlgorithm();
+	this->TryToExecDualPoolAlgorithm();
 
 	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
@@ -466,8 +466,10 @@ void ETL::UpdateThreshhold() {
 
 	unsigned int avrg_page_write_cycles =
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
-	this->dualpool_->SetThreshhold(this->page_indurance_
-				       - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2));
+
+	unsigned int th = this->page_indurance_ - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2);
+	th		= th < 10 ? 10 : th;
+	this->dualpool_->SetThreshhold(th);
 }
 
 void ETL::DirtySwap() {

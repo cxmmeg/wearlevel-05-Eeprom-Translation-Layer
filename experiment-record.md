@@ -453,27 +453,27 @@ pagetable ram cost : 264B
 
 T1,对同一个逻辑地址进行10,000次写入操作，每次写入长度20B的数据:
 
-{ 343, 346, 382, 381, 380, 343, 376, 403, 372, 343, 368, 404, 366, 404, 362, 403, 358, 404, 356, 404, 352, 404, 348, 403, 346, 404, 342, 402, 404, 404, 403, 403, 401, 403, 401, 402, 399, 402, 400, 402, 400, 402, 398, 402, 398, 401, 399, 402, 396, 401, 395, 400, 391, 401, 389, 400, 385, 400, 384, 400, 382, 400, 379, 399, 377, 399, 374, 399, 372, 399, 371, 400, 367, 399, 366, 401, 364, 401, 361, 399, 359, 400, 357, 400, 355, 399, 352, 400, 350, 400, 349, 398, 347, 398, 343, 400, 342, 398, 383, 400, 404, 390, 399, 386, 399 }
-write speed            300 B/sec
-spend time             1331 sec        => 1518 without pagetable cache
-overhead ratio         1.013625
-tandard deviation     210.864900
-RAM cost               540 B
-dualcache hit rate     0.999950        
-total write cycles : 40000 
-extra write cycles : 545 
+{ 250, 251, 382, 248, 380, 248, 376, 245, 372, 245, 368, 243, 366, 243, 362, 241, 358, 241, 356, 239, 352, 239, 348, 236, 346, 236, 342, 234, 338, 234, 336, 232, 332, 232, 330, 230, 326, 230, 324, 228, 320, 228, 318, 226, 314, 226, 257, 223, 103, 223, 0, 221, 0, 221, 0, 219, 0, 219, 0, 217, 0, 217, 0, 215, 0, 215, 0, 213, 0, 213, 0, 211, 0, 211, 0, 209, 0, 209, 0, 207, 0, 207, 0, 205, 0, 205, 0, 203, 0, 203, 0, 202, 0, 202, 0, 200, 0, 200, 0, 198, 0, 390, 0, 386, 0 }
+[INFO performance.cc:65] write speed            333 B/sec
+[INFO performance.cc:66] spend time             600 sec  => 694 sec
+[INFO performance.cc:67] overhead ratio         1.008750
+[INFO performance.cc:68] standard deviation     1313.525400  => 14006.78
+[INFO performance.cc:69] RAM cost               540 B
+[INFO performance.cc:70] dualcache hit rate     0.999900        
+[INFO performance.cc:71] total write cycles : 20000 
+[INFO performance.cc:72] extra write cycles : 175 
 
 T2,随机地址写入
 
-page erase cnt :{ 638, 713, 609, 622, 671, 568, 556, 657, 621, 475, 480, 630, 641, 499, 683, 644, 703, 628, 641, 668, 572, 581, 648, 632, 631, 608, 473, 613, 559, 608, 629, 628, 655, 631, 608, 647, 703, 660, 479, 649, 641, 664, 520, 561, 659, 560, 649, 483, 587, 651, 654, 622, 643, 476, 672, 683, 591, 665, 567, 632, 476, 594, 595, 607, 501, 650, 676, 627, 626, 477, 515, 594, 630, 616, 626, 622, 627, 478, 515, 476, 623, 650, 624, 488, 590, 632, 564, 633, 608, 611, 618, 477, 566, 657, 670, 617, 608, 615, 594, 566, 533, 547, 576, 648, 568 }
-[INFO performance.cc:65] write speed            187 B/sec
-[INFO performance.cc:66] spend time             2115 sec    =>  2136 sec
-[INFO performance.cc:67] overhead ratio         1.085832
-[INFO performance.cc:68] standard deviation     624.894400
-[INFO performance.cc:69] RAM cost               360 B
-[INFO performance.cc:70] dualcache hit rate     0.102613        
-[INFO performance.cc:71] total write cycles : 58160 
-[INFO performance.cc:72] extra write cycles : 4992 
+page erase cnt :{ 365, 289, 353, 275, 360, 329, 167, 415, 168, 366, 276, 372, 176, 383, 365, 378, 265, 320, 155, 266, 348, 330, 307, 520, 318, 301, 280, 412, 148, 329, 365, 354, 280, 285, 296, 345, 295, 254, 173, 360, 244, 270, 410, 275, 258, 309, 367, 359, 332, 210, 185, 348, 192, 310, 274, 268, 322, 344, 143, 469, 148, 478, 148, 456, 287, 640, 293, 457, 152, 506, 338, 415, 214, 354, 154, 343, 200, 568, 147, 362, 352, 340, 0, 458, 0, 328, 0, 362, 0, 300, 0, 449, 0, 214, 0, 354, 0, 355, 0, 353, 0, 355, 0, 237, 0 }
+[INFO performance.cc:65] write speed            234 B/sec
+[INFO performance.cc:66] spend time             853 sec => 955 sec without pagetable cache
+[INFO performance.cc:67] overhead ratio         1.007795
+[INFO performance.cc:68] standard deviation     1395.485600     => 4112.882800 without WL
+[INFO performance.cc:69] RAM cost               540 B
+[INFO performance.cc:70] dualcache hit rate     0.823467  , cache size 40     
+[INFO performance.cc:71] total write cycles : 29122 
+[INFO performance.cc:72] extra write cycles : 227  
 
 缓存映射表测试: 
 

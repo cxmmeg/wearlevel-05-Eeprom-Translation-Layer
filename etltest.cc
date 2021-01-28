@@ -5,6 +5,7 @@
 #include "etl.h"
 #include "performance.h"
 #include "rtc.h"
+#include "testcase.h"
 #include "timer.h"
 #include "tool.h"
 #include <map>
@@ -256,15 +257,15 @@ void TestRandomWrite(unsigned int write_cycle) {
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;
 
-	etl = new ETL(ROM_SIZE);
-	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	etl = new ETL(ROM_SIZE, 500);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD, 40);
 
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
 	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "01234567890123456789";
-		etl->Write(randarr_1k[ i % 1000 ], write_buff, strlen(write_buff));
+		etl->Write(GetZipfData()[ i % GetZipfDataLen() ], write_buff, strlen(write_buff));
 		if (i % 100 == 0) {
 			LOG_INFO("round %d \r\n", i);
 			LOG_INFO("thresh hold : %lu \r\n", etl->dualpool_->GetThreshhold());
