@@ -104,7 +104,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 
 	// 如果要禁止磨损均衡，以下代码块需要注释
 	DataPage datapage(logic_page_size);
-	this->ReadDataPage(start_physical_page_num, &datapage);
+	this->ReadDataPageInfo(start_physical_page_num, &datapage);
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
 	this->SetDataPageECAndEEC(start_physical_page_num, datapage.erase_cycle,
@@ -329,6 +329,38 @@ bool ETL::WriteDataPage(int physical_page_num, DataPage* datapage) {
 	return true;
 }
 
+bool ETL::ReadDataPageInfo(int physical_page_num, DataPage* datapage) {
+	const unsigned int datapage_size = this->GetDataPageInfoSize();
+	char*		   buff		 = ( char* )calloc(datapage_size + 1, sizeof(char));
+	if (!buff) {
+		LOG_ERROR("out of memory , calloc failed \r\n\r\n");
+		Loop();
+	}
+	unsigned int offest = 0;
+
+	this->RomReadBytes(( unsigned long long )datapage_size * ( unsigned long long )physical_page_num,
+			   buff, datapage_size);
+
+	memcpy(( char* )&datapage->erase_cycle, buff + offest, sizeof(datapage->erase_cycle));
+	offest += sizeof(datapage->erase_cycle);
+
+	memcpy(( char* )&datapage->effective_erase_cycle, buff + offest,
+	       sizeof(datapage->effective_erase_cycle));
+	offest += sizeof(datapage->effective_erase_cycle);
+
+	memcpy(( char* )&datapage->logic_page_num, buff + offest, sizeof(datapage->logic_page_num));
+	offest += sizeof(datapage->logic_page_num);
+
+	memcpy(( char* )&datapage->hot, buff + offest, sizeof(datapage->hot));
+
+	free(buff);
+	buff = NULL;
+
+	ClearWatchdog();
+
+	return true;
+}
+
 bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	const unsigned int datapage_size = this->GetDataPageSize();
 	char*		   buff		 = ( char* )calloc(datapage_size + 1, sizeof(char));
@@ -367,6 +399,10 @@ bool ETL::ReadDataPage(int physical_page_num, DataPage* datapage) {
 	return true;
 }
 
+unsigned int ETL::GetDataPageInfoSize() {
+	return sizeof(DataPage::erase_cycle) + sizeof(DataPage::effective_erase_cycle)
+	       + sizeof(DataPage::logic_page_num) + sizeof(DataPage::hot);
+}
 unsigned int ETL::GetDataPageSize() {
 	return sizeof(DataPage::erase_cycle) + sizeof(DataPage::effective_erase_cycle)
 	       + sizeof(DataPage::logic_page_num) + sizeof(DataPage::hot) /*+ sizeof(DataPage::check_sum)*/

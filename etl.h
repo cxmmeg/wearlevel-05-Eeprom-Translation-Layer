@@ -62,6 +62,7 @@ class ETL {
 	bool  SetDataPageData(int physical_page_num, int offset, const char* data,
 			      int datalen);  // offset为页内偏移
 	bool  WriteDataPage(int physical_page_num, DataPage* datapage);
+	bool  ReadDataPageInfo(int physical_page_num, DataPage* datapage);
 	bool  ReadDataPage(int physical_page_num, DataPage* datapage);
 	void  PrintPMTT();
 	float GetHitRate();
@@ -87,6 +88,7 @@ class ETL {
 
 	void	     InitialPhysicalPages();
 	void	     InitialDualpool();
+	unsigned int GetDataPageInfoSize();
 	unsigned int GetDataPageSize();
 	void	     ClearDataPage(DataPage* datapage);
 	void	     InitLpnToPpnTable();
