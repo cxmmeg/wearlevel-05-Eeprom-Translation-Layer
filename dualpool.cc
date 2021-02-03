@@ -246,12 +246,22 @@ bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num))
 		return false;
 
-	if (page_to_update->physical_page_num == this->hot_ec_tail_cache_->GetTop().physical_page_num
-	    || page_to_update->cycle < this->hot_ec_tail_cache_->GetTop().cycle) {
+	// if (page_to_update->physical_page_num == this->hot_ec_tail_cache_->GetTop().physical_page_num
+	//     || page_to_update->cycle < this->hot_ec_tail_cache_->GetTop().cycle) {
+	// 	this->hot_ec_tail_cache_->TryToPushItem(*page_to_update);
+	// 	return true;
+	// }
+
+	// return false;
+
+	if (page_to_update->cycle <= this->hot_ec_tail_cache_->GetBottom().cycle) {
 		this->hot_ec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
 	}
 
+	this->hot_ec_tail_cache_->PopItem(*page_to_update);
+	if (this->hot_ec_tail_cache_->IsEmpty())
+		FreshPool(HOTPOOL);
 	return false;
 }
 bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
@@ -259,12 +269,21 @@ bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->cold_pool_, page_to_update->physical_page_num))
 		return false;
 
-	if (page_to_update->physical_page_num == this->cold_ec_tail_cache_->GetTop().physical_page_num
-	    || page_to_update->cycle < this->cold_ec_tail_cache_->GetTop().cycle) {
+	// if (page_to_update->physical_page_num == this->cold_ec_tail_cache_->GetTop().physical_page_num
+	//     || page_to_update->cycle < this->cold_ec_tail_cache_->GetTop().cycle) {
+	// 	this->cold_ec_tail_cache_->TryToPushItem(*page_to_update);
+	// 	return true;
+	// }
+	// return false;
+
+	if (page_to_update->cycle <= this->cold_ec_tail_cache_->GetBottom().cycle) {
 		this->cold_ec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
 	}
 
+	this->cold_ec_tail_cache_->PopItem(*page_to_update);
+	if (this->cold_ec_tail_cache_->IsEmpty())
+		FreshPool(HOTPOOL);
 	return false;
 }
 bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
@@ -272,12 +291,22 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 	if (Tool::IsBitUnSet(this->hot_pool_, page_to_update->physical_page_num))
 		return false;
 
-	if (page_to_update->physical_page_num == this->hot_eec_tail_cache_->GetTop().physical_page_num
-	    || page_to_update->cycle < this->hot_eec_tail_cache_->GetTop().cycle) {
+	// if (page_to_update->physical_page_num == this->hot_eec_tail_cache_->GetTop().physical_page_num
+	//     || page_to_update->cycle < this->hot_eec_tail_cache_->GetTop().cycle) {
+	// 	this->hot_eec_tail_cache_->TryToPushItem(*page_to_update);
+	// 	return true;
+	// }
+
+	// return false;
+
+	if (page_to_update->cycle <= this->hot_eec_tail_cache_->GetBottom().cycle) {
 		this->hot_eec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
 	}
 
+	this->hot_eec_tail_cache_->PopItem(*page_to_update);
+	if (this->hot_eec_tail_cache_->IsEmpty())
+		FreshPool(HOTPOOL);
 	return false;
 }
 
@@ -322,6 +351,31 @@ void DualPool::InitialPoolBorder() {
 			this->cold_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
 			this->cold_eec_head_cache_->TryToPushItem(
 				PageCycle(ppn, datapage_temp.effective_erase_cycle));
+		}
+	}
+}
+
+void DualPool::FreshPool(enum PoolIdentify pool_identify) {
+
+	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
+	int	 poolsize = this->GetPoolSize(pool_identify);
+	int	 cnt	  = 0;
+	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count && cnt < poolsize; ppn++) {
+		if (pool_identify == HOTPOOL && Tool::IsBitSet(this->hot_pool_, ppn)) {
+			this->etl_->ReadDataPage(ppn, &datapage_temp);
+			this->hot_ec_head_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
+			this->hot_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
+			this->hot_eec_tail_cache_->TryToPushItem(
+				PageCycle(ppn, datapage_temp.effective_erase_cycle));
+			cnt++;
+		}
+
+		if (pool_identify == COLDPOOL && Tool::IsBitSet(this->cold_pool_, ppn)) {
+			this->etl_->ReadDataPage(ppn, &datapage_temp);
+			this->cold_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
+			this->cold_eec_head_cache_->TryToPushItem(
+				PageCycle(ppn, datapage_temp.effective_erase_cycle));
+			cnt++;
 		}
 	}
 }
