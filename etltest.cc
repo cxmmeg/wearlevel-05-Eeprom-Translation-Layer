@@ -300,7 +300,7 @@ bool IsSame(const void* data1, const void* data2, size_t len) {
 	return true;
 }
 
-void TestMultiHotPage() {
+void CheckReadWite() {
 	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
 	const unsigned int	 THRESH_HOLD	 = 30;

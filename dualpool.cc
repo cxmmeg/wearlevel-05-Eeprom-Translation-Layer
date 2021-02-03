@@ -131,11 +131,15 @@ PageCycle DualPool::GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_ident
 	if (!big)
 		son.cycle = 32767;
 
-	vector< char >* pool = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
-
-	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
-	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		if (Tool::IsBitUnSet(*pool, ppn) || ppn == old_page->physical_page_num)
+	vector< char >* pool	 = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
+	int		poolsize = this->GetPoolSize(pool_identify);
+	DataPage	datapage_temp(this->etl_->GetInfoPage().logic_page_size);
+	int		cnt = 0;
+	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count && cnt < poolsize; ppn++) {
+		if (Tool::IsBitUnSet(*pool, ppn))
+			continue;
+		cnt++;
+		if (ppn == old_page->physical_page_num)
 			continue;
 		this->etl_->ReadDataPage(ppn, &datapage_temp);
 

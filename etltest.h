@@ -9,7 +9,7 @@ void ETLWriteAndReadTest();
 void ETLFullWriteAndReadFullTest();
 void TestSingleHotPage(unsigned int write_cycle);
 void TestRandomWrite(unsigned int write_cycle);
-void TestMultiHotPage();
+void CheckReadWite();
 void TestHotPageToColdPage(unsigned int write_cycle);
 void SampleSimulation(unsigned int round);
 void MultiWriteSimulateTest(uint64_t cycles);

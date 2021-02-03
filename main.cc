@@ -125,7 +125,7 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(20000);
 	// TestRandomWrite(20000);
-	TestMultiHotPage();
+	CheckReadWite();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
 	// MultiWriteSimulateTest(30000);
