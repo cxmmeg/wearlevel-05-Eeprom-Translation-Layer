@@ -125,10 +125,10 @@ int main(void) {
 	// DualPoolTeste();
 	// TestSingleHotPage(20000);
 	// TestRandomWrite(20000);
-	CheckReadWite();
+	// CheckReadWite();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
-	// MultiWriteSimulateTest(30000);
+	MultiWriteSimulateTest(30000);
 	// RelationBtwWritecyclsAndStandarddeviation(51000, 500);
 	// RelationBtwWritecyclsAndWriteSpeed(51000, 500);
 	// GetSpeed(200000, 5000);

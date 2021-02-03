@@ -141,7 +141,7 @@ PageCycle DualPool::GetSonOfOldPage(PageCycle* old_page, PoolIdentify pool_ident
 		cnt++;
 		if (ppn == old_page->physical_page_num)
 			continue;
-		this->etl_->ReadDataPage(ppn, &datapage_temp);
+		this->etl_->ReadDataPageInfo(ppn, &datapage_temp);
 
 		int curr_cycle =
 			sort_by_erasecycle ? datapage_temp.erase_cycle : datapage_temp.effective_erase_cycle;
@@ -220,7 +220,7 @@ void DualPool::PrintPoolInfo(PoolIdentify pool_identify) {
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
 		if (Tool::IsBitUnSet(*pool, ppn))
 			continue;
-		this->etl_->ReadDataPage(ppn, &datapage_temp);
+		this->etl_->ReadDataPageInfo(ppn, &datapage_temp);
 
 		printf("ppn : %u \t erase cycle : %d \t effective erase cycle : %d \r\n", ppn,
 		       datapage_temp.erase_cycle, datapage_temp.effective_erase_cycle);
@@ -235,7 +235,7 @@ void DualPool::PrintPoolInMatrix() {
 	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
 
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		this->etl_->ReadDataPage(ppn, &datapage_temp);
+		this->etl_->ReadDataPageInfo(ppn, &datapage_temp);
 		if (ppn % matrix_len == 1)
 			printf("[ %u, ", datapage_temp.erase_cycle);
 		else if (ppn % matrix_len == 0)
@@ -338,7 +338,7 @@ void DualPool::InitialPoolBorder() {
 		//     && this->cold_eec_head_cache_->GetSize() >= this->cache_size_)
 		// 	return;
 
-		this->etl_->ReadDataPage(ppn, &datapage_temp);
+		this->etl_->ReadDataPageInfo(ppn, &datapage_temp);
 		if (Tool::IsBitSet(this->hot_pool_, ppn)) {
 			this->hot_ec_head_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
 			this->hot_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
@@ -361,7 +361,7 @@ void DualPool::FreshPool(enum PoolIdentify pool_identify) {
 	int	 cnt	  = 0;
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count && cnt < poolsize; ppn++) {
 		if (pool_identify == HOTPOOL && Tool::IsBitSet(this->hot_pool_, ppn)) {
-			this->etl_->ReadDataPage(ppn, &datapage_temp);
+			this->etl_->ReadDataPageInfo(ppn, &datapage_temp);
 			this->hot_ec_head_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
 			this->hot_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
 			this->hot_eec_tail_cache_->TryToPushItem(
@@ -370,7 +370,7 @@ void DualPool::FreshPool(enum PoolIdentify pool_identify) {
 		}
 
 		if (pool_identify == COLDPOOL && Tool::IsBitSet(this->cold_pool_, ppn)) {
-			this->etl_->ReadDataPage(ppn, &datapage_temp);
+			this->etl_->ReadDataPageInfo(ppn, &datapage_temp);
 			this->cold_ec_tail_cache_->TryToPushItem(PageCycle(ppn, datapage_temp.erase_cycle));
 			this->cold_eec_head_cache_->TryToPushItem(
 				PageCycle(ppn, datapage_temp.effective_erase_cycle));

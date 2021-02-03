@@ -21,9 +21,11 @@
 
 static void IICDelay() {
 	// uint8_t i;
-	// for (i = 0; i < 30; i++)
-	// 	_NOP();
-	System_Delayms(4);
+	// for (i = 0; i < 3000; i++)
+	// 	;
+	// _NOP();
+	// System_Delayms(4);
+	System_Delayus(1200);
 }
 
 void ROM_WP_OFF()  //¹Ø±ÕÐ´±£»¤
