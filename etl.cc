@@ -461,14 +461,13 @@ void ETL::PrintDataPage(DataPage* datapage) {
 
 void ETL::UpdateThreshhold() {
 	// 默认下不开启动态阈值
-	if (this->page_indurance_ == 0)
+	if (this->page_indurance_ == 0 || this->dualpool_->GetThreshhold() <= 10)
 		return;
 
 	int avrg_page_write_cycles =
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
 
 	int th = this->page_indurance_ - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2);
-	th     = th < 10 ? 10 : th;
 	this->dualpool_->SetThreshhold(th);
 }
 

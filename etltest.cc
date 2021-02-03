@@ -311,10 +311,22 @@ void TestMultiHotPage() {
 	etl->PrintPMTT();
 	DataPage datapage(etl->GetInfoPage().logic_page_size);
 	etl->dualpool_->PrintPool();
-	char* readbuf = ( char* )calloc(100, sizeof(char));
-	for (int i = 0; i < 900; ++i) {
-		char* write_buff = "0123456789A";
+	char* readbuf	 = ( char* )calloc(100, sizeof(char));
+	char* write_buff = "0123456789";
+	for (int i = 0; i < 900; i += strlen(write_buff)) {
 		etl->Write(i, write_buff, strlen(write_buff));
+		etl->Read(i, readbuf, strlen(write_buff));
+
+		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
+			printf("oh no, addr[%d] writebuf != readbuf \r\n\r\n", i);
+			printf("writebuf:%s readbuf:%s \r\n\r\n", write_buff, readbuf);
+			while (1)
+				;
+		}
+	}
+
+	LOG_INFO("scan mode\r\n");
+	for (int i = 0; i < 900; i += strlen(write_buff)) {
 		etl->Read(i, readbuf, strlen(write_buff));
 
 		if (!IsSame(write_buff, readbuf, strlen(write_buff))) {
@@ -495,6 +507,7 @@ void MultiWriteSimulateTest(uint64_t cycles) {
 	ep.PrintInfo();
 
 	etl->PrintPageEC();
+	etl->dualpool_->PrintPool();
 	// etl->dualpool_->PrintPool();
 	// printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
 	//        etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),

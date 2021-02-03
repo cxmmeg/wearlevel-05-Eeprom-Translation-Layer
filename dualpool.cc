@@ -252,8 +252,6 @@ bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 	// 	return true;
 	// }
 
-	// return false;
-
 	if (page_to_update->cycle <= this->hot_ec_tail_cache_->GetBottom().cycle) {
 		this->hot_ec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
@@ -274,7 +272,6 @@ bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
 	// 	this->cold_ec_tail_cache_->TryToPushItem(*page_to_update);
 	// 	return true;
 	// }
-	// return false;
 
 	if (page_to_update->cycle <= this->cold_ec_tail_cache_->GetBottom().cycle) {
 		this->cold_ec_tail_cache_->TryToPushItem(*page_to_update);
@@ -283,7 +280,7 @@ bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
 
 	this->cold_ec_tail_cache_->PopItem(*page_to_update);
 	if (this->cold_ec_tail_cache_->IsEmpty())
-		FreshPool(HOTPOOL);
+		FreshPool(COLDPOOL);
 	return false;
 }
 bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
@@ -296,8 +293,6 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 	// 	this->hot_eec_tail_cache_->TryToPushItem(*page_to_update);
 	// 	return true;
 	// }
-
-	// return false;
 
 	if (page_to_update->cycle <= this->hot_eec_tail_cache_->GetBottom().cycle) {
 		this->hot_eec_tail_cache_->TryToPushItem(*page_to_update);
@@ -332,12 +327,12 @@ void DualPool::InitialPoolBorder() {
 	DataPage datapage_temp(this->etl_->GetInfoPage().logic_page_size);
 
 	for (unsigned ppn = 0; ppn < this->etl_->GetInfoPage().total_page_count; ppn++) {
-		if (this->hot_ec_head_cache_->GetSize() >= this->cache_size_
-		    && this->hot_ec_tail_cache_->GetSize() >= this->cache_size_
-		    && this->hot_eec_tail_cache_->GetSize() >= this->cache_size_
-		    && this->cold_ec_tail_cache_->GetSize() >= this->cache_size_
-		    && this->cold_eec_head_cache_->GetSize() >= this->cache_size_)
-			return;
+		// if (this->hot_ec_head_cache_->GetSize() >= this->cache_size_
+		//     && this->hot_ec_tail_cache_->GetSize() >= this->cache_size_
+		//     && this->hot_eec_tail_cache_->GetSize() >= this->cache_size_
+		//     && this->cold_ec_tail_cache_->GetSize() >= this->cache_size_
+		//     && this->cold_eec_head_cache_->GetSize() >= this->cache_size_)
+		// 	return;
 
 		this->etl_->ReadDataPage(ppn, &datapage_temp);
 		if (Tool::IsBitSet(this->hot_pool_, ppn)) {
