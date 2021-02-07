@@ -13,8 +13,8 @@ DualPool::DualPool(unsigned int thresh_hold) : thresh_hold_(thresh_hold) {
 }
 
 DualPool::DualPool(unsigned int thresh_hold, ETL* etl) : thresh_hold_(thresh_hold), etl_(etl) {
-	this->hot_pool_.resize(this->max_page_cnt_ / 8, 0);
-	this->cold_pool_.resize(this->max_page_cnt_ / 8, 0);
+	this->hot_pool_.resize(etl->info_page_.total_page_count / 8 + 1, 0);
+	this->cold_pool_.resize(etl->info_page_.total_page_count / 8 + 1, 0);
 
 	this->cache_size_ = this->etl_->GetInfoPage().total_page_count * 0.1;
 	if (this->cache_size_ * PRIORITYPAGECYCLECACHE_ITEMSIZE * 5 > ETL::MAX_CACHE_SIZE) {
@@ -256,7 +256,8 @@ bool DualPool::TryToUpdateHotECTail(PageCycle* page_to_update) {
 	// 	return true;
 	// }
 
-	if (page_to_update->cycle <= this->hot_ec_tail_cache_->GetBottom().cycle) {
+	if (page_to_update->cycle <= this->hot_ec_tail_cache_->GetBottom().cycle
+	    || this->hot_ec_tail_cache_->GetSize() >= this->GetPoolSize(HOTPOOL)) {
 		this->hot_ec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
 	}
@@ -277,7 +278,8 @@ bool DualPool::TryToUpdateColdECTail(PageCycle* page_to_update) {
 	// 	return true;
 	// }
 
-	if (page_to_update->cycle <= this->cold_ec_tail_cache_->GetBottom().cycle) {
+	if (page_to_update->cycle <= this->cold_ec_tail_cache_->GetBottom().cycle
+	    || this->cold_ec_tail_cache_->GetSize() >= this->GetPoolSize(COLDPOOL)) {
 		this->cold_ec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
 	}
@@ -298,7 +300,8 @@ bool DualPool::TryToUpdateHotEECTail(PageCycle* page_to_update) {
 	// 	return true;
 	// }
 
-	if (page_to_update->cycle <= this->hot_eec_tail_cache_->GetBottom().cycle) {
+	if (page_to_update->cycle <= this->hot_eec_tail_cache_->GetBottom().cycle
+	    || this->hot_eec_tail_cache_->GetSize() >= this->GetPoolSize(HOTPOOL)) {
 		this->hot_eec_tail_cache_->TryToPushItem(*page_to_update);
 		return true;
 	}

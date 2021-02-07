@@ -66,13 +66,19 @@ static int CalcCharSelBitCnt(char data) {
 }
 
 static int GetCharSelBitCnt(char data) {
-	static vector< int > dict;
-	if (dict.size() == 0) {
-		for (int i = 0; i <= 0xFF; i++)
-			dict.push_back(CalcCharSelBitCnt(i));
-	}
+	// static vector< int > dict;
+	// if (dict.size() == 0) {
+	// 	for (int i = 0; i <= 0xFF; i++)
+	// 		dict.push_back(CalcCharSelBitCnt(i));
+	// }
 
-	return dict[ data ];
+	// return dict[ data ];
+	int cnt = 0;
+	while (data > 0) {
+		++cnt;
+		data &= data - 1;
+	}
+	return cnt;
 }
 
 int Tool::CountSelBitCnt(const vector< char >& bitmap) {
@@ -91,7 +97,6 @@ int Tool::GetRandomNum(int max) {
 	srand(( unsigned int )rtc_time.GetTimestamp());
 
 	return rand() % max;
-	
 }
 
 /*++++++++++++++++++++Test++++++++++++++++++++++++*/

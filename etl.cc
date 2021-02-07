@@ -107,8 +107,6 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->ReadDataPageInfo(start_physical_page_num, &datapage);
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
-	// this->SetDataPageECAndEEC(start_physical_page_num, datapage.erase_cycle,
-	// 			  datapage.effective_erase_cycle);
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
 	this->UpdateThreshhold();
@@ -117,9 +115,15 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
 		this->performance_statistics_.total_write_bytes += length;
-		memcpy(datapage.data + data_offset, src, length);
-		this->WriteDataPage(start_physical_page_num, &datapage);
-		// this->SetDataPageData(start_physical_page_num, data_offset, src, length);
+		if (length < this->info_page_.logic_page_size / 2) {
+			this->SetDataPageECAndEEC(start_physical_page_num, datapage.erase_cycle,
+						  datapage.effective_erase_cycle);
+			this->SetDataPageData(start_physical_page_num, data_offset, src, length);
+		}
+		else {
+			memcpy(datapage.data + data_offset, src, length);
+			this->WriteDataPage(start_physical_page_num, &datapage);
+		}
 
 		/* if triggered, exec dual-pool algorithm */
 		this->TryToExecDualPoolAlgorithm();
@@ -128,9 +132,16 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	}
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
-	memcpy(datapage.data + data_offset, src, front_len);
-	this->WriteDataPage(start_physical_page_num, &datapage);
-	// this->SetDataPageData(start_physical_page_num, data_offset, src, front_len);
+
+	if (front_len < this->info_page_.logic_page_size / 2) {
+		this->SetDataPageECAndEEC(start_physical_page_num, datapage.erase_cycle,
+					  datapage.effective_erase_cycle);
+		this->SetDataPageData(start_physical_page_num, data_offset, src, front_len);
+	}
+	else {
+		memcpy(datapage.data + data_offset, src, front_len);
+		this->WriteDataPage(start_physical_page_num, &datapage);
+	}
 	this->performance_statistics_.total_write_bytes += front_len;
 
 	/* if triggered, exec dual-pool algorithm */
