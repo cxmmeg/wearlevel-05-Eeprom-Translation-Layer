@@ -112,6 +112,7 @@ bool PriorityPageCycleCache::IsFull() {
 
 size_t PriorityPageCycleCache::GetSize() {
 	return this->cache_.data.size();
+	// return this->cache_size_;
 }
 
 void PriorityPageCycleCache::Print() {

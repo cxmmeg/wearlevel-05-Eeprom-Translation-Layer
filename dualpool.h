@@ -68,6 +68,7 @@ class DualPool {
 	static const int max_page_cnt_ = 4 * 1024;
 	vector< char >	 hot_pool_;
 	vector< char >	 cold_pool_;
+	size_t		 hot_pool_size_;
 
     public:
 	size_t			cache_size_;

@@ -78,10 +78,14 @@ void DualPool::AddPageIntoPool(unsigned int physical_page_num, DataPage* datapag
 
 	if (pool_identify == HOTPOOL) {
 		Tool::SetBit(this->hot_pool_, physical_page_num);
+		Tool::UnSetBit(this->cold_pool_, physical_page_num);
 	}
 	else {
+		Tool::UnSetBit(this->hot_pool_, physical_page_num);
 		Tool::SetBit(this->cold_pool_, physical_page_num);
 	}
+
+	this->hot_pool_size_ = Tool::CountSelBitCnt(this->hot_pool_);
 
 	TryToUpdatePoolBorder(physical_page_num, datapage->erase_cycle, datapage->effective_erase_cycle);
 }
@@ -398,9 +402,15 @@ void DualPool::TryToUpdatePoolBorder(unsigned int ppn, int erase_cnt, int effect
 }
 
 int DualPool::GetPoolSize(enum PoolIdentify pool_identify) {
-	vector< char >* pool = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
+	// vector< char >* pool = pool_identify == HOTPOOL ? &(this->hot_pool_) : &(this->cold_pool_);
+	// return Tool::CountSelBitCnt(*pool);
 
-	return Tool::CountSelBitCnt(*pool);
+	if (pool_identify == HOTPOOL) {
+		return this->hot_pool_size_;
+	}
+	else {
+		return this->etl_->info_page_.total_page_count - this->hot_pool_size_;
+	}
 }
 
 void DualPool::PrintPool() {

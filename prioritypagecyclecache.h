@@ -39,7 +39,7 @@ struct PriorityCache {
 		dict[ ppn ] = data.find(pc);
 	}
 
-	void PopItem(unsigned int ppn) {
+	bool PopItem(unsigned int ppn) {
 		if (dict.count(ppn) == 0)
 			return;
 		data.erase(dict[ ppn ]);

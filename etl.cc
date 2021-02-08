@@ -65,7 +65,7 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold, int pa
 		delete this->pagetable_;
 		this->pagetable_ = new PageTable(this, pagetable_size);
 	}
-	InitLpnToPpnTable();
+	// InitLpnToPpnTable();
 
 	this->InitPerformanceStatistics();
 
