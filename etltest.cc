@@ -631,6 +631,75 @@ void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span) {
 	// etl->PrintPMTT();
 }
 
+void RelationBtwWritecyclsAndStandarddeviation(uint64_t span) {
+
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 500;
+
+	char* configtable_data = "0123456789";
+	char* flowrate_data    = "0123456789";
+	char* waterlevel_data  = "0123456789";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE, 500);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	map< long long, pair< float, float > > cycles_to_overheadratio_and_standarddeviation;
+
+	uint64_t  cnt		= span;
+	long long actual_ec_sum = 0;
+	bool	  write_res	= true;
+	for (uint64_t r = 0; write_res == true; r++) {
+
+		int flowrate_round = 50;
+		if (r % 2 == 0 || r % 3 == 0)
+			flowrate_round = 0;
+		for (int fround = 0; fround < flowrate_round; fround++)
+			write_res = etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			write_res = etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		if (r % 10 == 0)
+			write_res = etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+
+		actual_ec_sum = etl->performance_statistics_.total_write_cycles
+				+ etl->performance_statistics_.extra_write_cycles;
+
+		if (actual_ec_sum >= cnt || !write_res) {
+			cnt += span;
+			float overhead_ratio	 = ep.GetOverheadRatio();
+			float standard_deviation = ep.GetStandardDeviation();
+			cycles_to_overheadratio_and_standarddeviation[ etl->performance_statistics_
+									       .total_write_cycles ] =
+				pair< float, float >(overhead_ratio, standard_deviation);
+
+			LOG_INFO("write cycles %lld , overhead ratio : %f, standard deviation: "
+				 "%f, TH = %d \r\n ",
+				 actual_ec_sum, overhead_ratio, standard_deviation,
+				 etl->dualpool_->GetThreshhold());
+		}
+	}
+
+	PrintRelationBtwCyclesAndOverheadRatioAndStandarddeviation(
+		cycles_to_overheadratio_and_standarddeviation);
+
+	/* show test result */
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	// etl->PrintPMTT();
+}
+
 static void PrintRelationBtwCyclesAndWriteSpeed(map< long long, long long >& statics) {
 
 	map< long long, long long >::iterator it = statics.begin();

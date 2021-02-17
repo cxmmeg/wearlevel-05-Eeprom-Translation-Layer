@@ -14,6 +14,7 @@ void TestHotPageToColdPage(unsigned int write_cycle);
 void SampleSimulation(unsigned int round);
 void MultiWriteSimulateTest(uint64_t cycles);
 void RelationBtwWritecyclsAndStandarddeviation(uint64_t cycles, uint64_t span);
+void RelationBtwWritecyclsAndStandarddeviation(uint64_t span);
 void RelationBtwWritecyclsAndWriteSpeed(uint64_t cycles, uint64_t span);
 void MemoryLeakTest();
 // float TestDualCacheHitRate(int cycles);

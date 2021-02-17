@@ -65,7 +65,7 @@ void ETL::Format(unsigned char logic_page_size, unsigned int thresh_hold, int pa
 		delete this->pagetable_;
 		this->pagetable_ = new PageTable(this, pagetable_size);
 	}
-	// InitLpnToPpnTable();
+	InitLpnToPpnTable();
 
 	this->InitPerformanceStatistics();
 
@@ -89,7 +89,7 @@ const InfoPage& ETL::GetInfoPage() {
 
 bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	if (length == 0)
-		return false;
+		return true;
 
 	unsigned int	   logic_page_size	   = this->info_page_.logic_page_size;
 	unsigned long long end_addr		   = addr + length;
@@ -105,6 +105,8 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	// 如果要禁止磨损均衡，以下代码块需要注释
 	DataPage datapage(logic_page_size);
 	this->ReadDataPageInfo(start_physical_page_num, &datapage);
+	if (datapage.erase_cycle >= this->page_indurance_)
+		return false;
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
@@ -514,7 +516,8 @@ void ETL::UpdateThreshhold() {
 	int avrg_page_write_cycles =
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
 
-	int th = this->page_indurance_ - (avrg_page_write_cycles / 2 + this->page_indurance_ / 2);
+	// int th = this->page_indurance_ - ((avrg_page_write_cycles + this->page_indurance_) * 0.5);
+	int th = this->page_indurance_ - (0.5 * this->page_indurance_ + avrg_page_write_cycles * 0.5);
 	this->dualpool_->SetThreshhold(th);
 }
 
