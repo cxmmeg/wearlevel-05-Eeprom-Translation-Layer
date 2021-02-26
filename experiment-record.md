@@ -507,20 +507,22 @@ hitrate time cachesize
 TestCase: MultiWriteSimulateTest(30000)
 
 NOWL:
-[INFO performance.cc:65] write speed 836 B/sec
-[INFO performance.cc:66] spend time 359 sec
-[INFO performance.cc:67] overhead ratio 1.000000
-[INFO performance.cc:68] standard deviation 21610.196000
-[INFO performance.cc:69] RAM cost 900 B
-[INFO performance.cc:70] dualcache hit rate 0.999900  
-[INFO performance.cc:71] total write cycles : 30033
-[INFO performance.cc:72] extra write cycles : 0
-{ 0, 113, 0, 0, 0, 0, 0, 0, 0, 0, 18700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 11220, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0 }
+[INFO performance.cc:55] ++++++++++++ performance +++++++++++++++
+
+[INFO performance.cc:56] write speed            423 B/sec
+[INFO performance.cc:57] overhead ratio         1.000000
+[INFO performance.cc:58] standard deviation     21600.232000
+[INFO performance.cc:59] RAM cost               520 B
+[INFO performance.cc:60] dualcache hit rate     0.999900        
+[INFO performance.cc:61] total write cycles : 30033 
+[INFO performance.cc:62] ------------ performance ---------------
+
+[INFO etl.cc:171] page ec:{ 0, 
+113, 0, 0, 0, 0, 0, 0, 0, 0, 18700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 11220, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }
 
 PDP:
 [INFO performance.cc:64] ++++++++++++ performance +++++++++++++++
