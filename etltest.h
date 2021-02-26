@@ -20,5 +20,6 @@ void MemoryLeakTest();
 // float TestDualCacheHitRate(int cycles);
 void GetSpeed(uint64_t cycles, uint64_t span);
 // void  TestMultiPagetableHitrate();
+void RelationBtwWritecyclsAndSpeed(uint64_t span);
 
 #endif

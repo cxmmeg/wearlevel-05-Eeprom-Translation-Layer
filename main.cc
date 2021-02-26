@@ -128,10 +128,11 @@ int main(void) {
 	// CheckReadWite();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
-	// MultiWriteSimulateTest(30000);
+	MultiWriteSimulateTest(30000);
 	// RelationBtwWritecyclsAndStandarddeviation(51000, 500);
-	RelationBtwWritecyclsAndStandarddeviation(500);
 	// RelationBtwWritecyclsAndWriteSpeed(51000, 500);
+	// RelationBtwWritecyclsAndStandarddeviation(500);
+	// RelationBtwWritecyclsAndSpeed(500);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();
 	// TestDualCacheHitRate(1000);

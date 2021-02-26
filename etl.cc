@@ -517,7 +517,7 @@ void ETL::UpdateThreshhold() {
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
 
 	// int th = this->page_indurance_ - ((avrg_page_write_cycles + this->page_indurance_) * 0.5);
-	int th = this->page_indurance_ - (0.5 * this->page_indurance_ + avrg_page_write_cycles * 0.5);
+	int th = this->page_indurance_ - ((1 - 0.5) * this->page_indurance_ + avrg_page_write_cycles * 0.5);
 	this->dualpool_->SetThreshhold(th);
 }
 

@@ -69,7 +69,7 @@ def main():
     # mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([492.03, 1.0099, 327, 313], [
     #     266.63, 1.0308, 290, 2100], [21610.19, 1.0, 836, 0], 30000, True)
 
-        mf.makeBarPageEC(data.page_cnt)
+    # mf.makeBarPageEC(data.page_cnt)
 
     #     mf.make3BarFigurePageEC(
     #         data.page_cnt_nowl, data.page_cnt_dp, data.page_cnt_pdp)
@@ -81,9 +81,9 @@ def main():
     #     mf.drawPlotByOverheadratio(data.PDP500_cycles, data.PDP500_overhead_ratio, data.TH20_cycles, data.TH20_overhead_ratio,
     #                                data.TH50_cycles, data.TH50_overhead_ratio, data.TH80_cycles, data.TH80_overhead_ratio,
     #                                data.TH110_cycles, data.TH110_overhead_ratio,  "PDPVsDPByOverheadratio")
-    # mf.drawPlotByWritespeed(data.PDP500_cycles, data.PDP500_write_speed, data.TH20_cycles, data.TH20_write_speed,
-    #                         data.TH50_cycles, data.TH50_write_speed, data.TH80_cycles, data.TH80_write_speed,
-    #                         data.TH110_cycles, data.TH110_write_speed,  "PDPVsDPByWritespeed")
+    mf.drawPlotByWritespeed(data.PDP500_cycles, data.PDP500_write_speed, data.TH20_cycles, data.TH20_write_speed,
+                            data.TH50_cycles, data.TH50_write_speed, data.TH80_cycles, data.TH80_write_speed,
+                            data.TH110_cycles, data.TH110_write_speed,  "PDPVsDPByWritespeed")
 
 
 if __name__ == "__main__":
