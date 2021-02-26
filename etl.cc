@@ -105,10 +105,10 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->ReadDataPage(start_physical_page_num, &datapage);
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
-	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
-					       datapage.effective_erase_cycle);
+	// this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
+	// 				       datapage.effective_erase_cycle);
 	this->performance_statistics_.total_write_cycles++;
-	this->UpdateThreshhold();
+	// this->UpdateThreshhold();
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -118,7 +118,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		this->WriteDataPage(start_physical_page_num, &datapage);
 
 		/* if triggered, exec dual-pool algorithm */
-		this->TryToExecDualPoolAlgorithm();
+		// this->TryToExecDualPoolAlgorithm();
 
 		return true;
 	}
@@ -129,7 +129,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	this->performance_statistics_.total_write_bytes += front_len;
 
 	/* if triggered, exec dual-pool algorithm */
-	this->TryToExecDualPoolAlgorithm();
+	// this->TryToExecDualPoolAlgorithm();
 
 	return this->Write(next_page_start_addr, src + front_len, length - front_len);
 }
@@ -166,6 +166,18 @@ float ETL::GetHitRate() {
 	return this->pagetable_->GetHitRate();
 }
 
+void ETL::PrintPageEC() {
+
+	LOG_INFO("page ec:{ ");
+	DataPage datapage_temp(this->GetInfoPage().logic_page_size);
+	for (unsigned ppn = 0; ppn < this->GetInfoPage().total_page_count; ppn++) {
+		this->ReadDataPage(ppn, &datapage_temp);
+		printf("%u, ", datapage_temp.erase_cycle);
+		if (ppn % 20 == 0)
+			printf("\r\n");
+	}
+	printf("}\n");
+}
 /* end of public methods */
 
 /* private methods */

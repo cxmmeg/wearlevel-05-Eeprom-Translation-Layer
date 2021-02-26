@@ -389,11 +389,11 @@ void MultiWriteTest(uint64_t cycles) {
 
 	unsigned long long configtable_addr = 10;
 	unsigned long long flowrate_addr    = 100;
-	unsigned long long waterlevel_addr  = 1000;
+	unsigned long long waterlevel_addr  = 500;
 
-	char* configtable_data = "abcdefgh";
-	char* flowrate_data    = "11.222012111652";
-	char* waterlevel_data  = "10.22012111652";
+	char* configtable_data = "0123456789";
+	char* flowrate_data    = "0123456789";
+	char* waterlevel_data  = "0123456789";
 
 	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
 	const unsigned char	 LOGIC_PAGE_SIZE = 10;
@@ -431,6 +431,7 @@ void MultiWriteTest(uint64_t cycles) {
 
 	/* show test result */
 	ep.PrintInfo();
+	etl->PrintPageEC();
 
 	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
