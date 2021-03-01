@@ -79,7 +79,7 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
     titles = ['standard deviation',
               'overhead ratio', 'write speed', 'ram cost']
 
-    yaxes_lables = ['标准差', '负载比', '平均写速度(byte/s)', 'RAM资源开销(byte)']
+    yaxes_lables = ['标准差', '负载比', '平均写速度(Byte/s)', 'RAM资源开销(Byte)']
 
 #     edgecache_dp_data = [156.8, 1.06, 101, 584]
 #     orgin_dp_data = [129.62, 1.06, 136, 1356]
@@ -119,6 +119,9 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
     plt.subplots_adjust(top=0.8)
     plt.ylim(1.0, 1.1)
     plt.legend(bbox_to_anchor=(0.2, 1.5), loc=2, borderaxespad=0)
+
+    plt.subplot(2, 2, 3)
+    plt.ylim(300, 500)
 
     # add main title
 #     plt.suptitle('after ' + str(total_write_cycles) + ' page write cycles')
@@ -181,15 +184,15 @@ def drawPlotByStandardDeviation(cycleData0, StandardDeviationData0, cycleData1, 
     plt.figure(dpi=600)
     marksize = 3
     l1 = plt.plot(cycleData0, StandardDeviationData0,
-                  'o-', label='渐进式双池算法', markersize=marksize)
+                  '-', label='渐进式双池算法', markersize=marksize)
     l2 = plt.plot(cycleData1, StandardDeviationData1,
-                  '+-', label='双池算法 TH=10', markersize=marksize)
+                  '-', label='双池算法 TH=10', markersize=marksize)
     l3 = plt.plot(cycleData2, StandardDeviationData2,
-                  '^-', label='双池算法 TH=30', markersize=marksize)
+                  '-', label='双池算法 TH=30', markersize=marksize)
     l3 = plt.plot(cycleData3, StandardDeviationData3,
-                  '*-', label='双池算法 TH=50', markersize=marksize)
+                  '-', label='双池算法 TH=50', markersize=marksize)
     l3 = plt.plot(cycleData4, StandardDeviationData4,
-                  'd-', label='双池算法 TH=70', markersize=marksize)
+                  '-', label='双池算法 TH=70', markersize=marksize)
 #     plt.plot(cycleData, StandardDeviationData0, 'ro-',
 #              cycleData, StandardDeviationData1, 'g+-',
 #              cycleData, StandardDeviationData2, 'b^-'
@@ -198,6 +201,40 @@ def drawPlotByStandardDeviation(cycleData0, StandardDeviationData0, cycleData1, 
     plt.ylabel('标准差')
     plt.legend()
     plt.axis([0, 51000, 0, 1500])
+
+    if len(saveName) != 0:
+        plt.savefig(saveName)
+    else:
+        plt.show()
+
+
+def drawPlotByStandardDeviation2(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
+                                 cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, cycleData5, StandardDeviationData5,
+                                 cycleData6, StandardDeviationData6, cycleData7, StandardDeviationData7, saveName):
+
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    plt.figure(dpi=600)
+    marksize = 3
+    l1 = plt.plot(cycleData0, StandardDeviationData0,
+                  '-', label='α = 0.30', markersize=marksize)
+    l2 = plt.plot(cycleData1, StandardDeviationData1,
+                  '-', label='α = 0.40', markersize=marksize)
+    l3 = plt.plot(cycleData2, StandardDeviationData2,
+                  '-', label='α = 0.50', markersize=marksize)
+    l3 = plt.plot(cycleData3, StandardDeviationData3,
+                  '-', label='α = 0.60', markersize=marksize)
+    l3 = plt.plot(cycleData4, StandardDeviationData4,
+                  '-', label='α = 0.70', markersize=marksize)
+    l3 = plt.plot(cycleData5, StandardDeviationData5,
+                  '-', label='α = 0.72', markersize=marksize)
+    l3 = plt.plot(cycleData6, StandardDeviationData6,
+                  '-', label='α = 0.73', markersize=marksize)
+    l3 = plt.plot(cycleData7, StandardDeviationData7,
+                  '-', label='α = 0.74', markersize=marksize)
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('标准差')
+    plt.legend()
+    plt.axis([0, 52000, 0, 2000])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -311,21 +348,23 @@ def makeBarRAMCost(ram_cost, save):
 
 def make3BarFigurePageEC(pageECListNOWL, pageECListDP, pageECListPDP):
 
-    #     plt.figure(1, dpi=600)
+    plt.figure(1, dpi=600)
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
 
     ax = plt.subplot(1, 2, 1)
-    rects = plt.bar(range(len(pageECListDP)),
-                    pageECListDP,  color='#0099FF')
+    rects = plt.plot(range(len(pageECListDP)),
+                     pageECListDP, 'o', color='#0099FF', markersize=1.7)
     ax.set_ylabel('擦写周期数')
     ax.set_xlabel('物理页号')
     plt.title('双池算法')
+    plt.ylim(0, 400)
     ax = plt.subplot(1, 2, 2)
-    rects = plt.bar(range(len(pageECListPDP)),
-                    pageECListPDP,  color='#0099FF')
+    rects = plt.plot(range(len(pageECListPDP)),
+                     pageECListPDP, 'o',  color='#0099FF', markersize=1.7)
     ax.set_ylabel('擦写周期数')
     ax.set_xlabel('物理页号')
     plt.title('渐进式双池算法')
+    plt.ylim(0, 400)
 
     plt.tight_layout()
 #     plt.show()
@@ -337,13 +376,15 @@ def makeBarPageEC(pageECList):
     plt.figure(1, dpi=600)
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     ax = plt.subplot(1, 1, 1)
-    rects = plt.bar(range(len(pageECList)), pageECList, color='#0099FF')
+    rects = plt.plot(range(len(pageECList)), pageECList,
+                     'o', color='#0099FF', markersize=2.5)
     ax.set_ylabel('擦写周期数')
     ax.set_xlabel('物理页号')
 #     plt.title('无磨损均衡介入')
+    plt.ylim(0, 550)
 
 #     plt.show()
-    plt.savefig('磨损均衡介入下的T2测试用例结果.png')
+    plt.savefig('磨损均衡介入下的T1测试用例结果.png')
 
 
 def WithoutCacheVsLRUVs2Q(cacheratio,  t1_lru, t1_2q, t2_lru, t2_2q, t1_NOCMT, t2_NOCMT):
@@ -376,3 +417,75 @@ def WithoutCacheVsLRUVs2Q(cacheratio,  t1_lru, t1_2q, t2_lru, t2_2q, t1_NOCMT, t
     plt.legend(bbox_to_anchor=(0, 3.25), loc=2)
     plt.savefig('CMT-performance.png')
 #     plt.show()
+
+
+# [th=10,th=30,th=50,th=70,pdp]
+def MaxCycleBtwDPAndPDP(cycles):
+
+    x = np.arange(5)  # the label locations
+    plt.figure(1, dpi=600)
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    ax = plt.subplot(1, 1, 1)
+    rects0 = plt.bar(0, cycles[0], label='双池算法 TH=10', width=1)
+    rects1 = plt.bar(1, cycles[1], label='双池算法 TH=30', width=1)
+    rects2 = plt.bar(2, cycles[2], label='双池算法 TH=50', width=1)
+    rects3 = plt.bar(3, cycles[3], label='双池算法 TH=70', width=1)
+    rects4 = plt.bar(4, cycles[4], label='渐进式双池算法 ', width=1)
+    autolabel(rects0, ax)
+    autolabel(rects1, ax)
+    autolabel(rects2, ax)
+    autolabel(rects3, ax)
+    autolabel(rects4, ax)
+    plt.ylim(40000, 58000)
+    ax.set_ylabel('最大页写入周期数')
+#     ax.set_xlabel('物理页号')
+#     plt.title('无磨损均衡介入')
+
+    ax.set_xticks([])
+    ax.set_xticklabels('')
+    plt.legend()
+#     plt.show()
+    plt.savefig('双池算法Vs渐进式双池算法On寿命.png')
+
+
+# 不同α取值下的寿命
+
+
+def MaxCycleBtwPDPTH(cycles):
+
+    x = [0.30, 0.40, 0.50, 0.60, 0.70, 0.72,
+         0.73, 0.74]
+    plt.figure(1, dpi=600)
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    ax = plt.subplot(1, 1, 1)
+    rects0 = plt.plot(x, cycles, 'o-', markersize=2.0)
+#     rects1 = plt.plot(0.40, cycles[1], label='α = 0.40', width=1)
+#     rects2 = plt.plot(0.50, cycles[2], label='α = 0.50', width=1)
+#     rects3 = plt.plot(0.60, cycles[3], label='α = 0.60', width=1)
+#     rects4 = plt.plot(0.70, cycles[4], label='α = 0.70', width=1)
+#     rects5 = plt.plot(0.72, cycles[5], label='α = 0.72', width=1)
+#     rects6 = plt.plot(0.73, cycles[6], label='α = 0.73', width=1)
+#     rects7 = plt.plot(0.74, cycles[7], label='α = 0.74', width=1)
+#     autolabel(rects0, ax)
+#     autolabel(rects1, ax)
+#     autolabel(rects2, ax)
+#     autolabel(rects3, ax)
+#     autolabel(rects4, ax)
+#     autolabel(rects5, ax)
+#     autolabel(rects6, ax)
+#     autolabel(rects7, ax)
+    plt.ylim(15000, 53000)
+    plt.xlim(0.3, 0.78)
+    ax.xaxis.set_minor_locator(MultipleLocator(0.01))
+    plt.xlabel('α')
+    for i in range(8):
+        plt.text(x[i], cycles[i]+500, cycles[i])
+    ax.set_ylabel('最大页写入周期数')
+#     ax.set_xlabel('物理页号')
+#     plt.title('无磨损均衡介入')
+
+#     ax.set_xticks([])
+#     ax.set_xticklabels('')
+#     plt.legend()
+#     plt.show()
+    plt.savefig('渐进式双池算法不同调节因子的寿命比较.png')
