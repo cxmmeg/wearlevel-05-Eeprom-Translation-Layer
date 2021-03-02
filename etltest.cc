@@ -263,13 +263,18 @@ void TestRandomWrite(unsigned int write_cycle) {
 	ETLPerformance ep(etl);
 	ep.StartTimer();
 
+	bool res = true;
 	for (unsigned int i = 0; i < write_cycle; ++i) {
 		char* write_buff = "01234567890123456789";
-		etl->Write(GetZipfData()[ i % GetZipfDataLen() ], write_buff, strlen(write_buff));
+		res = etl->Write(GetZipfData()[ i % GetZipfDataLen() ], write_buff, strlen(write_buff));
 		if (i % 100 == 0) {
 			LOG_INFO("round %d \r\n", i);
 			LOG_INFO("thresh hold : %lu \r\n", etl->dualpool_->GetThreshhold());
 		}
+		// if (!res) {
+		// 	LOG_ERROR("run out of life \r\n");
+		// 	break;
+		// }
 	}
 
 	ep.PrintInfo();
@@ -283,7 +288,7 @@ void TestRandomWrite(unsigned int write_cycle) {
 	}
 	printf("}\n");
 
-	// etl->dualpool_->PrintPool();
+	etl->dualpool_->PrintPool();
 	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
 	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
 	       etl->dualpool_->GetPoolSize(COLDPOOL));

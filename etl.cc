@@ -103,16 +103,14 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	}
 
 	// 如果要禁止磨损均衡，以下代码块需要注释
+	this->performance_statistics_.total_write_cycles++;
+	this->UpdateThreshhold();
 	DataPage datapage(logic_page_size);
 	this->ReadDataPageInfo(start_physical_page_num, &datapage);
-	if (datapage.erase_cycle >= this->page_indurance_)
-		return false;
 	datapage.erase_cycle++;
 	datapage.effective_erase_cycle++;
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
-	this->UpdateThreshhold();
-	this->performance_statistics_.total_write_cycles++;
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -130,7 +128,10 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		/* if triggered, exec dual-pool algorithm */
 		this->TryToExecDualPoolAlgorithm();
 
-		return true;
+		if (datapage.erase_cycle >= this->page_indurance_)
+			return false;
+		else
+			return true;
 	}
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
@@ -509,6 +510,10 @@ void ETL::PrintDataPage(DataPage* datapage) {
 }
 
 void ETL::UpdateThreshhold() {
+	// fixed th
+	// this->dualpool_->SetThreshhold(80);
+	// return;
+
 	// 默认下不开启动态阈值
 	if (this->page_indurance_ == 0 || this->dualpool_->GetThreshhold() <= 10)
 		return;

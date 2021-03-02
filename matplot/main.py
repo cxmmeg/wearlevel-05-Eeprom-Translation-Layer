@@ -69,15 +69,15 @@ def main():
     #     mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([486.54, 1.0099, 387, 305], [
     #         237.20, 1.0373, 392, 2100], [21600.23, 1.0000, 423, 0], 30000, True)
 
-    #     mf.makeBarPageEC(data.page_cnt)
+    mf.makeBarPageEC(data.page_cnt)
 
     #     mf.make3BarFigurePageEC(
     #         data.page_cnt_nowl, data.page_cnt_dp, data.page_cnt_pdp)
 
-    mf.drawPlotByStandardDeviation(
-        data.PDP500_cycles, data.PDP500_standard_deviation, data.TH20_cycles, data.TH20_standard_deviation,
-        data.TH50_cycles, data.TH50_standard_deviation, data.TH80_cycles, data.TH80_standard_deviation,
-        data.TH110_cycles, data.TH110_standard_deviation,  "PDPVsDPByStandarddeviation")
+    #     mf.drawPlotByStandardDeviation(
+    #         data.PDP500_cycles, data.PDP500_standard_deviation, data.TH20_cycles, data.TH20_standard_deviation,
+    #         data.TH50_cycles, data.TH50_standard_deviation, data.TH80_cycles, data.TH80_standard_deviation,
+    #         data.TH110_cycles, data.TH110_standard_deviation,  "PDPVsDPByStandarddeviation")
 
     #     mf.drawPlotByOverheadratio(data.PDP500_cycles, data.PDP500_overhead_ratio, data.TH20_cycles, data.TH20_overhead_ratio,
     #                                data.TH50_cycles, data.TH50_overhead_ratio, data.TH80_cycles, data.TH80_overhead_ratio,

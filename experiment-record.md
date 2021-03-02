@@ -441,7 +441,7 @@ T1,对同一个逻辑地址进行 15,000 次写入操作，每次写入长度 20
 [INFO performance.cc:65] write speed            386 B/sec
 [INFO performance.cc:66] spend time             776 sec =>  901
 [INFO performance.cc:67] overhead ratio         1.009900
-[INFO performance.cc:68] standard deviation     495.722720
+[INFO performance.cc:68] standard deviation     495.722720  => 21010.1800
 [INFO performance.cc:69] RAM cost               540 B
 [INFO performance.cc:70] dualcache hit rate     0.999933        
 [INFO performance.cc:71] total write cycles : 30000 
@@ -449,21 +449,21 @@ T1,对同一个逻辑地址进行 15,000 次写入操作，每次写入长度 20
 [INFO performance.cc:73] ------------ performance ---------------
 { 250, 251, 382, 247, 378, 247, 374, 245, 372, 245, 368, 243, 364, 243, 362, 240, 358, 240, 354, 238, 352, 238, 348, 236, 344, 236, 342, 234, 338, 234, 334, 232, 332, 232, 328, 229, 326, 229, 322, 227, 320, 227, 316, 225, 314, 225, 310, 223, 308, 223, 306, 221, 302, 221, 300, 219, 296, 219, 294, 217, 292, 217, 288, 323, 286, 319, 284, 325, 280, 325, 278, 324, 276, 324, 272, 323, 270, 323, 268, 322, 266, 322, 262, 321, 260, 321, 258, 321, 256, 320, 254, 320, 250, 320, 248, 319, 246, 319, 244, 318, 242, 390, 317, 386, 318 } 
 
-T2,随机地址写入,15,000 次写入操作
+T2,随机地址写入,15,000 次写入操作,a=0.2
 
 [INFO performance.cc:64] ++++++++++++ performance +++++++++++++++
 
-[INFO performance.cc:65] write speed            262 B/sec
-[INFO performance.cc:66] spend time             1106 sec => 1239
-[INFO performance.cc:67] overhead ratio         1.012652
-[INFO performance.cc:68] standard deviation     444.667280
+[INFO performance.cc:65] write speed            222 B/sec
+[INFO performance.cc:66] spend time             1214 sec        =>1349 sec
+[INFO performance.cc:67] overhead ratio         1.025536
+[INFO performance.cc:68] standard deviation     100.354370  => 6218.522400
 [INFO performance.cc:69] RAM cost               540 B
-[INFO performance.cc:70] dualcache hit rate     0.827287        
-[INFO performance.cc:71] total write cycles : 42365 
-[INFO performance.cc:72] extra write cycles : 536 
+[INFO performance.cc:70] dualcache hit rate     -nan    
+[INFO performance.cc:71] total write cycles : 43703 
+[INFO performance.cc:72] extra write cycles : 1116 
 [INFO performance.cc:73] ------------ performance ---------------
 
-{ 380, 396, 400, 502, 402, 380, 381, 351, 400, 500, 327, 411, 444, 500, 392, 502, 422, 387, 403, 492, 388, 380, 396, 416, 340, 500, 400, 500, 400, 500, 397, 329, 421, 327, 438, 405, 428, 390, 340, 502, 388, 399, 406, 406, 399, 327, 417, 440, 417, 417, 417, 471, 410, 391, 494, 424, 402, 373, 384, 403, 378, 400, 383, 400, 393, 421, 392, 357, 377, 500, 408, 395, 417, 436, 387, 370, 364, 482, 420, 466, 413, 361, 483, 381, 423, 402, 407, 422, 330, 353, 420, 406, 419, 354, 375, 417, 407, 407, 434, 345, 405, 355, 416, 434, 432, }
+[ 411, 431, 434, 435, 425, 406, 432, 429, 433, 435, 417, 413, 420, 433, 433, 432, 438, 407, 425, 436, 433, 432, 411, 433, 432, 427, 428, 425, 432, 435, 432, 427, 436, 430, 432, 427, 432, 434, 423, 424, 413, 427, 433, 433, 432, 406, 420, 411, 429, 420, 437, 428, 420, 433, 403, 417, 421, 434, 403, 436, 429, 425, 434, 433, 429, 427, 440, 418, 432, 441, 427, 433, 443, 427, 409, 428, 450, 452, 423, 433, 418, 420, 419, 409, 423, 437, 431, 435, 432, 433, 426, 412, 433, 429, 421, 438, 430, 407, 417, 430, 422, 407, 431, 427, 433]
 
 缓存映射表测试:
 

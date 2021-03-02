@@ -61,8 +61,8 @@ int main(void) {
 	// ETLWriteAndReadTest();
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
-	TestSingleHotPage(15000);
-	// TestRandomWrite(15000);
+	// TestSingleHotPage(15000);
+	TestRandomWrite(15000);
 	// CheckReadWite();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
