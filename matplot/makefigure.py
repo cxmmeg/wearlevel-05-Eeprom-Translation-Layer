@@ -225,12 +225,12 @@ def drawPlotByStandardDeviation2(cycleData0, StandardDeviationData0, cycleData1,
                   '-', label='α = 0.60', markersize=marksize)
     l3 = plt.plot(cycleData4, StandardDeviationData4,
                   '-', label='α = 0.70', markersize=marksize)
-    l3 = plt.plot(cycleData5, StandardDeviationData5,
-                  '-', label='α = 0.72', markersize=marksize)
-    l3 = plt.plot(cycleData6, StandardDeviationData6,
-                  '-', label='α = 0.73', markersize=marksize)
-    l3 = plt.plot(cycleData7, StandardDeviationData7,
-                  '-', label='α = 0.74', markersize=marksize)
+#     l3 = plt.plot(cycleData5, StandardDeviationData5,
+#                   '-', label='α = 0.72', markersize=marksize)
+#     l3 = plt.plot(cycleData6, StandardDeviationData6,
+#                   '-', label='α = 0.73', markersize=marksize)
+#     l3 = plt.plot(cycleData7, StandardDeviationData7,
+#                   '-', label='α = 0.74', markersize=marksize)
     plt.xlabel('页写入操作请求数')
     plt.ylabel('标准差')
     plt.legend()
@@ -320,12 +320,12 @@ def drawPlotByTH(cycleData0, th0, cycleData1, th1, cycleData2, th2,
              '-', label='α = 0.60', markersize=marksize)
     plt.plot(cycleData4, th4,
              '-', label='α = 0.70', markersize=marksize)
-    plt.plot(cycleData5, th5,
-             '-', label='α = 0.72', markersize=marksize)
-    plt.plot(cycleData6, th6,
-             '-', label='α = 0.73', markersize=marksize)
-    plt.plot(cycleData7, th7,
-             '-', label='α = 0.74', markersize=marksize)
+#     plt.plot(cycleData5, th5,
+#              '-', label='α = 0.72', markersize=marksize)
+#     plt.plot(cycleData6, th6,
+#              '-', label='α = 0.73', markersize=marksize)
+#     plt.plot(cycleData7, th7,
+#              '-', label='α = 0.74', markersize=marksize)
 #     plt.plot(cycleData, StandardDeviationData0, 'ro-',
 #              cycleData, StandardDeviationData1, 'g+-',
 #              cycleData, StandardDeviationData2, 'b^-'
@@ -333,7 +333,7 @@ def drawPlotByTH(cycleData0, th0, cycleData1, th1, cycleData2, th2,
     plt.xlabel('页写入操作请求数')
     plt.ylabel('阈值TH')
     plt.legend()
-    plt.axis([0, 51000, 0, 500])
+    plt.axis([0, 52000, 0, 500])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -490,33 +490,17 @@ def MaxCycleBtwDPAndPDP(cycles):
 
 def MaxCycleBtwPDPTH(cycles):
 
-    x = [0.30, 0.40, 0.50, 0.60, 0.70, 0.72,
-         0.73, 0.74]
+    x = [0.30, 0.40, 0.50, 0.60, 0.70]
     plt.figure(1, dpi=600)
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     ax = plt.subplot(1, 1, 1)
     rects0 = plt.plot(x, cycles, 'o-', markersize=2.0)
-#     rects1 = plt.plot(0.40, cycles[1], label='α = 0.40', width=1)
-#     rects2 = plt.plot(0.50, cycles[2], label='α = 0.50', width=1)
-#     rects3 = plt.plot(0.60, cycles[3], label='α = 0.60', width=1)
-#     rects4 = plt.plot(0.70, cycles[4], label='α = 0.70', width=1)
-#     rects5 = plt.plot(0.72, cycles[5], label='α = 0.72', width=1)
-#     rects6 = plt.plot(0.73, cycles[6], label='α = 0.73', width=1)
-#     rects7 = plt.plot(0.74, cycles[7], label='α = 0.74', width=1)
-#     autolabel(rects0, ax)
-#     autolabel(rects1, ax)
-#     autolabel(rects2, ax)
-#     autolabel(rects3, ax)
-#     autolabel(rects4, ax)
-#     autolabel(rects5, ax)
-#     autolabel(rects6, ax)
-#     autolabel(rects7, ax)
-    plt.ylim(15000, 53000)
-    plt.xlim(0.3, 0.78)
+    plt.ylim(49000, 52000)
+#     plt.xlim(0.3, 0.78)
     ax.xaxis.set_minor_locator(MultipleLocator(0.01))
     plt.xlabel('α')
-    for i in range(8):
-        plt.text(x[i], cycles[i]+500, cycles[i])
+    for i in range(5):
+        plt.text(x[i]-0.02, cycles[i]+100, cycles[i])
     ax.set_ylabel('最大页写入周期数')
 #     ax.set_xlabel('物理页号')
 #     plt.title('无磨损均衡介入')

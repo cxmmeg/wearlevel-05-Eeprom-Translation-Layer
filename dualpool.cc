@@ -174,7 +174,9 @@ unsigned int DualPool::PopFrontHotPoolByEraseCycle() {
 	this->hot_ec_head_cache_->PopItem(old_hot_ec_head);
 
 	/* 看看cache里的储备量还够不够，不够的话补充 */
-	GetSonOfOldPage(&old_hot_ec_head, HOTPOOL, true, true);
+	// GetSonOfOldPage(&old_hot_ec_head, HOTPOOL, true, true);
+	if (this->hot_ec_head_cache_->IsEmpty())
+		FreshPool(HOTPOOL);
 
 	return old_hot_ec_head.physical_page_num;
 }
@@ -187,7 +189,9 @@ unsigned int DualPool::PopBackHotPoolByEraseCycle() {
 	this->hot_ec_tail_cache_->PopItem(old_hot_ec_tail);
 
 	/* 看看cache里的储备量还够不够，不够的话补充 */
-	GetSonOfOldPage(&old_hot_ec_tail, HOTPOOL, false, true);
+	// GetSonOfOldPage(&old_hot_ec_tail, HOTPOOL, false, true);
+	if (this->hot_ec_tail_cache_->IsEmpty())
+		FreshPool(HOTPOOL);
 
 	return old_hot_ec_tail.physical_page_num;
 }
@@ -200,7 +204,9 @@ unsigned int DualPool::PopBackColdPoolByEraseCycle() {
 	this->cold_ec_tail_cache_->PopItem(old_cold_ec_tail);
 
 	/* 看看cache里的储备量还够不够，不够的话补充 */
-	GetSonOfOldPage(&old_cold_ec_tail, COLDPOOL, false, true);
+	// GetSonOfOldPage(&old_cold_ec_tail, COLDPOOL, false, true);
+	if (this->cold_ec_tail_cache_->IsEmpty())
+		FreshPool(COLDPOOL);
 
 	return old_cold_ec_tail.physical_page_num;
 }
@@ -212,7 +218,9 @@ unsigned int DualPool::PopFrontColdPoolByEffectiveEraseCycle() {
 	this->cold_eec_head_cache_->PopItem(old_cold_eec_head);
 
 	/* 看看cache里的储备量还够不够，不够的话补充 */
-	GetSonOfOldPage(&old_cold_eec_head, COLDPOOL, true, false);
+	// GetSonOfOldPage(&old_cold_eec_head, COLDPOOL, true, false);
+	if (this->cold_eec_head_cache_->IsEmpty())
+		FreshPool(COLDPOOL);
 
 	return old_cold_eec_head.physical_page_num;
 }
@@ -321,6 +329,7 @@ bool DualPool::TryToUpdateHotECHead(PageCycle* page_to_update) {
 	    || page_to_update->cycle <= this->hot_ec_head_cache_->GetBottom().cycle)
 		return false;
 
+	this->hot_ec_head_cache_->PopItem(*page_to_update);
 	this->hot_ec_head_cache_->TryToPushItem(*page_to_update);
 	return true;
 }
@@ -330,6 +339,7 @@ bool DualPool::TryToUpdateColdEECHead(PageCycle* page_to_update) {
 	    || page_to_update->cycle <= this->cold_eec_head_cache_->GetBottom().cycle)
 		return false;
 
+	this->cold_eec_head_cache_->PopItem(*page_to_update);
 	this->cold_eec_head_cache_->TryToPushItem(*page_to_update);
 	return true;
 }

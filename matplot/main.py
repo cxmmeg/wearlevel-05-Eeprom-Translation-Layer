@@ -96,13 +96,13 @@ def main():
     #         data.a73_cycle, data.a73_standard_deviation, data.a74_cycle, data.a74_standard_deviation, "PDPDiffTHStandarddeviation")
 
     #     mf.MaxCycleBtwPDPTH([49949, 50428, 50348, 51205,
-    #                          51070, 45229, 43924, 17023])
+    #                          51070])
 
-    mf.drawPlotByTH(
-        data.a3_cycle, data.a3_th, data.a4_cycle, data.a4_th,
-        data.a5_cycle, data.a5_th, data.a6_cycle, data.a6_th,
-        data.a7_cycle, data.a7_th,  data.a72_cycle, data.a72_th,
-        data.a73_cycle, data.a73_th, data.a74_cycle, data.a74_th, "PDPDiffTH")
+    #     mf.drawPlotByTH(
+    #         data.a3_cycle, data.a3_th, data.a4_cycle, data.a4_th,
+    #         data.a5_cycle, data.a5_th, data.a6_cycle, data.a6_th,
+    #         data.a7_cycle, data.a7_th,  data.a72_cycle, data.a72_th,
+    #         data.a73_cycle, data.a73_th, data.a74_cycle, data.a74_th, "PDPDiffTH")
 
 
 if __name__ == "__main__":
