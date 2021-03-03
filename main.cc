@@ -62,7 +62,7 @@ int main(void) {
 	// ETLFullWriteAndReadFullTest();
 	// DualPoolTeste();
 	// TestSingleHotPage(15000);
-	TestRandomWrite(15000);
+	// TestRandomWrite(15000);
 	// CheckReadWite();
 	// TestHotPageToColdPage(1000);
 	// SampleSimulation(200);
@@ -71,6 +71,7 @@ int main(void) {
 	// RelationBtwWritecyclsAndWriteSpeed(51000, 500);
 	// RelationBtwWritecyclsAndStandarddeviation(500);
 	// RelationBtwWritecyclsAndSpeed(500);
+	RelationBtwWritecyclsAndTH(500);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();
 	// TestDualCacheHitRate(1000);

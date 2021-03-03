@@ -69,7 +69,7 @@ def main():
     #     mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([486.54, 1.0099, 387, 305], [
     #         237.20, 1.0373, 392, 2100], [21600.23, 1.0000, 423, 0], 30000, True)
 
-    mf.makeBarPageEC(data.page_cnt)
+    #     mf.makeBarPageEC(data.page_cnt)
 
     #     mf.make3BarFigurePageEC(
     #         data.page_cnt_nowl, data.page_cnt_dp, data.page_cnt_pdp)
@@ -82,6 +82,7 @@ def main():
     #     mf.drawPlotByOverheadratio(data.PDP500_cycles, data.PDP500_overhead_ratio, data.TH20_cycles, data.TH20_overhead_ratio,
     #                                data.TH50_cycles, data.TH50_overhead_ratio, data.TH80_cycles, data.TH80_overhead_ratio,
     #                                data.TH110_cycles, data.TH110_overhead_ratio,  "PDPVsDPByOverheadratio")
+
     #     mf.drawPlotByWritespeed(data.PDP500_cycles, data.PDP500_write_speed, data.TH20_cycles, data.TH20_write_speed,
     #                             data.TH50_cycles, data.TH50_write_speed, data.TH80_cycles, data.TH80_write_speed,
     #                             data.TH110_cycles, data.TH110_write_speed,  "PDPVsDPByWritespeed")
@@ -96,6 +97,12 @@ def main():
 
     #     mf.MaxCycleBtwPDPTH([49949, 50428, 50348, 51205,
     #                          51070, 45229, 43924, 17023])
+
+    mf.drawPlotByTH(
+        data.a3_cycle, data.a3_th, data.a4_cycle, data.a4_th,
+        data.a5_cycle, data.a5_th, data.a6_cycle, data.a6_th,
+        data.a7_cycle, data.a7_th,  data.a72_cycle, data.a72_th,
+        data.a73_cycle, data.a73_th, data.a74_cycle, data.a74_th, "PDPDiffTH")
 
 
 if __name__ == "__main__":

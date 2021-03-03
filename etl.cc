@@ -111,6 +111,8 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 	datapage.effective_erase_cycle++;
 	this->dualpool_->TryToUpdatePoolBorder(start_physical_page_num, datapage.erase_cycle,
 					       datapage.effective_erase_cycle);
+	if (datapage.erase_cycle >= this->page_indurance_)
+		return false;
 
 	unsigned int data_offset = addr % logic_page_size;
 	if (start_logic_page_num == end_logic_page_num) {
@@ -128,10 +130,7 @@ bool ETL::Write(unsigned long long addr, const char* src, int length) {
 		/* if triggered, exec dual-pool algorithm */
 		this->TryToExecDualPoolAlgorithm();
 
-		if (datapage.erase_cycle >= this->page_indurance_)
-			return false;
-		else
-			return true;
+		return true;
 	}
 	unsigned long long next_page_start_addr = (start_logic_page_num + 1) * logic_page_size;
 	unsigned int	   front_len		= next_page_start_addr - addr;
@@ -522,7 +521,7 @@ void ETL::UpdateThreshhold() {
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
 
 	// int th = this->page_indurance_ - ((avrg_page_write_cycles + this->page_indurance_) * 0.5);
-	int th = this->page_indurance_ - ((1 - 0.5) * this->page_indurance_ + avrg_page_write_cycles * 0.5);
+	int th = this->page_indurance_ - ((1 - 0.74) * this->page_indurance_ + avrg_page_write_cycles * 0.74);
 	this->dualpool_->SetThreshhold(th);
 }
 

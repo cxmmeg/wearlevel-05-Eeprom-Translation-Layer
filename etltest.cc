@@ -850,6 +850,72 @@ void RelationBtwWritecyclsAndSpeed(uint64_t span) {
 	// etl->PrintPMTT();
 }
 
+void RelationBtwWritecyclsAndTH(uint64_t span) {
+
+	unsigned long long configtable_addr = 10;
+	unsigned long long flowrate_addr    = 100;
+	unsigned long long waterlevel_addr  = 500;
+
+	char* configtable_data = "0123456789";
+	char* flowrate_data    = "0123456789";
+	char* waterlevel_data  = "0123456789";
+
+	const unsigned long long ROM_SIZE	 = ( unsigned long long )2 * ( unsigned long long )1024;
+	const unsigned char	 LOGIC_PAGE_SIZE = 10;
+	const unsigned int	 THRESH_HOLD	 = 30;
+
+	etl = new ETL(ROM_SIZE, 500);
+	etl->Format(LOGIC_PAGE_SIZE, THRESH_HOLD);
+	ETLPerformance ep(etl);
+	ep.StartTimer();
+
+	map< long long, long long > cycles_to_speed;
+
+	uint64_t  cnt		= span;
+	long long actual_ec_sum = 0;
+	bool	  write_res	= true;
+	for (uint64_t r = 0; write_res == true; r++) {
+
+		int flowrate_round = 50;
+		if (r % 2 == 0 || r % 3 == 0)
+			flowrate_round = 0;
+		for (int fround = 0; fround < flowrate_round; fround++)
+			write_res = etl->Write(flowrate_addr, flowrate_data, strlen(flowrate_data));
+
+		for (int wround = 0; wround < 10; wround++)
+			write_res = etl->Write(waterlevel_addr, waterlevel_data, strlen(waterlevel_data));
+
+		if (r % 10 == 0)
+			write_res = etl->Write(configtable_addr, configtable_data, strlen(configtable_data));
+
+		actual_ec_sum = etl->performance_statistics_.total_write_cycles
+				+ etl->performance_statistics_.extra_write_cycles;
+
+		if (actual_ec_sum >= cnt || !write_res) {
+			cnt += span;
+
+			long long writespeed = ep.GetWriteSpeed();
+			cycles_to_speed[ etl->performance_statistics_.total_write_cycles ] =
+				etl->dualpool_->GetThreshhold();
+
+			LOG_INFO("write cycles %lld ,  TH = %d \r\n ", actual_ec_sum,
+				 etl->dualpool_->GetThreshhold());
+		}
+	}
+
+	LOG_INFO("relation between cycle and TH : \r\n");
+	PrintRelationBtwCyclesAndWriteSpeed(cycles_to_speed);
+
+	/* show test result */
+	ep.PrintInfo();
+
+	etl->dualpool_->PrintPool();
+	printf("thresh_hold : %u ,hotpool size : %u , coldpool size : %u \r\n",
+	       etl->GetInfoPage().thresh_hold, etl->dualpool_->GetPoolSize(HOTPOOL),
+	       etl->dualpool_->GetPoolSize(COLDPOOL));
+	// etl->PrintPMTT();
+}
+
 // float TestDualCacheHitRate(int pagetable_size) { static const unsigned long long write_addr_base[] = { 305,
 // 432, 300, 321, 788, 331, 785, 219, 376, 289, 425, 17,  47,	 324, 689, 307, 305, 337, 447, 759, 225, 337,
 // 205, 535, 530, 328, 289, 227, 321, 586, 334, 331, 70,  215, 60,	307, 301, 97, 658, 487, 399, 417, 321,

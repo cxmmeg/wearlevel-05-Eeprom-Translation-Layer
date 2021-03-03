@@ -247,25 +247,25 @@ def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, Stan
 
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
     plt.figure(dpi=600)
-    marksize = 2
+    marksize = 3
     plt.plot(cycleData0, StandardDeviationData0,
-             'o-', label='渐进式双池算法', markersize=marksize)
+             '-', label='渐进式双池算法', markersize=marksize)
     plt.plot(cycleData1, StandardDeviationData1,
-             '+-', label='双池算法 TH=10', markersize=marksize)
+             '-', label='双池算法 TH=10', markersize=marksize)
     plt.plot(cycleData2, StandardDeviationData2,
-             '^-', label='双池算法 TH=30', markersize=marksize)
+             '-', label='双池算法 TH=30', markersize=marksize)
     plt.plot(cycleData3, StandardDeviationData3,
-             '*-', label='双池算法 TH=50', markersize=marksize)
+             '-', label='双池算法 TH=50', markersize=marksize)
     plt.plot(cycleData4, StandardDeviationData4,
-             'd-', label='双池算法 TH=70', markersize=marksize)
+             '-', label='双池算法 TH=70', markersize=marksize)
 #     plt.plot(cycleData, StandardDeviationData0, 'ro-',
 #              cycleData, StandardDeviationData1, 'g+-',
 #              cycleData, StandardDeviationData2, 'b^-'
 #              )
     plt.xlabel('页写入操作请求数')
     plt.ylabel('负载比')
-    plt.legend()
-    plt.axis([0, 51000, 1.0, 1.15])
+    plt.legend(loc=1)
+    plt.axis([0, 51000, 1.0, 1.30])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -280,15 +280,15 @@ def drawPlotByWritespeed(cycleData0, StandardDeviationData0, cycleData1, Standar
     plt.figure(dpi=600)
     marksize = 2
     plt.plot(cycleData0, StandardDeviationData0,
-             'o-', label='渐进式双池算法', markersize=marksize)
+             '-', label='渐进式双池算法', markersize=marksize)
     plt.plot(cycleData1, StandardDeviationData1,
-             '+-', label='双池算法 TH=10', markersize=marksize)
+             '-', label='双池算法 TH=10', markersize=marksize)
     plt.plot(cycleData2, StandardDeviationData2,
-             '^-', label='双池算法 TH=30', markersize=marksize)
+             '-', label='双池算法 TH=30', markersize=marksize)
     plt.plot(cycleData3, StandardDeviationData3,
-             '*-', label='双池算法 TH=50', markersize=marksize)
+             '-', label='双池算法 TH=50', markersize=marksize)
     plt.plot(cycleData4, StandardDeviationData4,
-             'd-', label='双池算法 TH=70', markersize=marksize)
+             '-', label='双池算法 TH=70', markersize=marksize)
 #     plt.plot(cycleData, StandardDeviationData0, 'ro-',
 #              cycleData, StandardDeviationData1, 'g+-',
 #              cycleData, StandardDeviationData2, 'b^-'
@@ -297,6 +297,43 @@ def drawPlotByWritespeed(cycleData0, StandardDeviationData0, cycleData1, Standar
     plt.ylabel('平均写速度(Byte/s)')
     plt.legend()
     plt.axis([0, 51000, 290, 460])
+
+    if len(saveName) != 0:
+        plt.savefig(saveName)
+    else:
+        plt.show()
+
+
+def drawPlotByTH(cycleData0, th0, cycleData1, th1, cycleData2, th2,
+                 cycleData3, th3, cycleData4, th4, cycleData5, th5, cycleData6, th6, cycleData7, th7, saveName):
+
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    plt.figure(dpi=600)
+    marksize = 2
+    plt.plot(cycleData0, th0,
+             '-', label='α = 0.30', markersize=marksize)
+    plt.plot(cycleData1, th1,
+             '-', label='α = 0.40', markersize=marksize)
+    plt.plot(cycleData2, th2,
+             '-', label='α = 0.50', markersize=marksize)
+    plt.plot(cycleData3, th3,
+             '-', label='α = 0.60', markersize=marksize)
+    plt.plot(cycleData4, th4,
+             '-', label='α = 0.70', markersize=marksize)
+    plt.plot(cycleData5, th5,
+             '-', label='α = 0.72', markersize=marksize)
+    plt.plot(cycleData6, th6,
+             '-', label='α = 0.73', markersize=marksize)
+    plt.plot(cycleData7, th7,
+             '-', label='α = 0.74', markersize=marksize)
+#     plt.plot(cycleData, StandardDeviationData0, 'ro-',
+#              cycleData, StandardDeviationData1, 'g+-',
+#              cycleData, StandardDeviationData2, 'b^-'
+#              )
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('阈值TH')
+    plt.legend()
+    plt.axis([0, 51000, 0, 500])
 
     if len(saveName) != 0:
         plt.savefig(saveName)

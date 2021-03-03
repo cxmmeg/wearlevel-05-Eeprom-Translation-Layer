@@ -21,5 +21,6 @@ void MemoryLeakTest();
 void GetSpeed(uint64_t cycles, uint64_t span);
 // void  TestMultiPagetableHitrate();
 void RelationBtwWritecyclsAndSpeed(uint64_t span);
+void RelationBtwWritecyclsAndTH(uint64_t span);
 
 #endif
