@@ -69,9 +69,9 @@ int main(void) {
 	// MultiWriteSimulateTest(30000);
 	// RelationBtwWritecyclsAndStandarddeviation(51000, 500);
 	// RelationBtwWritecyclsAndWriteSpeed(51000, 500);
-	// RelationBtwWritecyclsAndStandarddeviation(500);
+	RelationBtwWritecyclsAndStandarddeviation(500);
 	// RelationBtwWritecyclsAndSpeed(500);
-	RelationBtwWritecyclsAndTH(500);
+	// RelationBtwWritecyclsAndTH(500);
 	// GetSpeed(200000, 5000);
 	// MemoryLeakTest();
 	// TestDualCacheHitRate(1000);

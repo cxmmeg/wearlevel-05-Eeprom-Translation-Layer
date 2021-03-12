@@ -79,7 +79,7 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
     titles = ['standard deviation',
               'overhead ratio', 'write speed', 'ram cost']
 
-    yaxes_lables = ['标准差', '负载比', '平均写速度(Byte/s)', 'RAM资源开销(Byte)']
+    yaxes_lables = ['标准差', '负载比', '平均写速率(Byte/s)', 'RAM资源开销(Byte)']
 
 #     edgecache_dp_data = [156.8, 1.06, 101, 584]
 #     orgin_dp_data = [129.62, 1.06, 136, 1356]
@@ -98,7 +98,7 @@ def makeBarEdgecachedpVsOrigindpVSWithoutDP(edgecache_dp_data, orgin_dp_data, wi
     for i in range(4):
         ax = plt.subplot(2, 2, i+1)
         rects1 = plt.bar(x - width/2, {edgecache_dp_data[i]},
-                         width=width, label='渐进式双池算法', color='#0099FF')
+                         width=width, label='本文算法', color='#0099FF')
         rects2 = plt.bar(x + width/2, {orgin_dp_data[i]},
                          width=width, label='双池算法', color='#FF9900')
         rects3 = plt.bar(x + width*3/2, {without_dp_data[i]},
@@ -184,7 +184,7 @@ def drawPlotByStandardDeviation(cycleData0, StandardDeviationData0, cycleData1, 
     plt.figure(dpi=600)
     marksize = 3
     l1 = plt.plot(cycleData0, StandardDeviationData0,
-                  '-', label='渐进式双池算法', markersize=marksize)
+                  '-', label='本文算法', markersize=marksize)
     l2 = plt.plot(cycleData1, StandardDeviationData1,
                   '-', label='双池算法 TH=10', markersize=marksize)
     l3 = plt.plot(cycleData2, StandardDeviationData2,
@@ -200,7 +200,7 @@ def drawPlotByStandardDeviation(cycleData0, StandardDeviationData0, cycleData1, 
     plt.xlabel('页写入操作请求数')
     plt.ylabel('标准差')
     plt.legend()
-    plt.axis([0, 51000, 0, 1500])
+    plt.axis([0, 52000, 0, 1600])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -242,6 +242,39 @@ def drawPlotByStandardDeviation2(cycleData0, StandardDeviationData0, cycleData1,
         plt.show()
 
 
+def drawPlotByOverheadratio2(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
+                             cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, saveName):
+
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+    plt.figure(dpi=600)
+    marksize = 3
+    l1 = plt.plot(cycleData0, StandardDeviationData0,
+                  '-', label='α = 0.30', markersize=marksize)
+    l2 = plt.plot(cycleData1, StandardDeviationData1,
+                  '-', label='α = 0.40', markersize=marksize)
+    l3 = plt.plot(cycleData2, StandardDeviationData2,
+                  '-', label='α = 0.50', markersize=marksize)
+    l3 = plt.plot(cycleData3, StandardDeviationData3,
+                  '-', label='α = 0.60', markersize=marksize)
+    l3 = plt.plot(cycleData4, StandardDeviationData4,
+                  '-', label='α = 0.70', markersize=marksize)
+#     l3 = plt.plot(cycleData5, StandardDeviationData5,
+#                   '-', label='α = 0.72', markersize=marksize)
+#     l3 = plt.plot(cycleData6, StandardDeviationData6,
+#                   '-', label='α = 0.73', markersize=marksize)
+#     l3 = plt.plot(cycleData7, StandardDeviationData7,
+#                   '-', label='α = 0.74', markersize=marksize)
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('负载比')
+    plt.legend()
+    plt.axis([0, 52000, 1.0, 1.05])
+
+    if len(saveName) != 0:
+        plt.savefig(saveName)
+    else:
+        plt.show()
+
+
 def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
                             cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, saveName):
 
@@ -249,7 +282,7 @@ def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, Stan
     plt.figure(dpi=600)
     marksize = 3
     plt.plot(cycleData0, StandardDeviationData0,
-             '-', label='渐进式双池算法', markersize=marksize)
+             '-', label='本文算法', markersize=marksize)
     plt.plot(cycleData1, StandardDeviationData1,
              '-', label='双池算法 TH=10', markersize=marksize)
     plt.plot(cycleData2, StandardDeviationData2,
@@ -265,7 +298,7 @@ def drawPlotByOverheadratio(cycleData0, StandardDeviationData0, cycleData1, Stan
     plt.xlabel('页写入操作请求数')
     plt.ylabel('负载比')
     plt.legend(loc=1)
-    plt.axis([0, 51000, 1.0, 1.30])
+    plt.axis([0, 52000, 1.0, 1.30])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
@@ -280,7 +313,7 @@ def drawPlotByWritespeed(cycleData0, StandardDeviationData0, cycleData1, Standar
     plt.figure(dpi=600)
     marksize = 2
     plt.plot(cycleData0, StandardDeviationData0,
-             '-', label='渐进式双池算法', markersize=marksize)
+             '-', label='本文算法', markersize=marksize)
     plt.plot(cycleData1, StandardDeviationData1,
              '-', label='双池算法 TH=10', markersize=marksize)
     plt.plot(cycleData2, StandardDeviationData2,
@@ -296,12 +329,45 @@ def drawPlotByWritespeed(cycleData0, StandardDeviationData0, cycleData1, Standar
     plt.xlabel('页写入操作请求数')
     plt.ylabel('平均写速度(Byte/s)')
     plt.legend()
-    plt.axis([0, 51000, 290, 460])
+    plt.axis([0, 52000, 290, 460])
 
     if len(saveName) != 0:
         plt.savefig(saveName)
     else:
         plt.show()
+
+
+def drawPlotByWritespeed2(cycleData0, StandardDeviationData0, cycleData1, StandardDeviationData1, cycleData2, StandardDeviationData2,
+                          cycleData3, StandardDeviationData3, cycleData4, StandardDeviationData4, saveName):
+
+    plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+#     plt.figure(dpi=600)
+    marksize = 3
+#     l1 = plt.plot(cycleData0, StandardDeviationData0,
+#                   '-', label='α = 0.30', markersize=marksize)
+#     l2 = plt.plot(cycleData1, StandardDeviationData1,
+#                   '-', label='α = 0.40', markersize=marksize)
+    l3 = plt.plot(cycleData2, StandardDeviationData2,
+                  '-', label='α = 0.50', markersize=marksize)
+    l3 = plt.plot(cycleData3, StandardDeviationData3,
+                  '-', label='α = 0.60', markersize=marksize)
+#     l3 = plt.plot(cycleData4, StandardDeviationData4,
+#                   '-', label='α = 0.70', markersize=marksize)
+#     l3 = plt.plot(cycleData5, StandardDeviationData5,
+#                   '-', label='α = 0.72', markersize=marksize)
+#     l3 = plt.plot(cycleData6, StandardDeviationData6,
+#                   '-', label='α = 0.73', markersize=marksize)
+#     l3 = plt.plot(cycleData7, StandardDeviationData7,
+#                   '-', label='α = 0.74', markersize=marksize)
+    plt.xlabel('页写入操作请求数')
+    plt.ylabel('平均写速度(Byte/s)')
+    plt.legend()
+    plt.axis([0, 52000, 290, 460])
+
+#     if len(saveName) != 0:
+#         plt.savefig(saveName)
+#     else:
+    plt.show()
 
 
 def drawPlotByTH(cycleData0, th0, cycleData1, th1, cycleData2, th2,
@@ -400,7 +466,7 @@ def make3BarFigurePageEC(pageECListNOWL, pageECListDP, pageECListPDP):
                      pageECListPDP, 'o',  color='#0099FF', markersize=1.7)
     ax.set_ylabel('擦写周期数')
     ax.set_xlabel('物理页号')
-    plt.title('渐进式双池算法')
+    plt.title('本文算法')
     plt.ylim(0, 400)
 
     plt.tight_layout()
@@ -467,7 +533,7 @@ def MaxCycleBtwDPAndPDP(cycles):
     rects1 = plt.bar(1, cycles[1], label='双池算法 TH=30', width=1)
     rects2 = plt.bar(2, cycles[2], label='双池算法 TH=50', width=1)
     rects3 = plt.bar(3, cycles[3], label='双池算法 TH=70', width=1)
-    rects4 = plt.bar(4, cycles[4], label='渐进式双池算法 ', width=1)
+    rects4 = plt.bar(4, cycles[4], label='本文算法 ', width=1)
     autolabel(rects0, ax)
     autolabel(rects1, ax)
     autolabel(rects2, ax)

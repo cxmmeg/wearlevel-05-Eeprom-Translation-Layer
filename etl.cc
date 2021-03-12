@@ -459,19 +459,19 @@ void ETL::TryToExecDualPoolAlgorithm() {
 	bool dirty_swap_triggered = false, coldpool_resize_triggered = false,
 	     hotpool_resize_triggered = false;
 
-	while (this->dualpool_->IsDirtySwapTriggered()) {
+	if (this->dualpool_->IsDirtySwapTriggered()) {
 		LOG_DEBUG("dirty swap triggered \r\n");
 		this->DirtySwap();
 		dirty_swap_triggered = true;
 	}
 
-	while (this->dualpool_->IsColdPoolResizeTriggered()) {
+	if (this->dualpool_->IsColdPoolResizeTriggered()) {
 		LOG_DEBUG("cold pool resize triggered \r\n");
 		this->ColdPoolResize();
 		coldpool_resize_triggered = true;
 	}
 
-	while (this->dualpool_->IsHotPoolResizeTriggered()) {
+	if (this->dualpool_->IsHotPoolResizeTriggered()) {
 		LOG_INFO("hot pool resize triggered \r\n");
 		this->HotPoolResize();
 		hotpool_resize_triggered = true;
@@ -521,7 +521,7 @@ void ETL::UpdateThreshhold() {
 		this->performance_statistics_.total_write_cycles / this->info_page_.total_page_count;
 
 	// int th = this->page_indurance_ - ((avrg_page_write_cycles + this->page_indurance_) * 0.5);
-	int th = this->page_indurance_ - ((1 - 0.5) * this->page_indurance_ + avrg_page_write_cycles * 0.5);
+	int th = this->page_indurance_ - ((1 - 0.6) * this->page_indurance_ + avrg_page_write_cycles * 0.6);
 	this->dualpool_->SetThreshhold(th);
 }
 

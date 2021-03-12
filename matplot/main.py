@@ -66,43 +66,62 @@ def main():
     #     mf.WithoutCacheVsLRUVs2Q([0.05, 0.10, 0.15, 0.20], [[
     #                              0.37, 0.52, 0.62, 0.69], [51, 42, 37, 32]], [[0.33, 0.45, 0.58, 0.66], [53, 47, 39, 34]], [[0.23, 0.31, 0.36, 0.43], [60, 57, 54, 50]], [[0.25, 0.36, 0.46, 0.51], [58, 52, 48, 43]], [68, 68, 68, 68], [68, 68, 68, 68])
 
+    # 图4.6 本文算法与双池算法的性能对比
     #     mf.makeBarEdgecachedpVsOrigindpVSWithoutDP([486.54, 1.0099, 387, 305], [
     #         237.20, 1.0373, 392, 2100], [21600.23, 1.0000, 423, 0], 30000, True)
 
-    #     mf.makeBarPageEC(data.page_cnt)
-
+    # 图4.7 本文算法与双池算法的页面负载情况对比
     #     mf.make3BarFigurePageEC(
     #         data.page_cnt_nowl, data.page_cnt_dp, data.page_cnt_pdp)
 
+    #     图4.8 两种算法下的标准差对比
     #     mf.drawPlotByStandardDeviation(
     #         data.PDP500_cycles, data.PDP500_standard_deviation, data.TH20_cycles, data.TH20_standard_deviation,
     #         data.TH50_cycles, data.TH50_standard_deviation, data.TH80_cycles, data.TH80_standard_deviation,
     #         data.TH110_cycles, data.TH110_standard_deviation,  "PDPVsDPByStandarddeviation")
 
+    # 图4.9 两种算法下的系统负载开销对比
     #     mf.drawPlotByOverheadratio(data.PDP500_cycles, data.PDP500_overhead_ratio, data.TH20_cycles, data.TH20_overhead_ratio,
     #                                data.TH50_cycles, data.TH50_overhead_ratio, data.TH80_cycles, data.TH80_overhead_ratio,
     #                                data.TH110_cycles, data.TH110_overhead_ratio,  "PDPVsDPByOverheadratio")
 
+    # 图4.10 两种算法下的平均写速度表现对比
     #     mf.drawPlotByWritespeed(data.PDP500_cycles, data.PDP500_write_speed, data.TH20_cycles, data.TH20_write_speed,
     #                             data.TH50_cycles, data.TH50_write_speed, data.TH80_cycles, data.TH80_write_speed,
     #                             data.TH110_cycles, data.TH110_write_speed,  "PDPVsDPByWritespeed")
 
+    # 图4.11 本文算法与双池算法的延长EEPROM使用寿命效果对比
     #     mf.MaxCycleBtwDPAndPDP([43260, 47376, 47375, 44284, 50348])
 
+    # 图4.12 本文算法在不同调节因子下的标准差比较
     #     mf.drawPlotByStandardDeviation2(
     #         data.a3_cycle, data.a3_standard_deviation, data.a4_cycle, data.a4_standard_deviation,
     #         data.a5_cycle, data.a5_standard_deviation, data.a6_cycle, data.a6_standard_deviation,
     #         data.a7_cycle, data.a7_standard_deviation,  data.a72_cycle, data.a72_standard_deviation,
     #         data.a73_cycle, data.a73_standard_deviation, data.a74_cycle, data.a74_standard_deviation, "PDPDiffTHStandarddeviation")
 
+    # 图4.13 本文算法在不同调节因子下延长EEPROM寿命效果对比
     #     mf.MaxCycleBtwPDPTH([49949, 50428, 50348, 51205,
     #                          51070])
+
+    #     mf.drawPlotByOverheadratio2(
+    #         data.a3_cycle, data.a3_overhead_ratio, data.a4_cycle, data.a4_overhead_ratio,
+    #         data.a5_cycle, data.a5_overhead_ratio, data.a6_cycle, data.a6_overhead_ratio,
+    #         data.a7_cycle, data.a7_overhead_ratio, "PDPDiffTHOverheadRatio")
+
+    mf.drawPlotByWritespeed2(
+        data.a3_cycle, data.a3_speed, data.a4_cycle, data.a4_speed,
+        data.a5_cycle, data.a5_speed, data.a6_cycle, data.a6_speed,
+        data.a7_cycle, data.a7_speed, "PDPDiffTHSpeed")
 
     #     mf.drawPlotByTH(
     #         data.a3_cycle, data.a3_th, data.a4_cycle, data.a4_th,
     #         data.a5_cycle, data.a5_th, data.a6_cycle, data.a6_th,
     #         data.a7_cycle, data.a7_th,  data.a72_cycle, data.a72_th,
     #         data.a73_cycle, data.a73_th, data.a74_cycle, data.a74_th, "PDPDiffTH")
+
+    # 图4.15/图4.16 磨损均衡介入下的T1/T2测试用例结果
+    #     mf.makeBarPageEC(data.page_cnt)
 
 
 if __name__ == "__main__":
