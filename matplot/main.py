@@ -94,11 +94,11 @@ def main():
     #     mf.MaxCycleBtwDPAndPDP([43260, 47376, 47375, 44284, 50348])
 
     # 图4.12 本文算法在不同调节因子下的标准差比较
-    #     mf.drawPlotByStandardDeviation2(
-    #         data.a3_cycle, data.a3_standard_deviation, data.a4_cycle, data.a4_standard_deviation,
-    #         data.a5_cycle, data.a5_standard_deviation, data.a6_cycle, data.a6_standard_deviation,
-    #         data.a7_cycle, data.a7_standard_deviation,  data.a72_cycle, data.a72_standard_deviation,
-    #         data.a73_cycle, data.a73_standard_deviation, data.a74_cycle, data.a74_standard_deviation, "PDPDiffTHStandarddeviation")
+    mf.drawPlotByStandardDeviation2(
+        data.a3_cycle, data.a3_standard_deviation, data.a4_cycle, data.a4_standard_deviation,
+        data.a5_cycle, data.a5_standard_deviation, data.a6_cycle, data.a6_standard_deviation,
+        data.a7_cycle, data.a7_standard_deviation,  data.a72_cycle, data.a72_standard_deviation,
+        data.a73_cycle, data.a73_standard_deviation, data.a74_cycle, data.a74_standard_deviation, "PDPDiffTHStandarddeviation")
 
     # 图4.13 本文算法在不同调节因子下延长EEPROM寿命效果对比
     #     mf.MaxCycleBtwPDPTH([49949, 50428, 50348, 51205,
@@ -109,10 +109,10 @@ def main():
     #         data.a5_cycle, data.a5_overhead_ratio, data.a6_cycle, data.a6_overhead_ratio,
     #         data.a7_cycle, data.a7_overhead_ratio, "PDPDiffTHOverheadRatio")
 
-    mf.drawPlotByWritespeed2(
-        data.a3_cycle, data.a3_speed, data.a4_cycle, data.a4_speed,
-        data.a5_cycle, data.a5_speed, data.a6_cycle, data.a6_speed,
-        data.a7_cycle, data.a7_speed, "PDPDiffTHSpeed")
+    #     mf.drawPlotByWritespeed2(
+    #         data.a3_cycle, data.a3_speed, data.a4_cycle, data.a4_speed,
+    #         data.a5_cycle, data.a5_speed, data.a6_cycle, data.a6_speed,
+    #         data.a7_cycle, data.a7_speed, "PDPDiffTHSpeed")
 
     #     mf.drawPlotByTH(
     #         data.a3_cycle, data.a3_th, data.a4_cycle, data.a4_th,
@@ -122,6 +122,7 @@ def main():
 
     # 图4.15/图4.16 磨损均衡介入下的T1/T2测试用例结果
     #     mf.makeBarPageEC(data.page_cnt)
+    #     mf.makeBarPageEC(data.page_cnt2)
 
 
 if __name__ == "__main__":
